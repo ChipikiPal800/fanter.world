@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Fanter World - Pokemon x Prodigy RPG</title>
+  <title>Fanter World - Your Custom Sprites</title>
   <style>
     * {
       margin: 0;
@@ -18,234 +18,81 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: 'Courier New', 'Press Start 2P', monospace;
+      font-family: 'Courier New', monospace;
       overflow: hidden;
     }
 
-    .game-wrapper {
+    .game-container {
       position: relative;
       border-radius: 20px;
-      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
       border: 3px solid #fbbf24;
       background: #1a4a2a;
     }
 
     canvas {
       display: block;
-      margin: 0 auto;
       cursor: crosshair;
     }
 
-    /* UI Top Bar */
-    .ui-top {
+    .ui-panel {
       position: absolute;
-      top: 12px;
-      left: 12px;
-      right: 12px;
-      display: flex;
-      justify-content: space-between;
-      z-index: 20;
-      pointer-events: none;
-    }
-
-    .player-card {
+      top: 15px;
+      left: 15px;
       background: rgba(0,0,0,0.85);
       backdrop-filter: blur(8px);
-      border-radius: 50px;
-      padding: 8px 20px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
+      border-radius: 30px;
+      padding: 10px 20px;
       border: 2px solid #fbbf24;
-      pointer-events: auto;
-    }
-
-    .player-avatar {
-      width: 44px;
-      height: 44px;
-      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      border: 2px solid #fbbf24;
-    }
-
-    .player-stats h4 {
-      color: #fbbf24;
-      font-size: 12px;
-      margin-bottom: 4px;
-    }
-
-    .xp-container {
-      width: 140px;
-      height: 8px;
-      background: #333;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .xp-fill {
-      width: 0%;
-      height: 100%;
-      background: linear-gradient(90deg, #fbbf24, #f59e0b);
-      transition: width 0.3s;
+      z-index: 10;
+      color: white;
+      font-weight: bold;
     }
 
     .coin-display {
+      position: absolute;
+      top: 15px;
+      right: 15px;
       background: rgba(0,0,0,0.85);
       backdrop-filter: blur(8px);
-      border-radius: 50px;
-      padding: 8px 20px;
+      border-radius: 30px;
+      padding: 10px 20px;
       border: 2px solid #fbbf24;
       color: #fbbf24;
-      font-weight: bold;
-      font-size: 16px;
+      z-index: 10;
     }
 
-    /* Bottom Bar */
-    .ui-bottom {
+    .controls {
       position: absolute;
       bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(8px);
-      border-radius: 50px;
-      padding: 8px 20px;
-      display: flex;
-      gap: 12px;
-      z-index: 20;
-      border: 2px solid #fbbf24;
-      pointer-events: auto;
-    }
-
-    .ui-btn {
-      background: rgba(255,255,255,0.1);
-      border: none;
-      border-radius: 40px;
-      padding: 8px 18px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: monospace;
+      left: 15px;
+      background: rgba(0,0,0,0.7);
+      border-radius: 20px;
+      padding: 8px 15px;
+      color: rgba(255,255,255,0.6);
       font-size: 11px;
+      z-index: 10;
     }
 
-    .ui-btn:hover {
-      background: #3b82f6;
-      transform: translateY(-2px);
-    }
-
-    /* Pokemon-Style Battle Screen */
-    .battle-container {
+    .battle-panel {
       position: fixed;
-      top: 0;
+      bottom: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #0a2a1a, #051a0a);
-      z-index: 100;
-      display: none;
-      flex-direction: column;
-      font-family: monospace;
-    }
-
-    .battle-container.active {
-      display: flex;
-    }
-
-    .battle-hud {
-      display: flex;
-      justify-content: space-between;
-      padding: 20px 40px;
-    }
-
-    .battle-card {
-      background: rgba(0,0,0,0.8);
-      border-radius: 16px;
-      padding: 12px 24px;
-      min-width: 220px;
-      border: 2px solid;
-    }
-
-    .battle-card.enemy { border-color: #ef4444; }
-    .battle-card.player { border-color: #22c55e; }
-
-    .battle-card-name {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    .enemy .battle-card-name { color: #f87171; }
-    .player .battle-card-name { color: #4ade80; }
-
-    .battle-hp-bg {
-      width: 160px;
-      height: 12px;
-      background: #333;
-      border-radius: 6px;
-      overflow: hidden;
-      margin: 5px 0;
-    }
-    .battle-hp-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #22c55e, #16a34a);
-      width: 100%;
-      transition: width 0.3s;
-    }
-
-    .battle-sprites-area {
-      flex: 1;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 80px;
-      position: relative;
-    }
-
-    .enemy-sprite-container {
-      position: relative;
-    }
-
-    .player-sprite-container {
-      position: relative;
-    }
-
-    .battle-sprite {
-      width: 220px;
-      height: 220px;
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
-    }
-
-    .battle-name-tag {
-      text-align: center;
-      margin-top: 10px;
-      color: white;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    .battle-controls {
+      right: 0;
       background: linear-gradient(135deg, #1a1a2e, #0f0f1a);
       border-top: 3px solid #fbbf24;
-      padding: 20px 40px;
+      padding: 20px;
+      z-index: 100;
+      display: none;
     }
 
-    .battle-math-area {
-      background: #0a0a15;
-      border-radius: 20px;
-      padding: 15px;
-      text-align: center;
-      margin-bottom: 15px;
+    .battle-panel.active {
+      display: block;
     }
 
     .battle-question {
-      font-size: 28px;
+      text-align: center;
+      font-size: 24px;
       color: #fbbf24;
-      font-weight: bold;
       margin-bottom: 15px;
     }
 
@@ -253,286 +100,181 @@
       display: flex;
       justify-content: center;
       gap: 15px;
-      flex-wrap: wrap;
+      margin-bottom: 15px;
     }
 
-    .battle-opt-btn {
+    .battle-btn {
       background: linear-gradient(135deg, #3b82f6, #1d4ed8);
       border: none;
-      border-radius: 50px;
+      border-radius: 40px;
       padding: 10px 25px;
       color: white;
       font-size: 18px;
       font-weight: bold;
       cursor: pointer;
-      font-family: monospace;
-      transition: all 0.2s;
-    }
-
-    .battle-opt-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 15px #3b82f6;
     }
 
     .battle-message {
-      background: rgba(0,0,0,0.7);
-      border-radius: 15px;
-      padding: 10px;
       text-align: center;
-      margin-top: 12px;
       color: #fbbf24;
-      font-size: 12px;
+      margin-bottom: 10px;
     }
 
-    .battle-run {
+    .run-btn {
       background: linear-gradient(135deg, #ef4444, #dc2626);
-      margin-top: 10px;
       width: 100%;
       padding: 10px;
-    }
-
-    @keyframes shakeAnim {
-      0%,100% { transform: translateX(0); }
-      25% { transform: translateX(-10px); }
-      75% { transform: translateX(10px); }
-    }
-    @keyframes hitFlash {
-      0%,100% { filter: brightness(1); }
-      50% { filter: brightness(1.8) drop-shadow(0 0 10px red); }
-    }
-    .shake-effect { animation: shakeAnim 0.3s ease-in-out; }
-    .hit-effect { animation: hitFlash 0.3s ease-in-out; }
-
-    @keyframes walkLeg {
-      0%,100% { transform: rotate(-10deg); }
-      50% { transform: rotate(10deg); }
     }
   </style>
 </head>
 <body>
-<div class="game-wrapper">
-  <canvas id="gameCanvas" width="1300" height="750"></canvas>
+<div class="game-container">
+  <canvas id="gameCanvas" width="1200" height="700"></canvas>
 
-  <!-- Top UI -->
-  <div class="ui-top">
-    <div class="player-card">
-      <div class="player-avatar">⚔️</div>
-      <div class="player-stats">
-        <h4>FANTER <span id="playerLv">Lv1</span></h4>
-        <div class="xp-container"><div class="xp-fill" id="xpFillBar" style="width:0%"></div></div>
-        <span style="font-size:9px;"><span id="xpCurrentVal">0</span>/<span id="xpNeededVal">100</span> XP</span>
-      </div>
-    </div>
-    <div class="coin-display">🪙 <span id="coinAmt">150</span></div>
+  <div class="ui-panel">
+    ⚔️ FANTER | Lv <span id="playerLv">1</span> | ⭐ <span id="playerXp">0</span>/<span id="playerXpNeeded">100</span> XP
+  </div>
+  <div class="coin-display">
+    🪙 <span id="playerCoins">150</span>
+  </div>
+  <div class="controls">
+    🎮 WASD or Click to Move | 🐱 Pet Follows | ⚔️ Touch Enemy = Battle
   </div>
 
-  <!-- Bottom UI -->
-  <div class="ui-bottom">
-    <button class="ui-btn" id="teamBtn">🐱 TEAM</button>
-    <button class="ui-btn" id="bagBtn">🎒 BAG</button>
-    <button class="ui-btn" id="mewtInfoBtn">⭐ MEWT</button>
-    <button class="ui-btn" id="settingsInfoBtn">⚙️ SET</button>
-  </div>
-
-  <!-- Battle Screen -->
-  <div class="battle-container" id="battleScreen">
-    <div class="battle-hud">
-      <div class="battle-card enemy">
-        <div class="battle-card-name" id="battleEnemyName">SLIME</div>
-        <div class="battle-hp-bg"><div class="battle-hp-fill" id="battleEnemyFill" style="width:100%"></div></div>
-        <div style="font-size:11px;">❤️ <span id="battleEnemyHpText">0</span>/<span id="battleEnemyMaxHp">0</span></div>
-      </div>
-      <div class="battle-card player">
-        <div class="battle-card-name">🐱 MEWT</div>
-        <div class="battle-hp-bg"><div class="battle-hp-fill" id="battlePetFill" style="width:100%"></div></div>
-        <div style="font-size:11px;">❤️ <span id="battlePetHpText">0</span>/<span id="battlePetMaxHp">0</span></div>
-      </div>
-    </div>
-
-    <div class="battle-sprites-area">
-      <div class="enemy-sprite-container">
-        <canvas id="enemyBattleCanvas" class="battle-sprite" width="220" height="220"></canvas>
-        <div class="battle-name-tag" id="enemyNameTag">???</div>
-      </div>
-      <div class="player-sprite-container">
-        <canvas id="petBattleCanvas" class="battle-sprite" width="220" height="220"></canvas>
-        <div class="battle-name-tag">MEWT Lv <span id="battlePetLv">1</span></div>
-      </div>
-    </div>
-
-    <div class="battle-controls">
-      <div class="battle-math-area">
-        <div class="battle-question" id="battleQ">2 + 2 = ?</div>
-        <div class="battle-options" id="battleOpts"></div>
-      </div>
-      <div class="battle-message" id="battleMsg">A wild enemy appeared!</div>
-      <button class="battle-opt-btn battle-run" id="battleRunBtn">🏃 RUN</button>
-    </div>
+  <div class="battle-panel" id="battlePanel">
+    <div class="battle-question" id="battleQuestion">2 + 2 = ?</div>
+    <div class="battle-options" id="battleOptions"></div>
+    <div class="battle-message" id="battleMessage">A wild enemy appeared!</div>
+    <button class="battle-btn run-btn" id="runBattleBtn">🏃 RUN</button>
   </div>
 </div>
 
 <script>
   // ============================================================
-  // FANTER WORLD - FULLY FUNCTIONAL WITH SAVES & ANIMATIONS
+  // FANTER WORLD - WITH YOUR CUSTOM SPRITES
   // ============================================================
   
   const canvas = document.getElementById('gameCanvas');
   const ctx = canvas.getContext('2d');
   
-  const enemyBattleCanvas = document.getElementById('enemyBattleCanvas');
-  const enemyBattleCtx = enemyBattleCanvas.getContext('2d');
-  const petBattleCanvas = document.getElementById('petBattleCanvas');
-  const petBattleCtx = petBattleCanvas.getContext('2d');
+  // ============================================================
+  // LOAD YOUR SPRITES
+  // ============================================================
+  
+  // Replace these with your actual file names
+  const standingSprite = new Image();   // 728x728, 6 sprites (turning/directional)
+  const walkingSprite = new Image();    // 800x800, 4 sprites (walking down)
+  
+  // UPDATE THESE PATHS to match your actual file names!
+  standingSprite.src = 'sprites/standing.png';   // change this
+  walkingSprite.src = 'sprites/walking.png';     // change this
+  
+  // Sprite dimensions (from your sprite sheet)
+  const STANDING_SHEET_SIZE = 728;
+  const STANDING_FRAMES = 6;
+  const STANDING_FRAME_W = STANDING_SHEET_SIZE / STANDING_FRAMES; // ~121px
+  
+  const WALKING_SHEET_SIZE = 800;
+  const WALKING_FRAMES = 4;
+  const WALKING_FRAME_W = WALKING_SHEET_SIZE / WALKING_FRAMES; // 200px
+  
+  // Draw size (scaled down)
+  const DRAW_SIZE = 48; // 48x48 pixels on screen
+  
+  let imagesLoaded = false;
+  let loadedCount = 0;
+  
+  function checkLoaded() {
+    loadedCount++;
+    if (loadedCount === 2) {
+      imagesLoaded = true;
+      console.log('✅ Both sprite sheets loaded!');
+      console.log(`Standing frame width: ${STANDING_FRAME_W}px`);
+      console.log(`Walking frame width: ${WALKING_FRAME_W}px`);
+    }
+  }
+  
+  standingSprite.onload = checkLoaded;
+  walkingSprite.onload = checkLoaded;
   
   // ============================================================
-  // FIXED WORLD MAP (Same every time)
+  // WORLD SETUP
   // ============================================================
   const WORLD_W = 3200;
   const WORLD_H = 3200;
-  const VIEW_W = 1300;
-  const VIEW_H = 750;
-  const TILE = 32;
+  const VIEW_W = 1200;
+  const VIEW_H = 700;
+  const TILE_SIZE = 32;
   
   let camX = WORLD_W/2 - VIEW_W/2;
   let camY = WORLD_H/2 - VIEW_H/2;
   
-  // Fixed tile map (based on seed so it's always the same)
+  // Simple grass map
   const tileMap = [];
   for (let i = 0; i < 100; i++) {
     tileMap[i] = [];
     for (let j = 0; j < 100; j++) {
-      const val = (i * 131 + j * 253) % 100;
-      if (val < 30) tileMap[i][j] = 0;
-      else if (val < 60) tileMap[i][j] = 1;
-      else tileMap[i][j] = 2;
+      tileMap[i][j] = 0;
     }
   }
   
-  const tileColors = ['#3a6b33', '#4a7c3f', '#5a9e4b'];
-  
-  // Fixed tree positions
-  const treeList = [];
-  for (let i = 0; i < 100; i++) {
-    treeList.push({
-      x: 300 + (i * 131) % (WORLD_W - 600),
-      y: 200 + (i * 253) % (WORLD_H - 400),
-      size: 24
+  // Trees
+  const trees = [];
+  for (let i = 0; i < 50; i++) {
+    trees.push({
+      x: 300 + Math.random() * (WORLD_W - 600),
+      y: 200 + Math.random() * (WORLD_H - 400)
     });
   }
   
-  // Fixed flower positions
-  const flowerList = [];
-  for (let i = 0; i < 200; i++) {
-    flowerList.push({
-      x: 100 + (i * 73) % (WORLD_W - 200),
-      y: 100 + (i * 97) % (WORLD_H - 200),
-      color: ['#f472b6', '#fbbf24', '#a855f7'][i % 3]
-    });
-  }
-  
-  // Fixed enemies
-  const enemyList = [
-    { x: 850, y: 650, name: 'SLIME', hp: 30, maxHp: 30, atk: 7, def: 3, exp: 35, color: '#86efac', lv: 2 },
-    { x: 1850, y: 1100, name: 'GLIMMER', hp: 38, maxHp: 38, atk: 9, def: 4, exp: 50, color: '#fbbf24', lv: 3 },
-    { x: 2600, y: 1600, name: 'SHADOWPAW', hp: 45, maxHp: 45, atk: 12, def: 5, exp: 70, color: '#a855f7', lv: 4 },
-    { x: 1300, y: 2500, name: 'FROSTBITE', hp: 35, maxHp: 35, atk: 8, def: 6, exp: 45, color: '#06b6d4', lv: 3 },
-    { x: 2800, y: 2300, name: 'EMBERFANG', hp: 50, maxHp: 50, atk: 14, def: 4, exp: 85, color: '#f97316', lv: 5 },
-    { x: 450, y: 2800, name: 'LEAFPUFF', hp: 32, maxHp: 32, atk: 7, def: 7, exp: 40, color: '#4ade80', lv: 2 },
-    { x: 2300, y: 550, name: 'THUNDERPAW', hp: 42, maxHp: 42, atk: 11, def: 4, exp: 60, color: '#facc15', lv: 4 },
+  // Enemies
+  const enemies = [
+    { x: 850, y: 650, name: 'SLIME', hp: 30, maxHp: 30, atk: 7, exp: 35, color: '#86efac' },
+    { x: 1850, y: 1100, name: 'GLIMMER', hp: 38, maxHp: 38, atk: 9, exp: 50, color: '#fbbf24' },
+    { x: 2600, y: 1600, name: 'SHADOWPAW', hp: 45, maxHp: 45, atk: 12, exp: 70, color: '#a855f7' },
   ];
   
   // ============================================================
-  // PLAYER DATA (With localStorage save)
+  // PLAYER & PET
   // ============================================================
-  let playerData = {
+  let player = {
     x: WORLD_W/2,
     y: WORLD_H/2,
+    targetX: WORLD_W/2,
+    targetY: WORLD_H/2,
+    speed: 3.2,
+    walkFrame: 0,
+    direction: 0, // 0=down, 1=downright, 2=right, 3=upright, 4=up, 5=upleft, 6=left, 7=downleft
     lv: 1,
     xp: 0,
     xpNeeded: 100,
-    coins: 200
-  };
-  
-  let petData = {
-    hp: 42,
-    maxHp: 42,
-    atk: 13,
-    def: 7,
-    lv: 1
-  };
-  
-  // Load save
-  const saved = localStorage.getItem('fanterWorldSave');
-  if (saved) {
-    try {
-      const save = JSON.parse(saved);
-      playerData = save.player || playerData;
-      petData = save.pet || petData;
-      console.log('✅ Save loaded!');
-    } catch(e) {}
-  }
-  
-  function saveGame() {
-    localStorage.setItem('fanterWorldSave', JSON.stringify({
-      player: playerData,
-      pet: petData
-    }));
-  }
-  
-  // ============================================================
-  // GAME STATE
-  // ============================================================
-  let player = {
-    x: playerData.x,
-    y: playerData.y,
-    targetX: playerData.x,
-    targetY: playerData.y,
-    speed: 3.2,
-    legSwing: 0,
-    walkCycle: 0,
-    lv: playerData.lv,
-    xp: playerData.xp,
-    xpNeeded: playerData.xpNeeded,
-    coins: playerData.coins
+    coins: 150
   };
   
   let pet = {
-    x: player.x - 45,
+    x: player.x - 50,
     y: player.y,
-    hp: petData.hp,
-    maxHp: petData.maxHp,
-    atk: petData.atk,
-    def: petData.def,
-    lv: petData.lv,
-    tailSwing: 0
+    walkFrame: 0,
+    direction: 0
   };
   
+  // Battle state
   let inBattle = false;
   let currentEnemy = null;
-  let battlePetHP = pet.hp;
+  let battlePetHP = 0;
   let battleEnemyHP = 0;
-  let currentMathQ = null;
-  let isBattleAnim = false;
+  let currentQuestion = null;
   
-  const moveKeys = { w: false, s: false, a: false, d: false };
+  // Movement keys
+  const keys = { w: false, s: false, a: false, d: false };
   
-  // Math questions (Kindergarten)
+  // Math questions
   const mathBank = [
     { q: "1 + 1 = ?", a: 2, opts: [0,1,2,3] },
     { q: "2 + 2 = ?", a: 4, opts: [2,3,4,5] },
     { q: "3 + 1 = ?", a: 4, opts: [2,3,4,5] },
     { q: "5 - 2 = ?", a: 3, opts: [1,2,3,4] },
     { q: "2 + 3 = ?", a: 5, opts: [3,4,5,6] },
-    { q: "4 - 1 = ?", a: 3, opts: [1,2,3,4] },
-    { q: "1 + 0 = ?", a: 1, opts: [0,1,2,3] },
-    { q: "3 - 1 = ?", a: 2, opts: [1,2,3,4] },
-    { q: "2 + 4 = ?", a: 6, opts: [4,5,6,7] },
-    { q: "5 - 3 = ?", a: 2, opts: [1,2,3,4] },
-    { q: "10 - 5 = ?", a: 5, opts: [3,4,5,6] },
-    { q: "3 + 3 = ?", a: 6, opts: [4,5,6,7] },
-    { q: "4 + 4 = ?", a: 8, opts: [6,7,8,9] },
-    { q: "2 + 5 = ?", a: 7, opts: [5,6,7,8] },
-    { q: "9 - 3 = ?", a: 6, opts: [4,5,6,7] },
   ];
   
   function getRandomMath() {
@@ -540,13 +282,122 @@
   }
   
   // ============================================================
-  // COLLISION
+  // DRAW FUNCTIONS
   // ============================================================
-  function checkCollision(x, y, r) {
-    for (const t of treeList) {
-      if (Math.hypot(x - t.x, y - t.y) < r + 14) return true;
+  
+  function drawGround() {
+    const startX = Math.max(0, Math.floor(camX / TILE_SIZE));
+    const endX = Math.min(99, Math.ceil((camX + VIEW_W) / TILE_SIZE) + 1);
+    const startY = Math.max(0, Math.floor(camY / TILE_SIZE));
+    const endY = Math.min(99, Math.ceil((camY + VIEW_H) / TILE_SIZE) + 1);
+    
+    for (let i = startX; i < endX; i++) {
+      for (let j = startY; j < endY; j++) {
+        const x = i * TILE_SIZE - camX;
+        const y = j * TILE_SIZE - camY;
+        ctx.fillStyle = '#4a7c3f';
+        ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+        ctx.strokeStyle = 'rgba(0,0,0,0.05)';
+        ctx.strokeRect(x, y, TILE_SIZE, TILE_SIZE);
+      }
     }
-    for (const e of enemyList) {
+  }
+  
+  function drawTrees() {
+    for (const tree of trees) {
+      const x = tree.x - camX;
+      const y = tree.y - camY;
+      if (x > -50 && x < VIEW_W + 50 && y > -50 && y < VIEW_H + 50) {
+        ctx.fillStyle = '#8B5A2B';
+        ctx.fillRect(x-5, y+5, 10, 20);
+        ctx.fillStyle = '#2d6e2d';
+        ctx.beginPath();
+        ctx.arc(x, y-5, 16, 0, Math.PI*2);
+        ctx.fill();
+        ctx.fillStyle = '#4ade80';
+        ctx.beginPath();
+        ctx.arc(x, y-12, 8, 0, Math.PI*2);
+        ctx.fill();
+      }
+    }
+  }
+  
+  function drawMapEnemies() {
+    for (const e of enemies) {
+      const x = e.x - camX;
+      const y = e.y - camY;
+      if (x > -50 && x < VIEW_W + 50 && y > -50 && y < VIEW_H + 50) {
+        const bounce = Math.sin(Date.now() / 200) * 2;
+        ctx.fillStyle = e.color;
+        ctx.beginPath();
+        ctx.arc(x, y + 8 + bounce, 14, 0, Math.PI*2);
+        ctx.fill();
+        ctx.fillStyle = '#1a1a2e';
+        ctx.fillRect(x-5, y+4+bounce, 3, 4);
+        ctx.fillRect(x+2, y+4+bounce, 3, 4);
+        ctx.fillStyle = '#ef4444';
+        ctx.font = 'bold 14px monospace';
+        ctx.fillText('!', x-12, y-4+bounce);
+      }
+    }
+  }
+  
+  // Draw player using YOUR walking sprite sheet
+  function drawPlayer() {
+    if (!imagesLoaded) return;
+    
+    const x = player.x - camX;
+    const y = player.y - camY;
+    const bob = Math.sin(Date.now() / 180) * 1.5;
+    
+    // Walking animation frame (0-3)
+    let frame = Math.floor(player.walkFrame) % 4;
+    if (player.walkFrame === 0) frame = 0; // idle = first frame
+    
+    const frameX = frame * WALKING_FRAME_W;
+    
+    ctx.drawImage(
+      walkingSprite,
+      frameX, 0, WALKING_FRAME_W, WALKING_FRAME_W,  // source
+      x - DRAW_SIZE/2, y - DRAW_SIZE/2 + bob, DRAW_SIZE, DRAW_SIZE  // dest
+    );
+    
+    // Update walk animation
+    if (player.walkFrame > 0) {
+      player.walkFrame += 0.15;
+      if (player.walkFrame >= 4) player.walkFrame = 0;
+    }
+  }
+  
+  // Draw pet using YOUR standing/turning sprite sheet (6 directional frames)
+  function drawPet() {
+    if (!imagesLoaded) return;
+    
+    const x = pet.x - camX;
+    const y = pet.y - camY;
+    const bob = Math.sin(Date.now() / 150) * 1.5;
+    
+    // Use pet's direction to pick the right standing frame
+    // 0=down, 2=right, 4=up, 6=left
+    let frame = player.direction % 6;
+    const frameX = frame * STANDING_FRAME_W;
+    
+    ctx.drawImage(
+      standingSprite,
+      frameX, 0, STANDING_FRAME_W, STANDING_FRAME_W,  // source
+      x - DRAW_SIZE/2, y - DRAW_SIZE/2 + bob, DRAW_SIZE, DRAW_SIZE  // dest
+    );
+  }
+  
+  // ============================================================
+  // MOVEMENT
+  // ============================================================
+  
+  function isColliding(x, y, r) {
+    for (const tree of trees) {
+      if (Math.hypot(x - tree.x, y - tree.y) < r + 15) return true;
+    }
+    for (const e of enemies) {
       if (Math.hypot(x - e.x, y - e.y) < r + 22 && !inBattle) {
         startBattle(e);
         return true;
@@ -557,17 +408,14 @@
     return false;
   }
   
-  // ============================================================
-  // MOVEMENT & ANIMATION
-  // ============================================================
   function handleMovement() {
     if (inBattle) return;
     
     let mx = 0, my = 0;
-    if (moveKeys.w) my -= 1;
-    if (moveKeys.s) my += 1;
-    if (moveKeys.a) mx -= 1;
-    if (moveKeys.d) mx += 1;
+    if (keys.w) my -= 1;
+    if (keys.s) my += 1;
+    if (keys.a) mx -= 1;
+    if (keys.d) mx += 1;
     
     if (mx !== 0 || my !== 0) {
       const len = Math.hypot(mx, my);
@@ -577,23 +425,29 @@
       let nx = player.x + mx * player.speed;
       let ny = player.y + my * player.speed;
       
-      if (!checkCollision(nx, player.y, 16)) player.x = nx;
-      if (!checkCollision(player.x, ny, 16)) player.y = ny;
+      if (!isColliding(nx, player.y, 16)) player.x = nx;
+      if (!isColliding(player.x, ny, 16)) player.y = ny;
       
-      player.walkCycle += 0.18;
-      player.legSwing = Math.sin(player.walkCycle * Math.PI) * 4;
+      // Update direction (0-7 based on angle)
+      const angle = Math.atan2(my, mx);
+      let dir = Math.round(angle * 4 / Math.PI + 4) % 8;
+      if (dir < 0) dir += 8;
+      player.direction = dir;
+      
+      // Start walking animation
+      if (player.walkFrame === 0) player.walkFrame = 0.1;
+      player.walkFrame += 0.15;
+      if (player.walkFrame >= 4) player.walkFrame = 0.1;
     } else {
-      player.walkCycle = 0;
-      player.legSwing = 0;
+      player.walkFrame = 0;
     }
     
-    // Pet follow
+    // Pet follows player
     const angle = Math.atan2(player.y - pet.y, player.x - pet.x);
-    pet.x += Math.cos(angle) * 2.6;
-    pet.y += Math.sin(angle) * 2.6;
-    pet.tailSwing = Math.sin(Date.now() / 150) * 3;
+    pet.x += Math.cos(angle) * 2.5;
+    pet.y += Math.sin(angle) * 2.5;
     
-    // Camera
+    // Camera follows player
     camX = player.x - VIEW_W/2;
     camY = player.y - VIEW_H/2;
     camX = Math.max(0, Math.min(camX, WORLD_W - VIEW_W));
@@ -606,507 +460,147 @@
     const dy = player.targetY - player.y;
     const dist = Math.hypot(dx, dy);
     
-    if (dist > 4) {
+    if (dist > 5) {
       const mx = (dx / dist) * player.speed;
       const my = (dy / dist) * player.speed;
       let nx = player.x + mx;
       let ny = player.y + my;
-      if (!checkCollision(nx, player.y, 16)) player.x = nx;
-      if (!checkCollision(player.x, ny, 16)) player.y = ny;
-      player.walkCycle += 0.18;
+      if (!isColliding(nx, player.y, 16)) player.x = nx;
+      if (!isColliding(player.x, ny, 16)) player.y = ny;
+      
+      const angle = Math.atan2(my, mx);
+      let dir = Math.round(angle * 4 / Math.PI + 4) % 8;
+      if (dir < 0) dir += 8;
+      player.direction = dir;
+      
+      if (player.walkFrame === 0) player.walkFrame = 0.1;
+      player.walkFrame += 0.15;
+      if (player.walkFrame >= 4) player.walkFrame = 0.1;
     } else {
-      player.walkCycle = 0;
+      player.walkFrame = 0;
     }
-  }
-  
-  // ============================================================
-  // DRAW FUNCTIONS
-  // ============================================================
-  function drawTerrain() {
-    const startX = Math.max(0, Math.floor(camX / TILE));
-    const endX = Math.min(99, Math.ceil((camX + VIEW_W) / TILE) + 1);
-    const startY = Math.max(0, Math.floor(camY / TILE));
-    const endY = Math.min(99, Math.ceil((camY + VIEW_H) / TILE) + 1);
-    
-    for (let i = startX; i < endX; i++) {
-      for (let j = startY; j < endY; j++) {
-        const x = i * TILE - camX;
-        const y = j * TILE - camY;
-        ctx.fillStyle = tileColors[tileMap[i]?.[j] || 0];
-        ctx.fillRect(x, y, TILE, TILE);
-        ctx.strokeStyle = 'rgba(0,0,0,0.04)';
-        ctx.strokeRect(x, y, TILE, TILE);
-      }
-    }
-  }
-  
-  function drawDecor() {
-    for (const f of flowerList) {
-      const x = f.x - camX;
-      const y = f.y - camY;
-      if (x > -10 && x < VIEW_W + 10 && y > -10 && y < VIEW_H + 10) {
-        ctx.fillStyle = f.color;
-        ctx.beginPath();
-        ctx.arc(x, y, 3, 0, Math.PI*2);
-        ctx.fill();
-        ctx.fillStyle = '#fbbf24';
-        ctx.beginPath();
-        ctx.arc(x, y, 1.5, 0, Math.PI*2);
-        ctx.fill();
-      }
-    }
-    
-    for (const t of treeList) {
-      const x = t.x - camX;
-      const y = t.y - camY;
-      if (x > -40 && x < VIEW_W + 40 && y > -50 && y < VIEW_H + 50) {
-        ctx.fillStyle = '#8B5A2B';
-        ctx.fillRect(x-5, y+5, 10, 22);
-        ctx.fillStyle = '#2d6e2d';
-        ctx.beginPath();
-        ctx.arc(x, y-5, 16, 0, Math.PI*2);
-        ctx.fill();
-        ctx.fillStyle = '#3a8c3a';
-        ctx.beginPath();
-        ctx.arc(x-6, y-10, 11, 0, Math.PI*2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(x+6, y-10, 11, 0, Math.PI*2);
-        ctx.fill();
-        ctx.fillStyle = '#4ade80';
-        ctx.beginPath();
-        ctx.arc(x, y-16, 8, 0, Math.PI*2);
-        ctx.fill();
-      }
-    }
-  }
-  
-  function drawMapEnemies() {
-    for (const e of enemyList) {
-      const x = e.x - camX;
-      const y = e.y - camY;
-      if (x > -50 && x < VIEW_W + 50 && y > -60 && y < VIEW_H + 60) {
-        const bounce = Math.sin(Date.now() / 200) * 2;
-        ctx.fillStyle = 'rgba(0,0,0,0.2)';
-        ctx.beginPath();
-        ctx.ellipse(x+2, y+22, 14, 5, 0, 0, Math.PI*2);
-        ctx.fill();
-        ctx.fillStyle = e.color;
-        ctx.beginPath();
-        ctx.arc(x, y+8+bounce, 16, 0, Math.PI*2);
-        ctx.fill();
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(x-7, y+4+bounce, 5, 5);
-        ctx.fillRect(x+2, y+4+bounce, 5, 5);
-        ctx.fillStyle = '#1a1a2e';
-        ctx.fillRect(x-6, y+5+bounce, 3, 3);
-        ctx.fillRect(x+3, y+5+bounce, 3, 3);
-        ctx.fillStyle = '#ef4444';
-        ctx.font = 'bold 14px monospace';
-        ctx.fillText('!', x-14, y-6+bounce);
-      }
-    }
-  }
-  
-  function drawPlayerChar() {
-    const x = player.x - camX;
-    const y = player.y - camY;
-    const bob = Math.sin(Date.now() / 180) * 1.5;
-    
-    ctx.fillStyle = 'rgba(0,0,0,0.2)';
-    ctx.beginPath();
-    ctx.ellipse(x+3, y+28, 14, 5, 0, 0, Math.PI*2);
-    ctx.fill();
-    
-    // Cape
-    ctx.fillStyle = '#fbbf24';
-    ctx.fillRect(x-10, y-2+bob, 20, 12);
-    
-    // Body
-    ctx.fillStyle = '#3b82f6';
-    ctx.fillRect(x-11, y-8+bob, 22, 28);
-    
-    // Legs with swing
-    ctx.fillStyle = '#2563eb';
-    ctx.fillRect(x-9 + (player.legSwing*0.3), y+16+bob, 7, 14);
-    ctx.fillRect(x+2 - (player.legSwing*0.3), y+16+bob, 7, 14);
-    
-    // Boots
-    ctx.fillStyle = '#8B4513';
-    ctx.fillRect(x-10 + (player.legSwing*0.3), y+26+bob, 9, 6);
-    ctx.fillRect(x+1 - (player.legSwing*0.3), y+26+bob, 9, 6);
-    
-    // Head
-    ctx.fillStyle = '#fcd34d';
-    ctx.beginPath();
-    ctx.arc(x, y-14+bob, 14, 0, Math.PI*2);
-    ctx.fill();
-    
-    // Hair
-    ctx.fillStyle = '#d97706';
-    ctx.fillRect(x-10, y-26+bob, 20, 8);
-    
-    // Eyes
-    ctx.fillStyle = '#1a1a2e';
-    ctx.fillRect(x-6, y-18+bob, 4, 5);
-    ctx.fillRect(x+2, y-18+bob, 4, 5);
-    
-    // Mouth
-    ctx.fillStyle = '#b45309';
-    ctx.fillRect(x-3, y-9+bob, 6, 3);
-  }
-  
-  function drawPetChar() {
-    const x = pet.x - camX;
-    const y = pet.y - camY;
-    const bob = Math.sin(Date.now() / 180) * 1.5;
-    
-    ctx.fillStyle = 'rgba(0,0,0,0.15)';
-    ctx.beginPath();
-    ctx.ellipse(x+2, y+22, 11, 4, 0, 0, Math.PI*2);
-    ctx.fill();
-    
-    // Tail
-    ctx.fillStyle = '#22c55e';
-    ctx.fillRect(x+12, y+5+bob, 12, 5);
-    
-    // Body
-    ctx.fillStyle = '#22c55e';
-    ctx.fillRect(x-9, y-2+bob, 18, 22);
-    
-    // Head
-    ctx.fillStyle = '#22c55e';
-    ctx.beginPath();
-    ctx.arc(x, y-10+bob, 11, 0, Math.PI*2);
-    ctx.fill();
-    
-    // Ears
-    ctx.fillStyle = '#16a34a';
-    ctx.fillRect(x-8, y-19+bob, 5, 8);
-    ctx.fillRect(x+3, y-19+bob, 5, 8);
-    
-    // Eyes
-    ctx.fillStyle = '#1a1a2e';
-    ctx.fillRect(x-5, y-13+bob, 3, 4);
-    ctx.fillRect(x+2, y-13+bob, 3, 4);
-    
-    // Nose
-    ctx.fillStyle = '#ef4444';
-    ctx.fillRect(x-1, y-7+bob, 2, 2);
-    
-    // Whiskers
-    ctx.strokeStyle = '#fff';
-    ctx.beginPath();
-    ctx.moveTo(x-9, y-8+bob);
-    ctx.lineTo(x-16, y-10+bob);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x+9, y-8+bob);
-    ctx.lineTo(x+16, y-10+bob);
-    ctx.stroke();
-  }
-  
-  // ============================================================
-  // BATTLE SPRITES (Pokemon style - side/back view)
-  // ============================================================
-  function drawEnemyBattleSprite(enemy) {
-    enemyBattleCtx.clearRect(0, 0, 220, 220);
-    const bob = Math.sin(Date.now() / 200) * 3;
-    
-    enemyBattleCtx.fillStyle = 'rgba(0,0,0,0.25)';
-    enemyBattleCtx.beginPath();
-    enemyBattleCtx.ellipse(110, 185, 50, 18, 0, 0, Math.PI*2);
-    enemyBattleCtx.fill();
-    
-    enemyBattleCtx.fillStyle = enemy.color;
-    enemyBattleCtx.beginPath();
-    enemyBattleCtx.ellipse(110, 110 + bob, 65, 70, 0, 0, Math.PI*2);
-    enemyBattleCtx.fill();
-    
-    // Eyes
-    enemyBattleCtx.fillStyle = '#fff';
-    enemyBattleCtx.fillRect(82, 95 + bob, 14, 16);
-    enemyBattleCtx.fillRect(124, 95 + bob, 14, 16);
-    enemyBattleCtx.fillStyle = '#1a1a2e';
-    enemyBattleCtx.fillRect(86, 99 + bob, 7, 9);
-    enemyBattleCtx.fillRect(128, 99 + bob, 7, 9);
-    
-    // Mouth
-    enemyBattleCtx.fillStyle = '#b45309';
-    enemyBattleCtx.fillRect(100, 125 + bob, 20, 10);
-    
-    // Name
-    enemyBattleCtx.fillStyle = 'white';
-    enemyBattleCtx.font = 'bold 14px monospace';
-    enemyBattleCtx.fillText(enemy.name, 75, 200);
-  }
-  
-  function drawPetBattleSprite() {
-    petBattleCtx.clearRect(0, 0, 220, 220);
-    const bob = Math.sin(Date.now() / 200) * 3;
-    
-    petBattleCtx.fillStyle = 'rgba(0,0,0,0.25)';
-    petBattleCtx.beginPath();
-    petBattleCtx.ellipse(110, 185, 50, 18, 0, 0, Math.PI*2);
-    petBattleCtx.fill();
-    
-    // Tail
-    petBattleCtx.fillStyle = '#22c55e';
-    petBattleCtx.fillRect(160, 90 + bob, 30, 12);
-    
-    // Body
-    petBattleCtx.fillStyle = '#22c55e';
-    petBattleCtx.fillRect(60, 85 + bob, 80, 70);
-    
-    // Head
-    petBattleCtx.fillStyle = '#22c55e';
-    petBattleCtx.beginPath();
-    petBattleCtx.arc(110, 75 + bob, 35, 0, Math.PI*2);
-    petBattleCtx.fill();
-    
-    // Ears
-    petBattleCtx.fillStyle = '#16a34a';
-    petBattleCtx.fillRect(80, 45 + bob, 12, 22);
-    petBattleCtx.fillRect(128, 45 + bob, 12, 22);
-    
-    // Eyes
-    petBattleCtx.fillStyle = '#fff';
-    petBattleCtx.fillRect(90, 68 + bob, 12, 14);
-    petBattleCtx.fillRect(118, 68 + bob, 12, 14);
-    petBattleCtx.fillStyle = '#1a1a2e';
-    petBattleCtx.fillRect(93, 71 + bob, 6, 8);
-    petBattleCtx.fillRect(121, 71 + bob, 6, 8);
-    
-    // Nose
-    petBattleCtx.fillStyle = '#ef4444';
-    petBattleCtx.fillRect(107, 88 + bob, 6, 4);
-    
-    // Whiskers
-    petBattleCtx.strokeStyle = '#fff';
-    petBattleCtx.beginPath();
-    petBattleCtx.moveTo(75, 85 + bob);
-    petBattleCtx.lineTo(50, 82 + bob);
-    petBattleCtx.stroke();
-    petBattleCtx.beginPath();
-    petBattleCtx.moveTo(75, 92 + bob);
-    petBattleCtx.lineTo(50, 95 + bob);
-    petBattleCtx.stroke();
-    petBattleCtx.beginPath();
-    petBattleCtx.moveTo(145, 85 + bob);
-    petBattleCtx.lineTo(170, 82 + bob);
-    petBattleCtx.stroke();
-    petBattleCtx.beginPath();
-    petBattleCtx.moveTo(145, 92 + bob);
-    petBattleCtx.lineTo(170, 95 + bob);
-    petBattleCtx.stroke();
   }
   
   // ============================================================
   // BATTLE SYSTEM
   // ============================================================
+  
   function startBattle(enemy) {
     if (inBattle) return;
     inBattle = true;
     currentEnemy = { ...enemy };
     battleEnemyHP = currentEnemy.hp;
-    battlePetHP = pet.hp;
-    currentMathQ = getRandomMath();
+    battlePetHP = 42;
+    currentQuestion = getRandomMath();
     
-    document.getElementById('battleEnemyName').textContent = currentEnemy.name;
-    document.getElementById('battleEnemyHpText').textContent = battleEnemyHP;
-    document.getElementById('battleEnemyMaxHp').textContent = currentEnemy.maxHp;
-    document.getElementById('battlePetHpText').textContent = battlePetHP;
-    document.getElementById('battlePetMaxHp').textContent = pet.maxHp;
-    document.getElementById('battlePetLv').textContent = pet.lv;
-    document.getElementById('enemyNameTag').textContent = currentEnemy.name;
-    document.getElementById('battleQ').textContent = currentMathQ.q;
-    document.getElementById('battleMsg').innerHTML = `Wild ${currentEnemy.name} appeared!`;
+    document.getElementById('battleQuestion').textContent = currentQuestion.q;
+    document.getElementById('battleMessage').innerHTML = `Wild ${currentEnemy.name} appeared!`;
     
-    updateBattleBars();
-    drawEnemyBattleSprite(currentEnemy);
-    drawPetBattleSprite();
     renderBattleOptions();
-    
-    document.getElementById('battleScreen').classList.add('active');
+    document.getElementById('battlePanel').classList.add('active');
   }
   
   function renderBattleOptions() {
-    const container = document.getElementById('battleOpts');
+    const container = document.getElementById('battleOptions');
     container.innerHTML = '';
-    currentMathQ.opts.forEach(opt => {
+    currentQuestion.opts.forEach(opt => {
       const btn = document.createElement('button');
-      btn.className = 'battle-opt-btn';
+      btn.className = 'battle-btn';
       btn.textContent = opt;
       btn.onclick = () => handleBattleAnswer(opt);
       container.appendChild(btn);
     });
   }
   
-  function updateBattleBars() {
-    const ep = (battleEnemyHP / currentEnemy.maxHp) * 100;
-    const pp = (battlePetHP / pet.maxHp) * 100;
-    document.getElementById('battleEnemyFill').style.width = `${Math.max(0, ep)}%`;
-    document.getElementById('battlePetFill').style.width = `${Math.max(0, pp)}%`;
-    document.getElementById('battleEnemyHpText').textContent = Math.max(0, battleEnemyHP);
-    document.getElementById('battlePetHpText').textContent = Math.max(0, battlePetHP);
-  }
-  
-  async function handleBattleAnswer(answer) {
-    if (isBattleAnim || !inBattle) return;
-    isBattleAnim = true;
-    
-    const enemySpriteDiv = document.getElementById('enemyBattleCanvas');
-    enemySpriteDiv.classList.add('shake-effect', 'hit-effect');
-    setTimeout(() => {
-      enemySpriteDiv.classList.remove('shake-effect', 'hit-effect');
-    }, 300);
-    
-    if (answer === currentMathQ.a) {
-      const dmg = Math.floor(Math.random() * 14) + 10;
+  function handleBattleAnswer(answer) {
+    if (answer === currentQuestion.a) {
+      const dmg = Math.floor(Math.random() * 12) + 10;
       battleEnemyHP -= dmg;
-      document.getElementById('battleMsg').innerHTML = `Correct! Mewt dealt ${dmg} damage!`;
-      updateBattleBars();
+      document.getElementById('battleMessage').innerHTML = `Correct! ${dmg} damage!`;
       
       if (battleEnemyHP <= 0) {
-        setTimeout(() => winBattle(), 800);
-        isBattleAnim = false;
+        winBattle();
         return;
       }
-      setTimeout(() => enemyBattleTurn(), 1000);
+      
+      setTimeout(() => enemyTurn(), 800);
     } else {
-      document.getElementById('battleMsg').innerHTML = `Wrong! Answer was ${currentMathQ.a}. ${currentEnemy.name} attacks!`;
-      
+      document.getElementById('battleMessage').innerHTML = `Wrong! Answer was ${currentQuestion.a}. Enemy attacks!`;
       const dmg = Math.floor(Math.random() * currentEnemy.atk) + 5;
-      const reduced = Math.max(1, dmg - Math.floor(pet.def / 3));
-      battlePetHP -= reduced;
-      updateBattleBars();
-      
-      const petSpriteDiv = document.getElementById('petBattleCanvas');
-      petSpriteDiv.classList.add('shake-effect', 'hit-effect');
-      setTimeout(() => {
-        petSpriteDiv.classList.remove('shake-effect', 'hit-effect');
-      }, 300);
+      battlePetHP -= dmg;
       
       if (battlePetHP <= 0) {
-        setTimeout(() => loseBattle(), 800);
-        isBattleAnim = false;
+        loseBattle();
         return;
       }
       
-      currentMathQ = getRandomMath();
-      document.getElementById('battleQ').textContent = currentMathQ.q;
+      currentQuestion = getRandomMath();
+      document.getElementById('battleQuestion').textContent = currentQuestion.q;
       renderBattleOptions();
-      document.getElementById('battleMsg').innerHTML = `What will Mewt do?`;
     }
-    isBattleAnim = false;
   }
   
-  function enemyBattleTurn() {
-    if (!inBattle || battleEnemyHP <= 0) return;
-    
+  function enemyTurn() {
     const dmg = Math.floor(Math.random() * currentEnemy.atk) + 5;
-    const reduced = Math.max(1, dmg - Math.floor(pet.def / 3));
-    battlePetHP -= reduced;
-    document.getElementById('battleMsg').innerHTML = `${currentEnemy.name} attacked! Dealt ${reduced} damage!`;
-    updateBattleBars();
-    
-    const petSpriteDiv = document.getElementById('petBattleCanvas');
-    petSpriteDiv.classList.add('shake-effect', 'hit-effect');
-    setTimeout(() => {
-      petSpriteDiv.classList.remove('shake-effect', 'hit-effect');
-    }, 300);
+    battlePetHP -= dmg;
+    document.getElementById('battleMessage').innerHTML = `${currentEnemy.name} deals ${dmg} damage!`;
     
     if (battlePetHP <= 0) {
-      setTimeout(() => loseBattle(), 800);
+      loseBattle();
       return;
     }
     
-    currentMathQ = getRandomMath();
-    document.getElementById('battleQ').textContent = currentMathQ.q;
+    currentQuestion = getRandomMath();
+    document.getElementById('battleQuestion').textContent = currentQuestion.q;
     renderBattleOptions();
-    document.getElementById('battleMsg').innerHTML = `What will Mewt do?`;
   }
   
   function winBattle() {
-    const expGain = currentEnemy.exp;
-    const coinGain = 25 + Math.floor(Math.random() * 30);
-    
-    player.xp += expGain;
-    player.coins += coinGain;
-    pet.hp = Math.min(pet.hp + Math.floor(pet.maxHp * 0.3), pet.maxHp);
-    battlePetHP = pet.hp;
-    
-    document.getElementById('battleMsg').innerHTML = `Victory! +${expGain} XP, +${coinGain} coins!`;
-    
-    if (player.xp >= player.xpNeeded) {
-      player.lv++;
-      player.xp -= player.xpNeeded;
-      player.xpNeeded = Math.floor(player.xpNeeded * 1.4);
-      pet.lv++;
-      pet.maxHp += 10;
-      pet.hp = pet.maxHp;
-      pet.atk += 4;
-      pet.def += 2;
-      document.getElementById('battleMsg').innerHTML += ` 🌟 Mewt grew to Lv${pet.lv}! 🌟`;
-    }
-    
-    // Remove defeated enemy
-    const idx = enemyList.findIndex(e => e.x === currentEnemy.x && e.y === currentEnemy.y);
-    if (idx !== -1) enemyList.splice(idx, 1);
-    
+    player.xp += currentEnemy.exp;
+    player.coins += 25;
+    document.getElementById('battleMessage').innerHTML = `Victory! +${currentEnemy.exp} XP, +25 coins!`;
     updateUI();
-    updateBattleBars();
-    saveGame();
+    
+    const idx = enemies.findIndex(e => e.x === currentEnemy.x && e.y === currentEnemy.y);
+    if (idx !== -1) enemies.splice(idx, 1);
     
     setTimeout(() => {
-      document.getElementById('battleScreen').classList.remove('active');
+      document.getElementById('battlePanel').classList.remove('active');
       inBattle = false;
-      currentEnemy = null;
-      isBattleAnim = false;
-    }, 2500);
-  }
-  
-  function loseBattle() {
-    document.getElementById('battleMsg').innerHTML = `Mewt fainted... Running to heal!`;
-    pet.hp = pet.maxHp;
-    battlePetHP = pet.hp;
-    updateUI();
-    updateBattleBars();
-    
-    setTimeout(() => {
-      document.getElementById('battleScreen').classList.remove('active');
-      inBattle = false;
-      currentEnemy = null;
-      isBattleAnim = false;
     }, 2000);
   }
   
-  function runBattle() {
-    document.getElementById('battleMsg').innerHTML = `Got away safely!`;
+  function loseBattle() {
+    document.getElementById('battleMessage').innerHTML = `Mewt fainted! Running away...`;
     setTimeout(() => {
-      document.getElementById('battleScreen').classList.remove('active');
+      document.getElementById('battlePanel').classList.remove('active');
       inBattle = false;
-      currentEnemy = null;
-      isBattleAnim = false;
+    }, 1500);
+  }
+  
+  function runBattle() {
+    document.getElementById('battleMessage').innerHTML = `Got away safely!`;
+    setTimeout(() => {
+      document.getElementById('battlePanel').classList.remove('active');
+      inBattle = false;
     }, 800);
   }
   
   // ============================================================
-  // UI UPDATE & SAVE
+  // UI UPDATES
   // ============================================================
+  
   function updateUI() {
-    const xpPercent = (player.xp / player.xpNeeded) * 100;
-    document.getElementById('xpFillBar').style.width = `${Math.min(100, xpPercent)}%`;
-    document.getElementById('xpCurrentVal').textContent = player.xp;
-    document.getElementById('xpNeededVal').textContent = player.xpNeeded;
-    document.getElementById('playerLv').textContent = `Lv${player.lv}`;
-    document.getElementById('coinAmt').textContent = player.coins;
-    document.getElementById('battlePetLv').textContent = pet.lv;
+    document.getElementById('playerLv').textContent = player.lv;
+    document.getElementById('playerXp').textContent = player.xp;
+    document.getElementById('playerXpNeeded').textContent = player.xpNeeded;
+    document.getElementById('playerCoins').textContent = player.coins;
   }
   
   // ============================================================
   // EVENT HANDLERS
   // ============================================================
+  
   canvas.addEventListener('click', (e) => {
     if (inBattle) return;
     const rect = canvas.getBoundingClientRect();
@@ -1121,10 +615,10 @@
   document.addEventListener('keydown', (e) => {
     if (inBattle) return;
     const k = e.key.toLowerCase();
-    if (k === 'w') moveKeys.w = true;
-    if (k === 's') moveKeys.s = true;
-    if (k === 'a') moveKeys.a = true;
-    if (k === 'd') moveKeys.d = true;
+    if (k === 'w') keys.w = true;
+    if (k === 's') keys.s = true;
+    if (k === 'a') keys.a = true;
+    if (k === 'd') keys.d = true;
     if (['w','s','a','d'].includes(k)) {
       player.targetX = player.x;
       player.targetY = player.y;
@@ -1133,21 +627,18 @@
   
   document.addEventListener('keyup', (e) => {
     const k = e.key.toLowerCase();
-    if (k === 'w') moveKeys.w = false;
-    if (k === 's') moveKeys.s = false;
-    if (k === 'a') moveKeys.a = false;
-    if (k === 'd') moveKeys.d = false;
+    if (k === 'w') keys.w = false;
+    if (k === 's') keys.s = false;
+    if (k === 'a') keys.a = false;
+    if (k === 'd') keys.d = false;
   });
   
-  document.getElementById('battleRunBtn').onclick = () => runBattle();
-  document.getElementById('teamBtn').onclick = () => alert(`🐱 MEWT - Lv${pet.lv}\n❤️ HP: ${pet.hp}/${pet.maxHp}\n⚔️ ATK: ${pet.atk}\n🛡️ DEF: ${pet.def}`);
-  document.getElementById('bagBtn').onclick = () => alert(`🎒 YOUR BAG\n🪙 ${player.coins} coins\n⭐ ${player.xp} XP`);
-  document.getElementById('mewtInfoBtn').onclick = () => alert(`⭐ MEWT - Your companion!\nLevel: ${pet.lv}\nHP: ${pet.hp}/${pet.maxHp}\nAttack: ${pet.atk}\nDefense: ${pet.def}`);
-  document.getElementById('settingsInfoBtn').onclick = () => alert(`⚙️ CONTROLS\nWASD or Click to move\nTouch enemies to battle!\nAnswer math to attack!\n\nGame saves automatically!`);
+  document.getElementById('runBattleBtn').onclick = () => runBattle();
   
   // ============================================================
   // ANIMATION LOOP
   // ============================================================
+  
   function animate() {
     if (!inBattle) {
       handleMovement();
@@ -1158,11 +649,11 @@
     ctx.fillStyle = '#7dd3fc';
     ctx.fillRect(0, 0, VIEW_W, VIEW_H);
     
-    drawTerrain();
-    drawDecor();
+    drawGround();
+    drawTrees();
     drawMapEnemies();
-    drawPetChar();
-    drawPlayerChar();
+    drawPet();
+    drawPlayer();
     
     requestAnimationFrame(animate);
   }
