@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Fanter World | Prodigy x Pokemon RPG</title>
+  <title>Fanter World | Pokemon Style RPG</title>
   <style>
     * {
       margin: 0;
@@ -18,13 +18,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: 'Courier New', 'Press Start 2P', 'Segoe UI', monospace;
+      font-family: 'Courier New', monospace;
       overflow: hidden;
     }
 
     .game-wrapper {
       position: relative;
-      border-radius: 24px;
+      border-radius: 20px;
       box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
       border: 3px solid #fbbf24;
     }
@@ -32,10 +32,9 @@
     canvas {
       display: block;
       cursor: crosshair;
-      border-radius: 20px;
     }
 
-    /* UI Panels - Prodigy Style */
+    /* UI Panels */
     .top-ui {
       position: absolute;
       top: 15px;
@@ -50,14 +49,13 @@
     .player-card {
       background: rgba(0,0,0,0.8);
       backdrop-filter: blur(12px);
-      border-radius: 40px;
-      padding: 10px 20px;
+      border-radius: 50px;
+      padding: 8px 20px;
       display: flex;
       align-items: center;
       gap: 15px;
       border: 2px solid #fbbf24;
       pointer-events: auto;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
     }
 
     .player-icon {
@@ -70,14 +68,12 @@
       justify-content: center;
       font-size: 24px;
       border: 2px solid #fbbf24;
-      box-shadow: 0 0 10px rgba(59,130,246,0.5);
     }
 
     .player-stats h4 {
       color: #fbbf24;
       font-size: 12px;
       margin-bottom: 5px;
-      letter-spacing: 1px;
     }
 
     .xp-bar-bg {
@@ -93,22 +89,18 @@
       height: 100%;
       background: linear-gradient(90deg, #fbbf24, #f59e0b);
       transition: width 0.3s;
-      border-radius: 10px;
     }
 
     .coin-card {
       background: rgba(0,0,0,0.8);
       backdrop-filter: blur(12px);
-      border-radius: 40px;
-      padding: 10px 25px;
+      border-radius: 50px;
+      padding: 8px 25px;
       border: 2px solid #fbbf24;
       color: #fbbf24;
       font-weight: bold;
       font-size: 18px;
       pointer-events: auto;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     .bottom-ui {
@@ -138,13 +130,11 @@
       transition: all 0.2s;
       font-family: monospace;
       font-size: 12px;
-      letter-spacing: 1px;
     }
 
     .ui-btn:hover {
       background: #3b82f6;
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(59,130,246,0.4);
     }
 
     .controls-hint {
@@ -158,17 +148,16 @@
       color: rgba(255,255,255,0.6);
       font-size: 10px;
       z-index: 20;
-      pointer-events: none;
     }
 
-    /* Battle Screen - Pokemon Style */
+    /* Pokemon Style Battle Screen */
     .battle-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at 20% 30%, #0a2a1a, #051a0a);
+      background: radial-gradient(circle at 20% 30%, #1a3a2a, #0a1a0a);
       z-index: 100;
       display: none;
       flex-direction: column;
@@ -182,35 +171,34 @@
     .battle-hud {
       display: flex;
       justify-content: space-between;
-      padding: 25px 50px;
+      padding: 20px 40px;
     }
 
     .battle-card {
       background: rgba(0,0,0,0.8);
       backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 12px 25px;
-      min-width: 240px;
+      border-radius: 16px;
+      padding: 10px 20px;
+      min-width: 220px;
       border: 2px solid;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
 
     .battle-card.enemy { border-color: #ef4444; }
     .battle-card.player { border-color: #22c55e; }
 
     .battle-card-name {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
-      margin-bottom: 8px;
+      margin-bottom: 5px;
     }
     .enemy .battle-card-name { color: #f87171; }
     .player .battle-card-name { color: #4ade80; }
 
-    .battle-hp-bar-bg {
-      width: 170px;
-      height: 12px;
+    .battle-hp-bg {
+      width: 160px;
+      height: 10px;
       background: #333;
-      border-radius: 10px;
+      border-radius: 5px;
       overflow: hidden;
       margin: 5px 0;
     }
@@ -226,7 +214,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 150px;
+      gap: 120px;
       position: relative;
     }
 
@@ -238,13 +226,6 @@
     .battle-sprite canvas {
       width: 200px;
       height: 200px;
-    }
-
-    .battle-sprite-name {
-      margin-top: 10px;
-      color: white;
-      font-weight: bold;
-      font-size: 14px;
     }
 
     .battle-controls {
@@ -319,27 +300,23 @@
       0%,100% { filter: brightness(1); }
       50% { filter: brightness(1.8) drop-shadow(0 0 10px red); }
     }
-    @keyframes floatAnim {
-      0%,100% { transform: translateY(0px); }
-      50% { transform: translateY(-5px); }
+    @keyframes runAnim {
+      0%,100% { transform: translateX(0) rotate(0deg); }
+      50% { transform: translateX(3px) rotate(2deg); }
     }
-    @keyframes walkLeg {
-      0%,100% { transform: rotate(-8deg); }
-      50% { transform: rotate(8deg); }
-    }
-    @keyframes sparkle {
-      0%,100% { opacity: 0; transform: scale(0); }
-      50% { opacity: 1; transform: scale(1); }
+    @keyframes gallop {
+      0%,100% { transform: scale(1) translateY(0); }
+      50% { transform: scale(1.02) translateY(-2px); }
     }
 
     .shake-effect { animation: shakeAnim 0.3s ease-in-out; }
     .hit-effect { animation: hitFlash 0.3s ease-in-out; }
-    .float-effect { animation: floatAnim 2s ease-in-out infinite; }
+    .gallop-animation { animation: gallop 0.3s ease-in-out; }
   </style>
 </head>
 <body>
 <div class="game-wrapper">
-  <canvas id="gameCanvas" width="1300" height="750"></canvas>
+  <canvas id="gameCanvas" width="1400" height="800"></canvas>
 
   <div class="top-ui">
     <div class="player-card">
@@ -350,9 +327,7 @@
         <span style="font-size:9px;"><span id="xpCurrent">0</span>/<span id="xpNeeded">100</span> XP</span>
       </div>
     </div>
-    <div class="coin-card">
-      🪙 <span id="coinAmount">200</span>
-    </div>
+    <div class="coin-card">🪙 <span id="coinAmount">200</span></div>
   </div>
 
   <div class="bottom-ui">
@@ -362,20 +337,18 @@
     <button class="ui-btn" id="settingsBtn">⚙️ SET</button>
   </div>
 
-  <div class="controls-hint">
-    🎮 WASD or Click to Move | 🐱 Pet Follows | ⚔️ Touch Enemy = Battle
-  </div>
+  <div class="controls-hint">🎮 WASD or Click | 🐱 Pet follows | ⚔️ Touch enemy = Battle</div>
 
   <div class="battle-container" id="battleScreen">
     <div class="battle-hud">
       <div class="battle-card enemy">
         <div class="battle-card-name" id="battleEnemyName">SLIME</div>
-        <div class="battle-hp-bar-bg"><div class="battle-hp-fill" id="battleEnemyFill" style="width:100%"></div></div>
+        <div class="battle-hp-bg"><div class="battle-hp-fill" id="battleEnemyFill" style="width:100%"></div></div>
         <div style="font-size:11px;">❤️ <span id="battleEnemyHp">0</span>/<span id="battleEnemyMax">0</span></div>
       </div>
       <div class="battle-card player">
         <div class="battle-card-name">🐱 MEWT</div>
-        <div class="battle-hp-bar-bg"><div class="battle-hp-fill" id="battlePetFill" style="width:100%"></div></div>
+        <div class="battle-hp-bg"><div class="battle-hp-fill" id="battlePetFill" style="width:100%"></div></div>
         <div style="font-size:11px;">❤️ <span id="battlePetHp">0</span>/<span id="battlePetMax">0</span></div>
       </div>
     </div>
@@ -404,7 +377,7 @@
 
 <script>
   // ============================================================
-  // FANTER WORLD - BEAUTIFUL CODE-DRAWN GRAPHICS
+  // FANTER WORLD - POKEMON STYLE WITH ALL FOURS PET!
   // ============================================================
   
   const canvas = document.getElementById('gameCanvas');
@@ -416,46 +389,41 @@
   const petBattleCtx = petBattleCanvas.getContext('2d');
   
   // ============================================================
-  // WORLD SETUP
+  // WORLD SETUP - FLAT GRASS PLANE (NO GRID)
   // ============================================================
-  const WORLD_W = 3500;
-  const WORLD_H = 3500;
-  const VIEW_W = 1300;
-  const VIEW_H = 750;
-  const TILE_SIZE = 32;
+  const WORLD_W = 4000;
+  const WORLD_H = 4000;
+  const VIEW_W = 1400;
+  const VIEW_H = 800;
   
   let camX = WORLD_W/2 - VIEW_W/2;
   let camY = WORLD_H/2 - VIEW_H/2;
   
-  // Beautiful terrain generation
-  const tileMap = [];
-  for (let i = 0; i < 110; i++) {
-    tileMap[i] = [];
-    for (let j = 0; j < 110; j++) {
-      const val = (i * 131 + j * 253) % 100;
-      if (val < 40) tileMap[i][j] = 0;
-      else if (val < 70) tileMap[i][j] = 1;
-      else tileMap[i][j] = 2;
-    }
+  // Grass texture (random dots for natural look)
+  const grassDots = [];
+  for (let i = 0; i < 2000; i++) {
+    grassDots.push({
+      x: Math.random() * WORLD_W,
+      y: Math.random() * WORLD_H,
+      size: 1 + Math.random() * 2,
+      shade: Math.random() > 0.7 ? '#4ade80' : '#22c55e'
+    });
   }
   
-  const tileColors = ['#3a6b33', '#4a7c3f', '#5a9e4b'];
-  const tileHighlights = ['#4a7c3f', '#5a9e4b', '#6aae5b'];
-  
-  // Trees with different styles
+  // Beautiful Trees
   const trees = [];
-  for (let i = 0; i < 120; i++) {
+  for (let i = 0; i < 180; i++) {
     trees.push({
       x: 200 + Math.random() * (WORLD_W - 400),
       y: 200 + Math.random() * (WORLD_H - 400),
-      type: Math.random() > 0.7 ? 'oak' : 'pine',
-      size: 24
+      type: Math.random() > 0.6 ? 'oak' : 'pine',
+      size: 28 + Math.random() * 12
     });
   }
   
   // Flowers
   const flowers = [];
-  for (let i = 0; i < 400; i++) {
+  for (let i = 0; i < 600; i++) {
     flowers.push({
       x: Math.random() * WORLD_W,
       y: Math.random() * WORLD_H,
@@ -465,36 +433,36 @@
   
   // Rocks
   const rocks = [];
-  for (let i = 0; i < 80; i++) {
+  for (let i = 0; i < 120; i++) {
     rocks.push({
       x: Math.random() * WORLD_W,
       y: Math.random() * WORLD_H,
-      size: 8 + Math.random() * 8
+      size: 6 + Math.random() * 8
     });
   }
   
-  // Enemies with unique designs
+  // Enemies
   const enemies = [
-    { x: 900, y: 700, name: 'SLIME', hp: 32, maxHp: 32, atk: 7, def: 3, exp: 35, color: '#86efac', type: 'slime', level: 2 },
-    { x: 1900, y: 1200, name: 'GLIMMER', hp: 40, maxHp: 40, atk: 9, def: 4, exp: 50, color: '#fbbf24', type: 'glimmer', level: 3 },
-    { x: 2700, y: 1700, name: 'SHADOWPAW', hp: 48, maxHp: 48, atk: 12, def: 5, exp: 70, color: '#a855f7', type: 'shadow', level: 4 },
-    { x: 1400, y: 2600, name: 'FROSTBITE', hp: 36, maxHp: 36, atk: 8, def: 6, exp: 45, color: '#06b6d4', type: 'frost', level: 3 },
-    { x: 2900, y: 2400, name: 'EMBERFANG', hp: 52, maxHp: 52, atk: 14, def: 4, exp: 85, color: '#f97316', type: 'ember', level: 5 },
-    { x: 500, y: 2900, name: 'LEAFPUFF', hp: 34, maxHp: 34, atk: 7, def: 7, exp: 40, color: '#4ade80', type: 'leaf', level: 2 },
+    { x: 1000, y: 800, name: 'SLIME', hp: 32, maxHp: 32, atk: 7, def: 3, exp: 35, color: '#86efac', type: 'slime', level: 2 },
+    { x: 2100, y: 1400, name: 'GLIMMER', hp: 40, maxHp: 40, atk: 9, def: 4, exp: 50, color: '#fbbf24', type: 'glimmer', level: 3 },
+    { x: 3000, y: 1900, name: 'SHADOWPAW', hp: 48, maxHp: 48, atk: 12, def: 5, exp: 70, color: '#a855f7', type: 'shadow', level: 4 },
+    { x: 1600, y: 2900, name: 'FROSTBITE', hp: 36, maxHp: 36, atk: 8, def: 6, exp: 45, color: '#06b6d4', type: 'frost', level: 3 },
+    { x: 3200, y: 2700, name: 'EMBERFANG', hp: 52, maxHp: 52, atk: 14, def: 4, exp: 85, color: '#f97316', type: 'ember', level: 5 },
+    { x: 600, y: 3300, name: 'LEAFPUFF', hp: 34, maxHp: 34, atk: 7, def: 7, exp: 40, color: '#4ade80', type: 'leaf', level: 2 },
   ];
   
   // ============================================================
-  // PLAYER DATA (with save)
+  // PLAYER DATA
   // ============================================================
   let player = {
     x: WORLD_W/2,
     y: WORLD_H/2,
     targetX: WORLD_W/2,
     targetY: WORLD_H/2,
-    speed: 3.3,
+    speed: 3.5,
     walkCycle: 0,
-    legSwing: 0,
-    direction: 0,
+    armSwing: 0,
+    direction: 'down',
     lv: 1,
     xp: 0,
     xpNeeded: 100,
@@ -502,15 +470,15 @@
   };
   
   let pet = {
-    x: player.x - 45,
+    x: player.x - 55,
     y: player.y,
+    runCycle: 0,
+    isRunning: false,
     hp: 45,
     maxHp: 45,
     atk: 14,
     def: 8,
-    lv: 1,
-    tailSwing: 0,
-    walkCycle: 0
+    lv: 1
   };
   
   // Load save
@@ -581,34 +549,17 @@
   // ============================================================
   
   function drawGround() {
-    const startX = Math.max(0, Math.floor(camX / TILE_SIZE));
-    const endX = Math.min(109, Math.ceil((camX + VIEW_W) / TILE_SIZE) + 1);
-    const startY = Math.max(0, Math.floor(camY / TILE_SIZE));
-    const endY = Math.min(109, Math.ceil((camY + VIEW_H) / TILE_SIZE) + 1);
+    // Base grass color
+    ctx.fillStyle = '#3a7a33';
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
     
-    for (let i = startX; i < endX; i++) {
-      for (let j = startY; j < endY; j++) {
-        const x = i * TILE_SIZE - camX;
-        const y = j * TILE_SIZE - camY;
-        const tileType = tileMap[i]?.[j] || 0;
-        
-        // Base color
-        ctx.fillStyle = tileColors[tileType];
-        ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
-        
-        // Add gradient highlight
-        ctx.fillStyle = tileHighlights[tileType];
-        ctx.fillRect(x + 2, y + 2, TILE_SIZE - 4, 4);
-        
-        // Subtle texture dots
-        ctx.fillStyle = 'rgba(0,0,0,0.05)';
-        for (let k = 0; k < 2; k++) {
-          ctx.fillRect(x + 8 + (i * 7) % 16, y + 16 + (j * 11) % 16, 2, 2);
-        }
-        
-        // Border
-        ctx.strokeStyle = 'rgba(0,0,0,0.04)';
-        ctx.strokeRect(x, y, TILE_SIZE, TILE_SIZE);
+    // Grass texture dots
+    for (const dot of grassDots) {
+      const x = dot.x - camX;
+      const y = dot.y - camY;
+      if (x > 0 && x < VIEW_W && y > 0 && y < VIEW_H) {
+        ctx.fillStyle = dot.shade;
+        ctx.fillRect(x, y, dot.size, dot.size);
       }
     }
   }
@@ -617,19 +568,18 @@
     for (const f of flowers) {
       const x = f.x - camX;
       const y = f.y - camY;
-      if (x > -15 && x < VIEW_W + 15 && y > -15 && y < VIEW_H + 15) {
+      if (x > -20 && x < VIEW_W + 20 && y > -20 && y < VIEW_H + 20) {
         // Stem
         ctx.fillStyle = '#4ade80';
-        ctx.fillRect(x - 1, y + 2, 2, 6);
-        // Flower petals
+        ctx.fillRect(x - 1, y + 3, 2, 6);
+        // Petals
         ctx.fillStyle = f.color;
-        ctx.beginPath();
         for (let a = 0; a < 5; a++) {
           const angle = a * 72 * Math.PI / 180;
           const px = x + Math.cos(angle) * 4;
           const py = y + Math.sin(angle) * 4;
           ctx.beginPath();
-          ctx.ellipse(px, py, 2, 3, angle, 0, Math.PI * 2);
+          ctx.ellipse(px, py, 2.5, 3, angle, 0, Math.PI * 2);
           ctx.fill();
         }
         // Center
@@ -641,11 +591,79 @@
     }
   }
   
+  function drawTrees() {
+    for (const tree of trees) {
+      const x = tree.x - camX;
+      const y = tree.y - camY;
+      if (x > -60 && x < VIEW_W + 60 && y > -80 && y < VIEW_H + 80) {
+        // Shadow
+        ctx.fillStyle = 'rgba(0,0,0,0.15)';
+        ctx.beginPath();
+        ctx.ellipse(x + 3, y + 35, 22, 8, 0, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Trunk with texture
+        ctx.fillStyle = '#8B5A2B';
+        ctx.fillRect(x - 8, y + 10, 16, 32);
+        ctx.fillStyle = '#6B3A1B';
+        for (let i = 0; i < 3; i++) {
+          ctx.fillRect(x - 4 + i * 4, y + 20 + i * 8, 2, 6);
+        }
+        
+        if (tree.type === 'oak') {
+          // Oak tree - rich layered canopy
+          ctx.fillStyle = '#2d6e2d';
+          ctx.beginPath();
+          ctx.ellipse(x, y - 5, 24, 28, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#3a8c3a';
+          ctx.beginPath();
+          ctx.ellipse(x - 9, y - 14, 16, 20, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.ellipse(x + 9, y - 14, 16, 20, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#4ade80';
+          ctx.beginPath();
+          ctx.ellipse(x, y - 22, 12, 14, 0, 0, Math.PI * 2);
+          ctx.fill();
+          // Highlight
+          ctx.fillStyle = 'rgba(255,255,255,0.15)';
+          ctx.beginPath();
+          ctx.ellipse(x - 5, y - 18, 4, 5, 0, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          // Pine tree - triangular layers
+          ctx.fillStyle = '#1a5a1a';
+          ctx.beginPath();
+          ctx.moveTo(x, y - 40);
+          ctx.lineTo(x - 16, y - 10);
+          ctx.lineTo(x - 8, y - 10);
+          ctx.lineTo(x - 8, y + 5);
+          ctx.lineTo(x + 8, y + 5);
+          ctx.lineTo(x + 8, y - 10);
+          ctx.lineTo(x + 16, y - 10);
+          ctx.fill();
+          ctx.fillStyle = '#2d6e2d';
+          ctx.beginPath();
+          ctx.moveTo(x, y - 32);
+          ctx.lineTo(x - 12, y - 8);
+          ctx.lineTo(x - 5, y - 8);
+          ctx.lineTo(x - 5, y + 3);
+          ctx.lineTo(x + 5, y + 3);
+          ctx.lineTo(x + 5, y - 8);
+          ctx.lineTo(x + 12, y - 8);
+          ctx.fill();
+        }
+      }
+    }
+  }
+  
   function drawRocks() {
     for (const r of rocks) {
       const x = r.x - camX;
       const y = r.y - camY;
-      if (x > -20 && x < VIEW_W + 20 && y > -20 && y < VIEW_H + 20) {
+      if (x > -25 && x < VIEW_W + 25 && y > -25 && y < VIEW_H + 25) {
         ctx.fillStyle = '#78716c';
         ctx.beginPath();
         ctx.ellipse(x, y, r.size, r.size * 0.6, 0, 0, Math.PI * 2);
@@ -654,131 +672,94 @@
         ctx.beginPath();
         ctx.ellipse(x - 2, y - 2, r.size * 0.4, r.size * 0.3, 0, 0, Math.PI * 2);
         ctx.fill();
-      }
-    }
-  }
-  
-  function drawTrees() {
-    for (const tree of trees) {
-      const x = tree.x - camX;
-      const y = tree.y - camY;
-      if (x > -50 && x < VIEW_W + 50 && y > -60 && y < VIEW_H + 60) {
-        // Shadow
-        ctx.fillStyle = 'rgba(0,0,0,0.15)';
+        ctx.fillStyle = '#57534e';
         ctx.beginPath();
-        ctx.ellipse(x + 3, y + 28, 18, 7, 0, 0, Math.PI * 2);
+        ctx.ellipse(x + 1, y + 1, r.size * 0.3, r.size * 0.2, 0, 0, Math.PI * 2);
         ctx.fill();
-        
-        // Trunk
-        ctx.fillStyle = '#8B5A2B';
-        ctx.fillRect(x - 6, y + 8, 12, 25);
-        
-        if (tree.type === 'oak') {
-          // Oak tree - layered circles
-          ctx.fillStyle = '#2d6e2d';
-          ctx.beginPath();
-          ctx.ellipse(x, y - 2, 18, 22, 0, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = '#3a8c3a';
-          ctx.beginPath();
-          ctx.ellipse(x - 7, y - 10, 13, 16, 0, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.beginPath();
-          ctx.ellipse(x + 7, y - 10, 13, 16, 0, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = '#4ade80';
-          ctx.beginPath();
-          ctx.ellipse(x, y - 18, 8, 10, 0, 0, Math.PI * 2);
-          ctx.fill();
-        } else {
-          // Pine tree - triangles
-          ctx.fillStyle = '#1a5a1a';
-          ctx.beginPath();
-          ctx.moveTo(x, y - 28);
-          ctx.lineTo(x - 12, y - 5);
-          ctx.lineTo(x - 5, y - 5);
-          ctx.lineTo(x - 5, y + 5);
-          ctx.lineTo(x + 5, y + 5);
-          ctx.lineTo(x + 5, y - 5);
-          ctx.lineTo(x + 12, y - 5);
-          ctx.fill();
-        }
       }
     }
   }
   
-  // Detailed Player Drawing
+  // HUMAN PLAYER WITH ARMS AND MOVING LEGS
   function drawPlayer() {
     const x = player.x - camX;
     const y = player.y - camY;
     const bob = Math.sin(Date.now() / 180) * 1.5;
-    const legOffset = Math.sin(player.walkCycle * Math.PI) * (player.walkCycle > 0 ? 4 : 0);
+    const legSwing = Math.sin(player.walkCycle * Math.PI) * (player.walkCycle > 0 ? 6 : 0);
+    const armSwing = Math.sin(player.walkCycle * Math.PI) * (player.walkCycle > 0 ? 8 : 0);
     
     // Shadow
     ctx.fillStyle = 'rgba(0,0,0,0.2)';
     ctx.beginPath();
-    ctx.ellipse(x + 3, y + 32, 16, 6, 0, 0, Math.PI * 2);
+    ctx.ellipse(x + 3, y + 38, 18, 7, 0, 0, Math.PI * 2);
     ctx.fill();
     
     // Flowing Cape
     ctx.fillStyle = '#fbbf24';
     ctx.beginPath();
-    ctx.moveTo(x - 13, y + 4 + bob);
-    ctx.quadraticCurveTo(x - 6, y + 22 + bob, x, y + 26 + bob);
-    ctx.quadraticCurveTo(x + 6, y + 22 + bob, x + 13, y + 4 + bob);
+    ctx.moveTo(x - 15, y + 2 + bob);
+    ctx.quadraticCurveTo(x - 8, y + 24 + bob, x, y + 28 + bob);
+    ctx.quadraticCurveTo(x + 8, y + 24 + bob, x + 15, y + 2 + bob);
     ctx.fill();
-    // Cape highlight
     ctx.fillStyle = '#f59e0b';
     ctx.beginPath();
-    ctx.moveTo(x - 8, y + 8 + bob);
-    ctx.quadraticCurveTo(x - 3, y + 20 + bob, x, y + 22 + bob);
-    ctx.quadraticCurveTo(x + 3, y + 20 + bob, x + 8, y + 8 + bob);
+    ctx.moveTo(x - 10, y + 6 + bob);
+    ctx.quadraticCurveTo(x - 4, y + 20 + bob, x, y + 24 + bob);
+    ctx.quadraticCurveTo(x + 4, y + 20 + bob, x + 10, y + 6 + bob);
     ctx.fill();
     
     // Body
     ctx.fillStyle = '#3b82f6';
     ctx.beginPath();
-    ctx.roundRect(x - 13, y - 8 + bob, 26, 34, 12);
+    ctx.roundRect(x - 14, y - 8 + bob, 28, 36, 12);
     ctx.fill();
-    // Body highlight
     ctx.fillStyle = '#60a5fa';
     ctx.beginPath();
-    ctx.roundRect(x - 8, y - 4 + bob, 6, 24, 6);
+    ctx.roundRect(x - 8, y - 4 + bob, 6, 28, 6);
     ctx.fill();
     
-    // Legs with walking animation
+    // Arms with swing
+    ctx.fillStyle = '#3b82f6';
+    ctx.fillRect(x - 20 + armSwing * 0.5, y + 2 + bob, 8, 20);
+    ctx.fillRect(x + 12 - armSwing * 0.5, y + 2 + bob, 8, 20);
+    // Hands
+    ctx.fillStyle = '#fcd34d';
+    ctx.fillRect(x - 21 + armSwing * 0.5, y + 18 + bob, 6, 6);
+    ctx.fillRect(x + 15 - armSwing * 0.5, y + 18 + bob, 6, 6);
+    
+    // Legs with swing
     ctx.fillStyle = '#2563eb';
-    ctx.fillRect(x - 9 + legOffset * 0.4, y + 20 + bob, 7, 14);
-    ctx.fillRect(x + 2 - legOffset * 0.4, y + 20 + bob, 7, 14);
+    ctx.fillRect(x - 10 + legSwing * 0.4, y + 24 + bob, 8, 16);
+    ctx.fillRect(x + 2 - legSwing * 0.4, y + 24 + bob, 8, 16);
     
     // Boots
     ctx.fillStyle = '#8B4513';
-    ctx.fillRect(x - 10 + legOffset * 0.4, y + 30 + bob, 9, 6);
-    ctx.fillRect(x + 1 - legOffset * 0.4, y + 30 + bob, 9, 6);
+    ctx.fillRect(x - 11 + legSwing * 0.4, y + 36 + bob, 10, 7);
+    ctx.fillRect(x + 1 - legSwing * 0.4, y + 36 + bob, 10, 7);
     ctx.fillStyle = '#d97706';
-    ctx.fillRect(x - 9 + legOffset * 0.4, y + 31 + bob, 7, 3);
-    ctx.fillRect(x + 2 - legOffset * 0.4, y + 31 + bob, 7, 3);
+    ctx.fillRect(x - 10 + legSwing * 0.4, y + 37 + bob, 8, 3);
+    ctx.fillRect(x + 2 - legSwing * 0.4, y + 37 + bob, 8, 3);
     
     // Head
     ctx.fillStyle = '#fcd34d';
     ctx.beginPath();
-    ctx.ellipse(x, y - 14 + bob, 15, 17, 0, 0, Math.PI * 2);
+    ctx.ellipse(x, y - 14 + bob, 16, 18, 0, 0, Math.PI * 2);
     ctx.fill();
     
     // Hair
     ctx.fillStyle = '#d97706';
     ctx.beginPath();
-    ctx.ellipse(x, y - 25 + bob, 14, 10, 0, 0, Math.PI * 2);
+    ctx.ellipse(x, y - 26 + bob, 15, 11, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = '#b45309';
     ctx.beginPath();
-    ctx.ellipse(x - 6, y - 28 + bob, 4, 5, 0, 0, Math.PI * 2);
+    ctx.ellipse(x - 7, y - 29 + bob, 4, 5, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.beginPath();
-    ctx.ellipse(x + 6, y - 28 + bob, 4, 5, 0, 0, Math.PI * 2);
+    ctx.ellipse(x + 7, y - 29 + bob, 4, 5, 0, 0, Math.PI * 2);
     ctx.fill();
     
-    // Eyes (big anime style)
+    // Eyes
     ctx.fillStyle = '#fff';
     ctx.beginPath();
     ctx.ellipse(x - 6, y - 18 + bob, 5, 7, 0, 0, Math.PI * 2);
@@ -804,165 +785,179 @@
     ctx.ellipse(x + 4, y - 20 + bob, 1.5, 1.5, 0, 0, Math.PI * 2);
     ctx.fill();
     
-    // Mouth
+    // Mouth (determined)
     ctx.fillStyle = '#b45309';
     ctx.beginPath();
-    ctx.ellipse(x, y - 9 + bob, 5, 3, 0, 0, Math.PI * 2);
+    ctx.ellipse(x, y - 8 + bob, 5, 3, 0, 0, Math.PI * 2);
     ctx.fill();
     
     // Staff
     ctx.fillStyle = '#8B5A2B';
-    ctx.fillRect(x + 14, y - 5 + bob, 4, 35);
+    ctx.fillRect(x + 16, y - 6 + bob, 4, 42);
     ctx.fillStyle = '#60a5fa';
     ctx.beginPath();
-    ctx.ellipse(x + 16, y - 8 + bob, 5, 5, 0, 0, Math.PI * 2);
+    ctx.ellipse(x + 18, y - 9 + bob, 6, 6, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = '#fff';
     ctx.beginPath();
-    ctx.ellipse(x + 15, y - 9 + bob, 2, 2, 0, 0, Math.PI * 2);
+    ctx.ellipse(x + 17, y - 10 + bob, 2.5, 2.5, 0, 0, Math.PI * 2);
     ctx.fill();
   }
   
-  // Detailed Pet Drawing
+  // CAT ON ALL FOURS (runs when far away)
   function drawPet() {
     const x = pet.x - camX;
     const y = pet.y - camY;
     const bob = Math.sin(Date.now() / 160) * 1.5;
-    const tailSwing = Math.sin(Date.now() / 120) * 5;
+    
+    // Check distance to player to determine if running
+    const distToPlayer = Math.hypot(player.x - pet.x, player.y - pet.y);
+    const isRunning = distToPlayer > 60;
+    
+    // Running animation cycle
+    pet.runCycle += isRunning ? 0.25 : 0.1;
+    const legOffset = Math.sin(pet.runCycle * Math.PI * 2) * 4;
+    const bodyBob = Math.sin(pet.runCycle * Math.PI * 2) * 2;
     
     // Shadow
     ctx.fillStyle = 'rgba(0,0,0,0.18)';
     ctx.beginPath();
-    ctx.ellipse(x + 2, y + 28, 13, 5, 0, 0, Math.PI * 2);
+    ctx.ellipse(x + 2, y + 25, 16, 6, 0, 0, Math.PI * 2);
     ctx.fill();
     
-    // Fluffy Tail
+    // Body (elongated for four-legged)
     ctx.fillStyle = '#22c55e';
     ctx.beginPath();
-    ctx.moveTo(x + 14, y + 12 + bob);
-    ctx.quadraticCurveTo(x + 28 + tailSwing * 0.5, y + 6 + bob, x + 24 + tailSwing * 0.3, y - 6 + bob);
-    ctx.lineTo(x + 20, y + 2 + bob);
-    ctx.fill();
-    ctx.fillStyle = '#16a34a';
-    ctx.beginPath();
-    ctx.moveTo(x + 16, y + 10 + bob);
-    ctx.quadraticCurveTo(x + 26 + tailSwing * 0.4, y + 5 + bob, x + 23 + tailSwing * 0.2, y - 3 + bob);
-    ctx.lineTo(x + 19, y + 2 + bob);
-    ctx.fill();
-    
-    // Body
-    ctx.fillStyle = '#22c55e';
-    ctx.beginPath();
-    ctx.roundRect(x - 11, y - 3 + bob, 22, 28, 12);
+    ctx.roundRect(x - 16, y - 4 + bob + bodyBob, 34, 22, 10);
     ctx.fill();
     
     // Belly
     ctx.fillStyle = '#86efac';
     ctx.beginPath();
-    ctx.roundRect(x - 7, y + 2 + bob, 14, 18, 8);
+    ctx.roundRect(x - 12, y + 1 + bob + bodyBob, 26, 14, 7);
     ctx.fill();
     
-    // Gradient body highlight
-    ctx.fillStyle = '#4ade80';
+    // Back legs (moving)
+    ctx.fillStyle = '#16a34a';
+    ctx.fillRect(x - 20 + legOffset * 0.5, y + 6 + bob + bodyBob, 8, 12);
+    ctx.fillRect(x + 12 - legOffset * 0.5, y + 6 + bob + bodyBob, 8, 12);
+    
+    // Front legs (moving)
+    ctx.fillStyle = '#16a34a';
+    ctx.fillRect(x - 18 + legOffset * 0.3, y - 2 + bob + bodyBob, 7, 10);
+    ctx.fillRect(x + 11 - legOffset * 0.3, y - 2 + bob + bodyBob, 7, 10);
+    
+    // Paws
+    ctx.fillStyle = '#fcd34d';
+    ctx.fillRect(x - 19 + legOffset * 0.5, y + 14 + bob + bodyBob, 6, 3);
+    ctx.fillRect(x + 13 - legOffset * 0.5, y + 14 + bob + bodyBob, 6, 3);
+    
+    // Tail (swishing more when running)
+    const tailSwing = Math.sin(Date.now() / (isRunning ? 100 : 150)) * (isRunning ? 8 : 5);
+    ctx.fillStyle = '#22c55e';
     ctx.beginPath();
-    ctx.roundRect(x - 6, y - 1 + bob, 5, 18, 5);
+    ctx.moveTo(x + 19, y + 2 + bob + bodyBob);
+    ctx.quadraticCurveTo(x + 32 + tailSwing * 0.5, y - 2 + bob + bodyBob, x + 28 + tailSwing * 0.3, y - 10 + bob + bodyBob);
+    ctx.lineTo(x + 24, y - 2 + bob + bodyBob);
     ctx.fill();
     
     // Head
     ctx.fillStyle = '#22c55e';
     ctx.beginPath();
-    ctx.ellipse(x, y - 10 + bob, 13, 15, 0, 0, Math.PI * 2);
+    ctx.ellipse(x - 12, y - 6 + bob + bodyBob, 12, 14, 0, 0, Math.PI * 2);
     ctx.fill();
     
     // Ears
     ctx.fillStyle = '#16a34a';
     ctx.beginPath();
-    ctx.moveTo(x - 11, y - 20 + bob);
-    ctx.lineTo(x - 18, y - 32 + bob);
-    ctx.lineTo(x - 5, y - 22 + bob);
+    ctx.moveTo(x - 22, y - 15 + bob + bodyBob);
+    ctx.lineTo(x - 28, y - 26 + bob + bodyBob);
+    ctx.lineTo(x - 16, y - 17 + bob + bodyBob);
     ctx.fill();
     ctx.beginPath();
-    ctx.moveTo(x + 11, y - 20 + bob);
-    ctx.lineTo(x + 18, y - 32 + bob);
-    ctx.lineTo(x + 5, y - 22 + bob);
+    ctx.moveTo(x - 6, y - 15 + bob + bodyBob);
+    ctx.lineTo(x - 2, y - 26 + bob + bodyBob);
+    ctx.lineTo(x - 10, y - 17 + bob + bodyBob);
     ctx.fill();
     
     // Inner ears
     ctx.fillStyle = '#fcd34d';
     ctx.beginPath();
-    ctx.moveTo(x - 10, y - 21 + bob);
-    ctx.lineTo(x - 15, y - 29 + bob);
-    ctx.lineTo(x - 6, y - 22 + bob);
+    ctx.moveTo(x - 21, y - 16 + bob + bodyBob);
+    ctx.lineTo(x - 25, y - 24 + bob + bodyBob);
+    ctx.lineTo(x - 17, y - 17 + bob + bodyBob);
     ctx.fill();
     ctx.beginPath();
-    ctx.moveTo(x + 10, y - 21 + bob);
-    ctx.lineTo(x + 15, y - 29 + bob);
-    ctx.lineTo(x + 6, y - 22 + bob);
+    ctx.moveTo(x - 7, y - 16 + bob + bodyBob);
+    ctx.lineTo(x - 4, y - 24 + bob + bodyBob);
+    ctx.lineTo(x - 9, y - 17 + bob + bodyBob);
     ctx.fill();
     
-    // Eyes (big cute)
+    // Eyes
     ctx.fillStyle = '#fff';
     ctx.beginPath();
-    ctx.ellipse(x - 5, y - 14 + bob, 5, 6, 0, 0, Math.PI * 2);
+    ctx.ellipse(x - 16, y - 10 + bob + bodyBob, 4, 5, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.beginPath();
-    ctx.ellipse(x + 5, y - 14 + bob, 5, 6, 0, 0, Math.PI * 2);
+    ctx.ellipse(x - 8, y - 10 + bob + bodyBob, 4, 5, 0, 0, Math.PI * 2);
     ctx.fill();
     
     ctx.fillStyle = '#1a1a2e';
     ctx.beginPath();
-    ctx.ellipse(x - 5, y - 13 + bob, 2.5, 4, 0, 0, Math.PI * 2);
+    ctx.ellipse(x - 16, y - 9 + bob + bodyBob, 2, 3, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.beginPath();
-    ctx.ellipse(x + 5, y - 13 + bob, 2.5, 4, 0, 0, Math.PI * 2);
+    ctx.ellipse(x - 8, y - 9 + bob + bodyBob, 2, 3, 0, 0, Math.PI * 2);
     ctx.fill();
     
     // Eye sparkle
     ctx.fillStyle = '#fff';
     ctx.beginPath();
-    ctx.ellipse(x - 7, y - 16 + bob, 1.5, 1.5, 0, 0, Math.PI * 2);
+    ctx.ellipse(x - 18, y - 12 + bob + bodyBob, 1.2, 1.2, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.beginPath();
-    ctx.ellipse(x + 3, y - 16 + bob, 1.5, 1.5, 0, 0, Math.PI * 2);
+    ctx.ellipse(x - 10, y - 12 + bob + bodyBob, 1.2, 1.2, 0, 0, Math.PI * 2);
     ctx.fill();
     
     // Nose
     ctx.fillStyle = '#ef4444';
     ctx.beginPath();
-    ctx.ellipse(x, y - 6 + bob, 2, 2, 0, 0, Math.PI * 2);
+    ctx.ellipse(x - 12, y - 4 + bob + bodyBob, 2, 1.5, 0, 0, Math.PI * 2);
     ctx.fill();
     
     // Whiskers
     ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 1.2;
     ctx.beginPath();
-    ctx.moveTo(x - 11, y - 9 + bob);
-    ctx.lineTo(x - 20, y - 11 + bob);
+    ctx.moveTo(x - 20, y - 5 + bob + bodyBob);
+    ctx.lineTo(x - 28, y - 7 + bob + bodyBob);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(x - 11, y - 6 + bob);
-    ctx.lineTo(x - 20, y - 7 + bob);
+    ctx.moveTo(x - 20, y - 3 + bob + bodyBob);
+    ctx.lineTo(x - 28, y - 3 + bob + bodyBob);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(x + 11, y - 9 + bob);
-    ctx.lineTo(x + 20, y - 11 + bob);
+    ctx.moveTo(x - 4, y - 5 + bob + bodyBob);
+    ctx.lineTo(x + 4, y - 7 + bob + bodyBob);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(x + 11, y - 6 + bob);
-    ctx.lineTo(x + 20, y - 7 + bob);
+    ctx.moveTo(x - 4, y - 3 + bob + bodyBob);
+    ctx.lineTo(x + 4, y - 3 + bob + bodyBob);
     ctx.stroke();
     
-    // Cute blush
-    ctx.fillStyle = 'rgba(255,100,100,0.4)';
-    ctx.beginPath();
-    ctx.ellipse(x - 8, y - 7 + bob, 3, 2, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.ellipse(x + 8, y - 7 + bob, 3, 2, 0, 0, Math.PI * 2);
-    ctx.fill();
+    // Running dust particles
+    if (isRunning && pet.runCycle % 1 < 0.3) {
+      ctx.fillStyle = 'rgba(200,200,200,0.5)';
+      ctx.beginPath();
+      ctx.ellipse(x - 22, y + 10 + bob + bodyBob, 3, 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(x + 16, y + 10 + bob + bodyBob, 3, 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
   
-  // Detailed Map Enemy
+  // Map Enemy
   function drawMapEnemy(enemy) {
     const x = enemy.x - camX;
     const y = enemy.y - camY;
@@ -972,44 +967,44 @@
       // Shadow
       ctx.fillStyle = 'rgba(0,0,0,0.2)';
       ctx.beginPath();
-      ctx.ellipse(x + 2, y + 22 + bounce, 14, 5, 0, 0, Math.PI * 2);
+      ctx.ellipse(x + 2, y + 22 + bounce, 15, 6, 0, 0, Math.PI * 2);
       ctx.fill();
       
       // Body
       ctx.fillStyle = enemy.color;
       ctx.beginPath();
-      ctx.ellipse(x, y + 8 + bounce, 15, 17, 0, 0, Math.PI * 2);
+      ctx.ellipse(x, y + 8 + bounce, 17, 19, 0, 0, Math.PI * 2);
       ctx.fill();
       
-      // Gradient highlight
-      ctx.fillStyle = 'rgba(255,255,255,0.2)';
+      // Highlight
+      ctx.fillStyle = 'rgba(255,255,255,0.25)';
       ctx.beginPath();
-      ctx.ellipse(x - 3, y + 3 + bounce, 5, 5, 0, 0, Math.PI * 2);
+      ctx.ellipse(x - 4, y + 2 + bounce, 6, 6, 0, 0, Math.PI * 2);
       ctx.fill();
       
       // Eyes
       ctx.fillStyle = '#fff';
-      ctx.fillRect(x - 6, y + 3 + bounce, 4, 5);
-      ctx.fillRect(x + 2, y + 3 + bounce, 4, 5);
+      ctx.fillRect(x - 7, y + 3 + bounce, 4, 5);
+      ctx.fillRect(x + 3, y + 3 + bounce, 4, 5);
       ctx.fillStyle = '#1a1a2e';
-      ctx.fillRect(x - 5, y + 4 + bounce, 2, 3);
-      ctx.fillRect(x + 3, y + 4 + bounce, 2, 3);
+      ctx.fillRect(x - 6, y + 4 + bounce, 2, 3);
+      ctx.fillRect(x + 4, y + 4 + bounce, 2, 3);
       
       // Mouth
       ctx.fillStyle = '#b45309';
       ctx.beginPath();
-      ctx.ellipse(x, y + 11 + bounce, 5, 3, 0, 0, Math.PI * 2);
+      ctx.ellipse(x, y + 12 + bounce, 5, 3, 0, 0, Math.PI * 2);
       ctx.fill();
       
-      // Exclamation mark
+      // Exclamation
       ctx.fillStyle = '#ef4444';
       ctx.font = 'bold 14px monospace';
-      ctx.fillText('!', x - 12, y - 5 + bounce);
+      ctx.fillText('!', x - 14, y - 6 + bounce);
     }
   }
   
   // ============================================================
-  // BATTLE SPRITES (Beautiful)
+  // BATTLE SPRITES (Pokemon Style)
   // ============================================================
   
   function drawBattleEnemy(enemy) {
@@ -1019,185 +1014,185 @@
     // Shadow
     enemyBattleCtx.fillStyle = 'rgba(0,0,0,0.2)';
     enemyBattleCtx.beginPath();
-    enemyBattleCtx.ellipse(100, 165, 45, 15, 0, 0, Math.PI * 2);
+    enemyBattleCtx.ellipse(100, 170, 50, 18, 0, 0, Math.PI * 2);
     enemyBattleCtx.fill();
     
     // Body
     enemyBattleCtx.fillStyle = enemy.color;
     enemyBattleCtx.beginPath();
-    enemyBattleCtx.ellipse(100, 100 + bob, 55, 60, 0, 0, Math.PI * 2);
+    enemyBattleCtx.ellipse(100, 100 + bob, 60, 65, 0, 0, Math.PI * 2);
     enemyBattleCtx.fill();
     
     // Highlight
-    enemyBattleCtx.fillStyle = 'rgba(255,255,255,0.25)';
+    enemyBattleCtx.fillStyle = 'rgba(255,255,255,0.3)';
     enemyBattleCtx.beginPath();
-    enemyBattleCtx.ellipse(80, 80 + bob, 15, 15, 0, 0, Math.PI * 2);
+    enemyBattleCtx.ellipse(80, 80 + bob, 18, 18, 0, 0, Math.PI * 2);
     enemyBattleCtx.fill();
     
     // Eyes
     enemyBattleCtx.fillStyle = '#fff';
     enemyBattleCtx.beginPath();
-    enemyBattleCtx.ellipse(75, 85 + bob, 10, 12, 0, 0, Math.PI * 2);
+    enemyBattleCtx.ellipse(75, 85 + bob, 11, 13, 0, 0, Math.PI * 2);
     enemyBattleCtx.fill();
     enemyBattleCtx.beginPath();
-    enemyBattleCtx.ellipse(125, 85 + bob, 10, 12, 0, 0, Math.PI * 2);
+    enemyBattleCtx.ellipse(125, 85 + bob, 11, 13, 0, 0, Math.PI * 2);
     enemyBattleCtx.fill();
     
     enemyBattleCtx.fillStyle = '#1a1a2e';
     enemyBattleCtx.beginPath();
-    enemyBattleCtx.ellipse(75, 87 + bob, 5, 7, 0, 0, Math.PI * 2);
+    enemyBattleCtx.ellipse(75, 87 + bob, 5.5, 7.5, 0, 0, Math.PI * 2);
     enemyBattleCtx.fill();
     enemyBattleCtx.beginPath();
-    enemyBattleCtx.ellipse(125, 87 + bob, 5, 7, 0, 0, Math.PI * 2);
+    enemyBattleCtx.ellipse(125, 87 + bob, 5.5, 7.5, 0, 0, Math.PI * 2);
     enemyBattleCtx.fill();
     
-    // Eye sparkle
+    // Sparkle
     enemyBattleCtx.fillStyle = '#fff';
     enemyBattleCtx.beginPath();
-    enemyBattleCtx.ellipse(71, 82 + bob, 2.5, 2.5, 0, 0, Math.PI * 2);
+    enemyBattleCtx.ellipse(71, 81 + bob, 2.5, 2.5, 0, 0, Math.PI * 2);
     enemyBattleCtx.fill();
     enemyBattleCtx.beginPath();
-    enemyBattleCtx.ellipse(121, 82 + bob, 2.5, 2.5, 0, 0, Math.PI * 2);
+    enemyBattleCtx.ellipse(121, 81 + bob, 2.5, 2.5, 0, 0, Math.PI * 2);
     enemyBattleCtx.fill();
     
     // Mouth
     enemyBattleCtx.fillStyle = '#b45309';
     enemyBattleCtx.beginPath();
-    enemyBattleCtx.ellipse(100, 115 + bob, 12, 8, 0, 0, Math.PI * 2);
+    enemyBattleCtx.ellipse(100, 118 + bob, 14, 9, 0, 0, Math.PI * 2);
     enemyBattleCtx.fill();
     
     // Blush
     enemyBattleCtx.fillStyle = 'rgba(255,100,100,0.5)';
     enemyBattleCtx.beginPath();
-    enemyBattleCtx.ellipse(60, 100 + bob, 8, 5, 0, 0, Math.PI * 2);
+    enemyBattleCtx.ellipse(58, 102 + bob, 9, 6, 0, 0, Math.PI * 2);
     enemyBattleCtx.fill();
     enemyBattleCtx.beginPath();
-    enemyBattleCtx.ellipse(140, 100 + bob, 8, 5, 0, 0, Math.PI * 2);
+    enemyBattleCtx.ellipse(142, 102 + bob, 9, 6, 0, 0, Math.PI * 2);
     enemyBattleCtx.fill();
   }
   
   function drawBattlePet() {
     petBattleCtx.clearRect(0, 0, 200, 200);
     const bob = Math.sin(Date.now() / 200) * 3;
-    const tailSwing = Math.sin(Date.now() / 150) * 5;
+    const tailSwing = Math.sin(Date.now() / 150) * 8;
     
     // Shadow
     petBattleCtx.fillStyle = 'rgba(0,0,0,0.2)';
     petBattleCtx.beginPath();
-    petBattleCtx.ellipse(100, 165, 45, 15, 0, 0, Math.PI * 2);
+    petBattleCtx.ellipse(100, 170, 50, 18, 0, 0, Math.PI * 2);
     petBattleCtx.fill();
     
     // Tail
     petBattleCtx.fillStyle = '#22c55e';
     petBattleCtx.beginPath();
-    petBattleCtx.moveTo(145, 100 + bob);
-    petBattleCtx.quadraticCurveTo(165 + tailSwing * 0.5, 90 + bob, 158 + tailSwing * 0.3, 70 + bob);
-    petBattleCtx.lineTo(148, 80 + bob);
+    petBattleCtx.moveTo(148, 95 + bob);
+    petBattleCtx.quadraticCurveTo(175 + tailSwing * 0.5, 85 + bob, 165 + tailSwing * 0.3, 65 + bob);
+    petBattleCtx.lineTo(152, 78 + bob);
     petBattleCtx.fill();
     
     // Body
     petBattleCtx.fillStyle = '#22c55e';
     petBattleCtx.beginPath();
-    petBattleCtx.roundRect(55, 75 + bob, 90, 75, 20);
+    petBattleCtx.roundRect(50, 75 + bob, 100, 80, 22);
     petBattleCtx.fill();
     
     // Belly
     petBattleCtx.fillStyle = '#86efac';
     petBattleCtx.beginPath();
-    petBattleCtx.roundRect(70, 85 + bob, 60, 55, 15);
+    petBattleCtx.roundRect(65, 85 + bob, 70, 60, 15);
     petBattleCtx.fill();
     
     // Head
     petBattleCtx.fillStyle = '#22c55e';
     petBattleCtx.beginPath();
-    petBattleCtx.ellipse(100, 60 + bob, 38, 42, 0, 0, Math.PI * 2);
+    petBattleCtx.ellipse(100, 60 + bob, 42, 46, 0, 0, Math.PI * 2);
     petBattleCtx.fill();
     
     // Ears
     petBattleCtx.fillStyle = '#16a34a';
     petBattleCtx.beginPath();
-    petBattleCtx.moveTo(70, 35 + bob);
-    petBattleCtx.lineTo(55, 15 + bob);
-    petBattleCtx.lineTo(80, 30 + bob);
+    petBattleCtx.moveTo(68, 32 + bob);
+    petBattleCtx.lineTo(52, 10 + bob);
+    petBattleCtx.lineTo(78, 28 + bob);
     petBattleCtx.fill();
     petBattleCtx.beginPath();
-    petBattleCtx.moveTo(130, 35 + bob);
-    petBattleCtx.lineTo(145, 15 + bob);
-    petBattleCtx.lineTo(120, 30 + bob);
+    petBattleCtx.moveTo(132, 32 + bob);
+    petBattleCtx.lineTo(148, 10 + bob);
+    petBattleCtx.lineTo(122, 28 + bob);
     petBattleCtx.fill();
     
     // Inner ears
     petBattleCtx.fillStyle = '#fcd34d';
     petBattleCtx.beginPath();
-    petBattleCtx.moveTo(72, 33 + bob);
-    petBattleCtx.lineTo(60, 19 + bob);
-    petBattleCtx.lineTo(78, 30 + bob);
+    petBattleCtx.moveTo(70, 30 + bob);
+    petBattleCtx.lineTo(58, 15 + bob);
+    petBattleCtx.lineTo(76, 28 + bob);
     petBattleCtx.fill();
     petBattleCtx.beginPath();
-    petBattleCtx.moveTo(128, 33 + bob);
-    petBattleCtx.lineTo(140, 19 + bob);
-    petBattleCtx.lineTo(122, 30 + bob);
+    petBattleCtx.moveTo(130, 30 + bob);
+    petBattleCtx.lineTo(142, 15 + bob);
+    petBattleCtx.lineTo(124, 28 + bob);
     petBattleCtx.fill();
     
     // Eyes
     petBattleCtx.fillStyle = '#fff';
     petBattleCtx.beginPath();
-    petBattleCtx.ellipse(80, 52 + bob, 10, 12, 0, 0, Math.PI * 2);
+    petBattleCtx.ellipse(78, 52 + bob, 11, 13, 0, 0, Math.PI * 2);
     petBattleCtx.fill();
     petBattleCtx.beginPath();
-    petBattleCtx.ellipse(120, 52 + bob, 10, 12, 0, 0, Math.PI * 2);
+    petBattleCtx.ellipse(122, 52 + bob, 11, 13, 0, 0, Math.PI * 2);
     petBattleCtx.fill();
     
     petBattleCtx.fillStyle = '#1a1a2e';
     petBattleCtx.beginPath();
-    petBattleCtx.ellipse(80, 54 + bob, 5, 7, 0, 0, Math.PI * 2);
+    petBattleCtx.ellipse(78, 54 + bob, 5.5, 7.5, 0, 0, Math.PI * 2);
     petBattleCtx.fill();
     petBattleCtx.beginPath();
-    petBattleCtx.ellipse(120, 54 + bob, 5, 7, 0, 0, Math.PI * 2);
+    petBattleCtx.ellipse(122, 54 + bob, 5.5, 7.5, 0, 0, Math.PI * 2);
     petBattleCtx.fill();
     
-    // Eye sparkle
+    // Sparkle
     petBattleCtx.fillStyle = '#fff';
     petBattleCtx.beginPath();
-    petBattleCtx.ellipse(76, 48 + bob, 2.5, 2.5, 0, 0, Math.PI * 2);
+    petBattleCtx.ellipse(74, 48 + bob, 2.5, 2.5, 0, 0, Math.PI * 2);
     petBattleCtx.fill();
     petBattleCtx.beginPath();
-    petBattleCtx.ellipse(116, 48 + bob, 2.5, 2.5, 0, 0, Math.PI * 2);
+    petBattleCtx.ellipse(118, 48 + bob, 2.5, 2.5, 0, 0, Math.PI * 2);
     petBattleCtx.fill();
     
     // Nose
     petBattleCtx.fillStyle = '#ef4444';
     petBattleCtx.beginPath();
-    petBattleCtx.ellipse(100, 72 + bob, 4, 3, 0, 0, Math.PI * 2);
+    petBattleCtx.ellipse(100, 74 + bob, 4.5, 3.5, 0, 0, Math.PI * 2);
     petBattleCtx.fill();
     
     // Whiskers
     petBattleCtx.strokeStyle = '#fff';
     petBattleCtx.lineWidth = 2;
     petBattleCtx.beginPath();
-    petBattleCtx.moveTo(60, 70 + bob);
-    petBattleCtx.lineTo(35, 67 + bob);
+    petBattleCtx.moveTo(58, 72 + bob);
+    petBattleCtx.lineTo(32, 69 + bob);
     petBattleCtx.stroke();
     petBattleCtx.beginPath();
-    petBattleCtx.moveTo(60, 76 + bob);
-    petBattleCtx.lineTo(35, 79 + bob);
+    petBattleCtx.moveTo(58, 78 + bob);
+    petBattleCtx.lineTo(32, 81 + bob);
     petBattleCtx.stroke();
     petBattleCtx.beginPath();
-    petBattleCtx.moveTo(140, 70 + bob);
-    petBattleCtx.lineTo(165, 67 + bob);
+    petBattleCtx.moveTo(142, 72 + bob);
+    petBattleCtx.lineTo(168, 69 + bob);
     petBattleCtx.stroke();
     petBattleCtx.beginPath();
-    petBattleCtx.moveTo(140, 76 + bob);
-    petBattleCtx.lineTo(165, 79 + bob);
+    petBattleCtx.moveTo(142, 78 + bob);
+    petBattleCtx.lineTo(168, 81 + bob);
     petBattleCtx.stroke();
     
     // Blush
     petBattleCtx.fillStyle = 'rgba(255,100,100,0.4)';
     petBattleCtx.beginPath();
-    petBattleCtx.ellipse(68, 80 + bob, 8, 5, 0, 0, Math.PI * 2);
+    petBattleCtx.ellipse(65, 82 + bob, 9, 6, 0, 0, Math.PI * 2);
     petBattleCtx.fill();
     petBattleCtx.beginPath();
-    petBattleCtx.ellipse(132, 80 + bob, 8, 5, 0, 0, Math.PI * 2);
+    petBattleCtx.ellipse(135, 82 + bob, 9, 6, 0, 0, Math.PI * 2);
     petBattleCtx.fill();
   }
   
@@ -1207,13 +1202,13 @@
   
   function checkCollision(x, y, r) {
     for (const t of trees) {
-      if (Math.hypot(x - t.x, y - t.y) < r + 14) return true;
+      if (Math.hypot(x - t.x, y - t.y) < r + 18) return true;
     }
     for (const rk of rocks) {
-      if (Math.hypot(x - rk.x, y - rk.y) < r + rk.size/2) return true;
+      if (Math.hypot(x - rk.x, y - rk.y) < r + rk.size) return true;
     }
     for (const e of enemies) {
-      if (Math.hypot(x - e.x, y - e.y) < r + 18 && !inBattle) {
+      if (Math.hypot(x - e.x, y - e.y) < r + 22 && !inBattle) {
         startBattle(e);
         return true;
       }
@@ -1240,19 +1235,20 @@
       let nx = player.x + mx * player.speed;
       let ny = player.y + my * player.speed;
       
-      if (!checkCollision(nx, player.y, 17)) player.x = nx;
-      if (!checkCollision(player.x, ny, 17)) player.y = ny;
+      if (!checkCollision(nx, player.y, 18)) player.x = nx;
+      if (!checkCollision(player.x, ny, 18)) player.y = ny;
       
-      player.walkCycle += 0.16;
+      player.walkCycle += 0.18;
     } else {
       player.walkCycle = 0;
     }
     
-    // Pet follows player
+    // Pet follows with dynamic speed (runs when far)
+    const distToPlayer = Math.hypot(player.x - pet.x, player.y - pet.y);
+    const petSpeed = distToPlayer > 80 ? 4.2 : 2.8;
     const angle = Math.atan2(player.y - pet.y, player.x - pet.x);
-    pet.x += Math.cos(angle) * 2.7;
-    pet.y += Math.sin(angle) * 2.7;
-    pet.walkCycle += 0.1;
+    pet.x += Math.cos(angle) * petSpeed;
+    pet.y += Math.sin(angle) * petSpeed;
     
     // Camera
     camX = player.x - VIEW_W/2;
@@ -1272,9 +1268,9 @@
       const my = (dy / dist) * player.speed;
       let nx = player.x + mx;
       let ny = player.y + my;
-      if (!checkCollision(nx, player.y, 17)) player.x = nx;
-      if (!checkCollision(player.x, ny, 17)) player.y = ny;
-      player.walkCycle += 0.16;
+      if (!checkCollision(nx, player.y, 18)) player.x = nx;
+      if (!checkCollision(player.x, ny, 18)) player.y = ny;
+      player.walkCycle += 0.18;
     } else {
       player.walkCycle = 0;
     }
@@ -1342,7 +1338,7 @@
     }, 300);
     
     if (answer === currentQuestion.a) {
-      const dmg = Math.floor(Math.random() * 13) + 11;
+      const dmg = Math.floor(Math.random() * 13) + 12;
       battleEnemyHP -= dmg;
       document.getElementById('battleMessage').innerHTML = `Correct! Mewt dealt ${dmg} damage!`;
       updateBattleBars();
@@ -1356,7 +1352,7 @@
     } else {
       document.getElementById('battleMessage').innerHTML = `Wrong! Answer was ${currentQuestion.a}. ${currentEnemy.name} attacks!`;
       
-      const dmg = Math.floor(Math.random() * currentEnemy.atk) + 5;
+      const dmg = Math.floor(Math.random() * currentEnemy.atk) + 6;
       const reduced = Math.max(1, dmg - Math.floor(pet.def / 3));
       battlePetHP -= reduced;
       updateBattleBars();
@@ -1384,7 +1380,7 @@
   function enemyTurn() {
     if (!inBattle || battleEnemyHP <= 0) return;
     
-    const dmg = Math.floor(Math.random() * currentEnemy.atk) + 5;
+    const dmg = Math.floor(Math.random() * currentEnemy.atk) + 6;
     const reduced = Math.max(1, dmg - Math.floor(pet.def / 3));
     battlePetHP -= reduced;
     document.getElementById('battleMessage').innerHTML = `${currentEnemy.name} attacked! Dealt ${reduced} damage!`;
@@ -1409,11 +1405,11 @@
   
   function winBattle() {
     const expGain = currentEnemy.exp;
-    const coinGain = 25 + Math.floor(Math.random() * 25);
+    const coinGain = 30 + Math.floor(Math.random() * 30);
     
     player.xp += expGain;
     player.coins += coinGain;
-    pet.hp = Math.min(pet.hp + Math.floor(pet.maxHp * 0.25), pet.maxHp);
+    pet.hp = Math.min(pet.hp + Math.floor(pet.maxHp * 0.3), pet.maxHp);
     battlePetHP = pet.hp;
     
     document.getElementById('battleMessage').innerHTML = `Victory! +${expGain} XP, +${coinGain} coins!`;
@@ -1425,10 +1421,10 @@
       player.xp -= player.xpNeeded;
       player.xpNeeded = Math.floor(player.xpNeeded * 1.4);
       pet.lv++;
-      pet.maxHp += 10;
+      pet.maxHp += 12;
       pet.hp = pet.maxHp;
-      pet.atk += 4;
-      pet.def += 2;
+      pet.atk += 5;
+      pet.def += 3;
       battlePetHP = pet.hp;
       document.getElementById('battleMessage').innerHTML += ` 🌟 Mewt grew to Lv${pet.lv}! 🌟`;
       updateUI();
@@ -1542,7 +1538,7 @@
     
     // Sky gradient
     const grad = ctx.createLinearGradient(0, 0, 0, VIEW_H);
-    grad.addColorStop(0, '#7dd3fc');
+    grad.addColorStop(0, '#87CEEB');
     grad.addColorStop(1, '#bae6fd');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, VIEW_W, VIEW_H);
