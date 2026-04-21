@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Fanter World - Retro Pokemon x Prodigy</title>
+  <title>Fanter World - Pokemon x Prodigy RPG</title>
   <style>
     * {
       margin: 0;
@@ -13,18 +13,18 @@
     }
 
     body {
-      background: #0a0f1a;
+      background: linear-gradient(135deg, #0f172a, #1e1b4b);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: 'Courier New', 'Press Start 2P', 'Quicksand', monospace;
+      font-family: 'Courier New', 'Press Start 2P', monospace;
       overflow: hidden;
     }
 
-    .game-container {
+    .game-wrapper {
       position: relative;
-      border-radius: 16px;
+      border-radius: 20px;
       box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
       border: 3px solid #fbbf24;
       background: #1a4a2a;
@@ -34,61 +34,59 @@
       display: block;
       margin: 0 auto;
       cursor: crosshair;
-      background: #2d5a3a;
     }
 
-    /* Retro Prodigy-Style Top Bar */
-    .top-bar {
+    /* UI Top Bar */
+    .ui-top {
       position: absolute;
-      top: 10px;
-      left: 10px;
-      right: 10px;
+      top: 12px;
+      left: 12px;
+      right: 12px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
       z-index: 20;
       pointer-events: none;
     }
 
     .player-card {
-      background: rgba(0,0,0,0.8);
-      border-radius: 30px;
-      padding: 6px 16px;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      border-radius: 50px;
+      padding: 8px 20px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 15px;
       border: 2px solid #fbbf24;
       pointer-events: auto;
-      font-family: monospace;
     }
 
     .player-avatar {
-      width: 36px;
-      height: 36px;
-      background: #3b82f6;
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 24px;
       border: 2px solid #fbbf24;
     }
 
-    .player-info h4 {
+    .player-stats h4 {
       color: #fbbf24;
       font-size: 12px;
       margin-bottom: 4px;
     }
 
-    .xp-bar-bg {
-      width: 100px;
-      height: 6px;
+    .xp-container {
+      width: 140px;
+      height: 8px;
       background: #333;
-      border-radius: 3px;
+      border-radius: 4px;
       overflow: hidden;
     }
 
-    .xp-bar-fill {
+    .xp-fill {
       width: 0%;
       height: 100%;
       background: linear-gradient(90deg, #fbbf24, #f59e0b);
@@ -96,24 +94,26 @@
     }
 
     .coin-display {
-      background: rgba(0,0,0,0.8);
-      border-radius: 30px;
-      padding: 6px 16px;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      border-radius: 50px;
+      padding: 8px 20px;
       border: 2px solid #fbbf24;
       color: #fbbf24;
       font-weight: bold;
-      font-family: monospace;
+      font-size: 16px;
     }
 
     /* Bottom Bar */
-    .bottom-bar {
+    .ui-bottom {
       position: absolute;
       bottom: 15px;
       left: 50%;
       transform: translateX(-50%);
       background: rgba(0,0,0,0.85);
-      border-radius: 40px;
-      padding: 6px 20px;
+      backdrop-filter: blur(8px);
+      border-radius: 50px;
+      padding: 8px 20px;
       display: flex;
       gap: 12px;
       z-index: 20;
@@ -121,11 +121,11 @@
       pointer-events: auto;
     }
 
-    .bottom-btn {
+    .ui-btn {
       background: rgba(255,255,255,0.1);
       border: none;
-      border-radius: 30px;
-      padding: 8px 16px;
+      border-radius: 40px;
+      padding: 8px 18px;
       color: white;
       font-weight: bold;
       cursor: pointer;
@@ -134,26 +134,26 @@
       font-size: 11px;
     }
 
-    .bottom-btn:hover {
+    .ui-btn:hover {
       background: #3b82f6;
       transform: translateY(-2px);
     }
 
     /* Pokemon-Style Battle Screen */
-    .battle-screen {
+    .battle-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #1a3a2a, #0d2a1a);
+      background: linear-gradient(135deg, #0a2a1a, #051a0a);
       z-index: 100;
       display: none;
       flex-direction: column;
       font-family: monospace;
     }
 
-    .battle-screen.active {
+    .battle-container.active {
       display: flex;
     }
 
@@ -163,30 +163,30 @@
       padding: 20px 40px;
     }
 
-    .battle-hud-card {
-      background: rgba(0,0,0,0.7);
+    .battle-card {
+      background: rgba(0,0,0,0.8);
       border-radius: 16px;
-      padding: 10px 20px;
-      min-width: 200px;
+      padding: 12px 24px;
+      min-width: 220px;
       border: 2px solid;
     }
 
-    .battle-hud-card.enemy { border-color: #ef4444; }
-    .battle-hud-card.player { border-color: #22c55e; }
+    .battle-card.enemy { border-color: #ef4444; }
+    .battle-card.player { border-color: #22c55e; }
 
-    .battle-hud-name {
+    .battle-card-name {
       font-size: 18px;
       font-weight: bold;
       margin-bottom: 5px;
     }
-    .enemy .battle-hud-name { color: #f87171; }
-    .player .battle-hud-name { color: #4ade80; }
+    .enemy .battle-card-name { color: #f87171; }
+    .player .battle-card-name { color: #4ade80; }
 
     .battle-hp-bg {
       width: 160px;
-      height: 10px;
+      height: 12px;
       background: #333;
-      border-radius: 5px;
+      border-radius: 6px;
       overflow: hidden;
       margin: 5px 0;
     }
@@ -200,70 +200,76 @@
     .battle-sprites-area {
       flex: 1;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      gap: 100px;
+      padding: 0 80px;
+      position: relative;
     }
 
-    .battle-sprite-box {
+    .enemy-sprite-container {
+      position: relative;
+    }
+
+    .player-sprite-container {
+      position: relative;
+    }
+
+    .battle-sprite {
+      width: 220px;
+      height: 220px;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+    }
+
+    .battle-name-tag {
       text-align: center;
-    }
-
-    .battle-sprite-canvas {
-      width: 160px;
-      height: 160px;
-      background: rgba(0,0,0,0.3);
-      border-radius: 20px;
-    }
-
-    .battle-sprite-name {
       margin-top: 10px;
       color: white;
       font-weight: bold;
+      font-size: 14px;
     }
 
     .battle-controls {
-      background: #1a1a2e;
+      background: linear-gradient(135deg, #1a1a2e, #0f0f1a);
       border-top: 3px solid #fbbf24;
-      padding: 20px;
+      padding: 20px 40px;
     }
 
-    .math-question {
-      background: #0f0f1a;
+    .battle-math-area {
+      background: #0a0a15;
       border-radius: 20px;
       padding: 15px;
       text-align: center;
       margin-bottom: 15px;
     }
 
-    .question-text {
+    .battle-question {
       font-size: 28px;
       color: #fbbf24;
       font-weight: bold;
       margin-bottom: 15px;
     }
 
-    .answer-buttons {
+    .battle-options {
       display: flex;
       justify-content: center;
       gap: 15px;
       flex-wrap: wrap;
     }
 
-    .answer-btn {
+    .battle-opt-btn {
       background: linear-gradient(135deg, #3b82f6, #1d4ed8);
       border: none;
-      border-radius: 40px;
+      border-radius: 50px;
       padding: 10px 25px;
       color: white;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
       cursor: pointer;
       font-family: monospace;
       transition: all 0.2s;
     }
 
-    .answer-btn:hover {
+    .battle-opt-btn:hover {
       transform: scale(1.05);
       box-shadow: 0 0 15px #3b82f6;
     }
@@ -273,533 +279,295 @@
       border-radius: 15px;
       padding: 10px;
       text-align: center;
-      margin-top: 10px;
+      margin-top: 12px;
       color: #fbbf24;
       font-size: 12px;
     }
 
-    .run-btn {
+    .battle-run {
       background: linear-gradient(135deg, #ef4444, #dc2626);
       margin-top: 10px;
       width: 100%;
-      padding: 8px;
+      padding: 10px;
     }
 
-    @keyframes shake {
+    @keyframes shakeAnim {
       0%,100% { transform: translateX(0); }
-      25% { transform: translateX(-8px); }
-      75% { transform: translateX(8px); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
     }
-    @keyframes flash {
+    @keyframes hitFlash {
       0%,100% { filter: brightness(1); }
-      50% { filter: brightness(1.5) drop-shadow(0 0 10px red); }
+      50% { filter: brightness(1.8) drop-shadow(0 0 10px red); }
     }
-    .shake-animation { animation: shake 0.3s ease-in-out; }
-    .flash-animation { animation: flash 0.3s ease-in-out; }
+    .shake-effect { animation: shakeAnim 0.3s ease-in-out; }
+    .hit-effect { animation: hitFlash 0.3s ease-in-out; }
+
+    @keyframes walkLeg {
+      0%,100% { transform: rotate(-10deg); }
+      50% { transform: rotate(10deg); }
+    }
   </style>
 </head>
 <body>
-<div class="game-container">
-  <canvas id="gameCanvas" width="1200" height="700"></canvas>
+<div class="game-wrapper">
+  <canvas id="gameCanvas" width="1300" height="750"></canvas>
 
-  <!-- Top Bar -->
-  <div class="top-bar">
+  <!-- Top UI -->
+  <div class="ui-top">
     <div class="player-card">
       <div class="player-avatar">⚔️</div>
-      <div class="player-info">
-        <h4>FANTER <span id="playerLevelBadge">Lv1</span></h4>
-        <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpFill" style="width:0%"></div></div>
-        <span style="font-size:9px;"><span id="xpCurrent">0</span>/<span id="xpNeeded">100</span> XP</span>
+      <div class="player-stats">
+        <h4>FANTER <span id="playerLv">Lv1</span></h4>
+        <div class="xp-container"><div class="xp-fill" id="xpFillBar" style="width:0%"></div></div>
+        <span style="font-size:9px;"><span id="xpCurrentVal">0</span>/<span id="xpNeededVal">100</span> XP</span>
       </div>
     </div>
-    <div class="coin-display">🪙 <span id="coinAmount">100</span></div>
+    <div class="coin-display">🪙 <span id="coinAmt">150</span></div>
   </div>
 
-  <!-- Bottom Bar -->
-  <div class="bottom-bar">
-    <button class="bottom-btn" id="teamBtn">🐱 TEAM</button>
-    <button class="bottom-btn" id="bagBtn">🎒 BAG</button>
-    <button class="bottom-btn" id="mewtBtn">⭐ MEWT</button>
-    <button class="bottom-btn" id="settingsBtn">⚙️ SET</button>
+  <!-- Bottom UI -->
+  <div class="ui-bottom">
+    <button class="ui-btn" id="teamBtn">🐱 TEAM</button>
+    <button class="ui-btn" id="bagBtn">🎒 BAG</button>
+    <button class="ui-btn" id="mewtInfoBtn">⭐ MEWT</button>
+    <button class="ui-btn" id="settingsInfoBtn">⚙️ SET</button>
   </div>
 
   <!-- Battle Screen -->
-  <div class="battle-screen" id="battleScreen">
+  <div class="battle-container" id="battleScreen">
     <div class="battle-hud">
-      <div class="battle-hud-card enemy">
-        <div class="battle-hud-name" id="battleEnemyName">SLIME</div>
-        <div class="battle-hp-bg"><div class="battle-hp-fill" id="battleEnemyHpFill" style="width:100%"></div></div>
-        <div style="font-size:11px;">❤️ <span id="battleEnemyHp">0</span>/<span id="battleEnemyMaxHp">0</span></div>
+      <div class="battle-card enemy">
+        <div class="battle-card-name" id="battleEnemyName">SLIME</div>
+        <div class="battle-hp-bg"><div class="battle-hp-fill" id="battleEnemyFill" style="width:100%"></div></div>
+        <div style="font-size:11px;">❤️ <span id="battleEnemyHpText">0</span>/<span id="battleEnemyMaxHp">0</span></div>
       </div>
-      <div class="battle-hud-card player">
-        <div class="battle-hud-name">🐱 MEWT</div>
-        <div class="battle-hp-bg"><div class="battle-hp-fill" id="battlePetHpFill" style="width:100%"></div></div>
-        <div style="font-size:11px;">❤️ <span id="battlePetHp">0</span>/<span id="battlePetMaxHp">0</span></div>
+      <div class="battle-card player">
+        <div class="battle-card-name">🐱 MEWT</div>
+        <div class="battle-hp-bg"><div class="battle-hp-fill" id="battlePetFill" style="width:100%"></div></div>
+        <div style="font-size:11px;">❤️ <span id="battlePetHpText">0</span>/<span id="battlePetMaxHp">0</span></div>
       </div>
     </div>
 
     <div class="battle-sprites-area">
-      <div class="battle-sprite-box">
-        <canvas id="battleEnemyCanvas" class="battle-sprite-canvas" width="160" height="160"></canvas>
-        <div class="battle-sprite-name" id="battleEnemySpriteName">???</div>
+      <div class="enemy-sprite-container">
+        <canvas id="enemyBattleCanvas" class="battle-sprite" width="220" height="220"></canvas>
+        <div class="battle-name-tag" id="enemyNameTag">???</div>
       </div>
-      <div class="battle-sprite-box">
-        <canvas id="battlePetCanvas" class="battle-sprite-canvas" width="160" height="160"></canvas>
-        <div class="battle-sprite-name">MEWT Lv <span id="battlePetLevel">1</span></div>
+      <div class="player-sprite-container">
+        <canvas id="petBattleCanvas" class="battle-sprite" width="220" height="220"></canvas>
+        <div class="battle-name-tag">MEWT Lv <span id="battlePetLv">1</span></div>
       </div>
     </div>
 
     <div class="battle-controls">
-      <div class="math-question">
-        <div class="question-text" id="questionText">2 + 2 = ?</div>
-        <div class="answer-buttons" id="answerButtons"></div>
+      <div class="battle-math-area">
+        <div class="battle-question" id="battleQ">2 + 2 = ?</div>
+        <div class="battle-options" id="battleOpts"></div>
       </div>
-      <div class="battle-message" id="battleMessage">A wild enemy appeared!</div>
-      <button class="answer-btn run-btn" id="runBattleBtn">🏃 RUN</button>
+      <div class="battle-message" id="battleMsg">A wild enemy appeared!</div>
+      <button class="battle-opt-btn battle-run" id="battleRunBtn">🏃 RUN</button>
     </div>
   </div>
 </div>
 
 <script>
   // ============================================================
-  // FANTER WORLD - RETRO POKEMON x PRODIGY STYLE
+  // FANTER WORLD - FULLY FUNCTIONAL WITH SAVES & ANIMATIONS
   // ============================================================
   
   const canvas = document.getElementById('gameCanvas');
   const ctx = canvas.getContext('2d');
   
-  // Battle canvases
-  const battleEnemyCanvas = document.getElementById('battleEnemyCanvas');
-  const battleEnemyCtx = battleEnemyCanvas.getContext('2d');
-  const battlePetCanvas = document.getElementById('battlePetCanvas');
-  const battlePetCtx = battlePetCanvas.getContext('2d');
+  const enemyBattleCanvas = document.getElementById('enemyBattleCanvas');
+  const enemyBattleCtx = enemyBattleCanvas.getContext('2d');
+  const petBattleCanvas = document.getElementById('petBattleCanvas');
+  const petBattleCtx = petBattleCanvas.getContext('2d');
   
   // ============================================================
-  // WORLD SETUP
+  // FIXED WORLD MAP (Same every time)
   // ============================================================
-  const WORLD_WIDTH = 3000;
-  const WORLD_HEIGHT = 3000;
-  const VIEW_WIDTH = 1200;
-  const VIEW_HEIGHT = 700;
+  const WORLD_W = 3200;
+  const WORLD_H = 3200;
+  const VIEW_W = 1300;
+  const VIEW_H = 750;
+  const TILE = 32;
   
-  let cameraX = WORLD_WIDTH / 2 - VIEW_WIDTH / 2;
-  let cameraY = WORLD_HEIGHT / 2 - VIEW_HEIGHT / 2;
+  let camX = WORLD_W/2 - VIEW_W/2;
+  let camY = WORLD_H/2 - VIEW_H/2;
   
-  // Simple tile-based world (retro style)
-  const TILE_SIZE = 32;
-  const MAP_WIDTH = 94;
-  const MAP_HEIGHT = 94;
-  
-  // Generate map with different zones
-  const groundMap = [];
-  for (let i = 0; i < MAP_WIDTH; i++) {
-    groundMap[i] = [];
-    for (let j = 0; j < MAP_HEIGHT; j++) {
-      let zone = 0;
-      // Center is grass, edges are darker
-      const distFromCenter = Math.abs(i - MAP_WIDTH/2) + Math.abs(j - MAP_HEIGHT/2);
-      if (distFromCenter < 20) zone = 2;
-      else if (distFromCenter < 40) zone = 1;
-      else zone = 0;
-      groundMap[i][j] = zone;
+  // Fixed tile map (based on seed so it's always the same)
+  const tileMap = [];
+  for (let i = 0; i < 100; i++) {
+    tileMap[i] = [];
+    for (let j = 0; j < 100; j++) {
+      const val = (i * 131 + j * 253) % 100;
+      if (val < 30) tileMap[i][j] = 0;
+      else if (val < 60) tileMap[i][j] = 1;
+      else tileMap[i][j] = 2;
     }
   }
   
-  const groundColors = ['#3a6b33', '#4a7c3f', '#5a9e4b'];
+  const tileColors = ['#3a6b33', '#4a7c3f', '#5a9e4b'];
   
-  // Trees
-  const trees = [];
-  for (let i = 0; i < 120; i++) {
-    trees.push({
-      x: 200 + Math.random() * (WORLD_WIDTH - 400),
-      y: 200 + Math.random() * (WORLD_HEIGHT - 400),
+  // Fixed tree positions
+  const treeList = [];
+  for (let i = 0; i < 100; i++) {
+    treeList.push({
+      x: 300 + (i * 131) % (WORLD_W - 600),
+      y: 200 + (i * 253) % (WORLD_H - 400),
       size: 24
     });
   }
   
-  // Flowers
-  const flowers = [];
-  for (let i = 0; i < 300; i++) {
-    flowers.push({
-      x: Math.random() * WORLD_WIDTH,
-      y: Math.random() * WORLD_HEIGHT,
-      color: ['#f472b6', '#fbbf24', '#a855f7'][Math.floor(Math.random() * 3)]
+  // Fixed flower positions
+  const flowerList = [];
+  for (let i = 0; i < 200; i++) {
+    flowerList.push({
+      x: 100 + (i * 73) % (WORLD_W - 200),
+      y: 100 + (i * 97) % (WORLD_H - 200),
+      color: ['#f472b6', '#fbbf24', '#a855f7'][i % 3]
     });
   }
   
-  // Enemies
-  const enemies = [
-    { x: 800, y: 600, name: 'SLIME', hp: 28, maxHp: 28, attack: 7, defense: 3, exp: 30, color: '#86efac', level: 2 },
-    { x: 1800, y: 1000, name: 'GLIMMER', hp: 35, maxHp: 35, attack: 9, defense: 4, exp: 45, color: '#fbbf24', level: 3 },
-    { x: 2500, y: 1500, name: 'SHADOWPAW', hp: 42, maxHp: 42, attack: 11, defense: 5, exp: 60, color: '#a855f7', level: 4 },
-    { x: 1200, y: 2400, name: 'FROSTBITE', hp: 32, maxHp: 32, attack: 8, defense: 6, exp: 40, color: '#06b6d4', level: 3 },
-    { x: 2700, y: 2200, name: 'EMBERFANG', hp: 48, maxHp: 48, attack: 13, defense: 4, exp: 75, color: '#f97316', level: 5 },
-    { x: 400, y: 2700, name: 'LEAFPUFF', hp: 30, maxHp: 30, attack: 6, defense: 7, exp: 35, color: '#4ade80', level: 2 },
-    { x: 2200, y: 500, name: 'THUNDERPAW', hp: 38, maxHp: 38, attack: 10, defense: 4, exp: 55, color: '#facc15', level: 4 },
+  // Fixed enemies
+  const enemyList = [
+    { x: 850, y: 650, name: 'SLIME', hp: 30, maxHp: 30, atk: 7, def: 3, exp: 35, color: '#86efac', lv: 2 },
+    { x: 1850, y: 1100, name: 'GLIMMER', hp: 38, maxHp: 38, atk: 9, def: 4, exp: 50, color: '#fbbf24', lv: 3 },
+    { x: 2600, y: 1600, name: 'SHADOWPAW', hp: 45, maxHp: 45, atk: 12, def: 5, exp: 70, color: '#a855f7', lv: 4 },
+    { x: 1300, y: 2500, name: 'FROSTBITE', hp: 35, maxHp: 35, atk: 8, def: 6, exp: 45, color: '#06b6d4', lv: 3 },
+    { x: 2800, y: 2300, name: 'EMBERFANG', hp: 50, maxHp: 50, atk: 14, def: 4, exp: 85, color: '#f97316', lv: 5 },
+    { x: 450, y: 2800, name: 'LEAFPUFF', hp: 32, maxHp: 32, atk: 7, def: 7, exp: 40, color: '#4ade80', lv: 2 },
+    { x: 2300, y: 550, name: 'THUNDERPAW', hp: 42, maxHp: 42, atk: 11, def: 4, exp: 60, color: '#facc15', lv: 4 },
   ];
   
   // ============================================================
-  // PLAYER & PET
+  // PLAYER DATA (With localStorage save)
   // ============================================================
-  const player = {
-    x: WORLD_WIDTH / 2,
-    y: WORLD_HEIGHT / 2,
-    targetX: WORLD_WIDTH / 2,
-    targetY: WORLD_HEIGHT / 2,
-    speed: 3.2,
-    walkFrame: 0,
-    level: 1,
+  let playerData = {
+    x: WORLD_W/2,
+    y: WORLD_H/2,
+    lv: 1,
     xp: 0,
     xpNeeded: 100,
-    coins: 150
+    coins: 200
   };
   
-  const pet = {
-    x: WORLD_WIDTH / 2 - 40,
-    y: WORLD_HEIGHT / 2,
-    hp: 38,
-    maxHp: 38,
-    attack: 12,
-    defense: 7,
-    level: 1
+  let petData = {
+    hp: 42,
+    maxHp: 42,
+    atk: 13,
+    def: 7,
+    lv: 1
   };
   
-  // Battle state
+  // Load save
+  const saved = localStorage.getItem('fanterWorldSave');
+  if (saved) {
+    try {
+      const save = JSON.parse(saved);
+      playerData = save.player || playerData;
+      petData = save.pet || petData;
+      console.log('✅ Save loaded!');
+    } catch(e) {}
+  }
+  
+  function saveGame() {
+    localStorage.setItem('fanterWorldSave', JSON.stringify({
+      player: playerData,
+      pet: petData
+    }));
+  }
+  
+  // ============================================================
+  // GAME STATE
+  // ============================================================
+  let player = {
+    x: playerData.x,
+    y: playerData.y,
+    targetX: playerData.x,
+    targetY: playerData.y,
+    speed: 3.2,
+    legSwing: 0,
+    walkCycle: 0,
+    lv: playerData.lv,
+    xp: playerData.xp,
+    xpNeeded: playerData.xpNeeded,
+    coins: playerData.coins
+  };
+  
+  let pet = {
+    x: player.x - 45,
+    y: player.y,
+    hp: petData.hp,
+    maxHp: petData.maxHp,
+    atk: petData.atk,
+    def: petData.def,
+    lv: petData.lv,
+    tailSwing: 0
+  };
+  
   let inBattle = false;
   let currentEnemy = null;
-  let battlePetHp = pet.hp;
-  let battleEnemyHp = 0;
-  let currentQuestion = null;
-  let isAnimating = false;
+  let battlePetHP = pet.hp;
+  let battleEnemyHP = 0;
+  let currentMathQ = null;
+  let isBattleAnim = false;
   
-  // Movement
-  const keys = { w: false, s: false, a: false, d: false };
+  const moveKeys = { w: false, s: false, a: false, d: false };
   
-  // Math questions
-  const mathQuestions = [
-    { q: "1 + 1 = ?", a: 2, opts: [0, 1, 2, 3] },
-    { q: "2 + 2 = ?", a: 4, opts: [2, 3, 4, 5] },
-    { q: "3 + 1 = ?", a: 4, opts: [2, 3, 4, 5] },
-    { q: "5 - 2 = ?", a: 3, opts: [1, 2, 3, 4] },
-    { q: "2 + 3 = ?", a: 5, opts: [3, 4, 5, 6] },
-    { q: "4 - 1 = ?", a: 3, opts: [1, 2, 3, 4] },
-    { q: "1 + 0 = ?", a: 1, opts: [0, 1, 2, 3] },
-    { q: "3 - 1 = ?", a: 2, opts: [1, 2, 3, 4] },
-    { q: "2 + 4 = ?", a: 6, opts: [4, 5, 6, 7] },
-    { q: "5 - 3 = ?", a: 2, opts: [1, 2, 3, 4] },
-    { q: "10 - 5 = ?", a: 5, opts: [3, 4, 5, 6] },
-    { q: "3 + 3 = ?", a: 6, opts: [4, 5, 6, 7] },
-    { q: "4 + 4 = ?", a: 8, opts: [6, 7, 8, 9] },
+  // Math questions (Kindergarten)
+  const mathBank = [
+    { q: "1 + 1 = ?", a: 2, opts: [0,1,2,3] },
+    { q: "2 + 2 = ?", a: 4, opts: [2,3,4,5] },
+    { q: "3 + 1 = ?", a: 4, opts: [2,3,4,5] },
+    { q: "5 - 2 = ?", a: 3, opts: [1,2,3,4] },
+    { q: "2 + 3 = ?", a: 5, opts: [3,4,5,6] },
+    { q: "4 - 1 = ?", a: 3, opts: [1,2,3,4] },
+    { q: "1 + 0 = ?", a: 1, opts: [0,1,2,3] },
+    { q: "3 - 1 = ?", a: 2, opts: [1,2,3,4] },
+    { q: "2 + 4 = ?", a: 6, opts: [4,5,6,7] },
+    { q: "5 - 3 = ?", a: 2, opts: [1,2,3,4] },
+    { q: "10 - 5 = ?", a: 5, opts: [3,4,5,6] },
+    { q: "3 + 3 = ?", a: 6, opts: [4,5,6,7] },
+    { q: "4 + 4 = ?", a: 8, opts: [6,7,8,9] },
+    { q: "2 + 5 = ?", a: 7, opts: [5,6,7,8] },
+    { q: "9 - 3 = ?", a: 6, opts: [4,5,6,7] },
   ];
   
-  function getRandomQuestion() {
-    return { ...mathQuestions[Math.floor(Math.random() * mathQuestions.length)] };
+  function getRandomMath() {
+    return { ...mathBank[Math.floor(Math.random() * mathBank.length)] };
   }
   
   // ============================================================
-  // DRAW FUNCTIONS (Retro Style)
+  // COLLISION
   // ============================================================
-  
-  function drawGround() {
-    const startX = Math.max(0, Math.floor(cameraX / TILE_SIZE));
-    const endX = Math.min(MAP_WIDTH, Math.ceil((cameraX + VIEW_WIDTH) / TILE_SIZE) + 1);
-    const startY = Math.max(0, Math.floor(cameraY / TILE_SIZE));
-    const endY = Math.min(MAP_HEIGHT, Math.ceil((cameraY + VIEW_HEIGHT) / TILE_SIZE) + 1);
-    
-    for (let i = startX; i < endX; i++) {
-      for (let j = startY; j < endY; j++) {
-        const x = i * TILE_SIZE - cameraX;
-        const y = j * TILE_SIZE - cameraY;
-        ctx.fillStyle = groundColors[groundMap[i]?.[j] || 0];
-        ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
-        
-        // Grid lines (retro feel)
-        ctx.strokeStyle = 'rgba(0,0,0,0.05)';
-        ctx.strokeRect(x, y, TILE_SIZE, TILE_SIZE);
-      }
+  function checkCollision(x, y, r) {
+    for (const t of treeList) {
+      if (Math.hypot(x - t.x, y - t.y) < r + 14) return true;
     }
-  }
-  
-  function drawFlowers() {
-    for (const flower of flowers) {
-      const x = flower.x - cameraX;
-      const y = flower.y - cameraY;
-      if (x < 0 || x > VIEW_WIDTH || y < 0 || y > VIEW_HEIGHT) continue;
-      
-      ctx.fillStyle = flower.color;
-      ctx.beginPath();
-      ctx.arc(x, y, 3, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#fbbf24';
-      ctx.beginPath();
-      ctx.arc(x, y, 1.5, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-  
-  function drawTrees() {
-    for (const tree of trees) {
-      const x = tree.x - cameraX;
-      const y = tree.y - cameraY;
-      if (x + 25 < 0 || x - 25 > VIEW_WIDTH || y + 35 < 0 || y - 35 > VIEW_HEIGHT) continue;
-      
-      // Trunk
-      ctx.fillStyle = '#8B5A2B';
-      ctx.fillRect(x - 5, y + 5, 10, 20);
-      
-      // Leaves
-      ctx.fillStyle = '#2d6e2d';
-      ctx.beginPath();
-      ctx.arc(x, y - 5, 16, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#3a8c3a';
-      ctx.beginPath();
-      ctx.arc(x - 6, y - 10, 10, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(x + 6, y - 10, 10, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#4ade80';
-      ctx.beginPath();
-      ctx.arc(x, y - 16, 8, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-  
-  function drawPlayer() {
-    const x = player.x - cameraX;
-    const y = player.y - cameraY;
-    const walk = Math.sin(player.walkFrame * Math.PI) * 2;
-    
-    // Shadow
-    ctx.fillStyle = 'rgba(0,0,0,0.2)';
-    ctx.beginPath();
-    ctx.ellipse(x + 3, y + 25, 12, 5, 0, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Body
-    ctx.fillStyle = '#3b82f6';
-    ctx.fillRect(x - 10, y - 5 + walk, 20, 25);
-    
-    // Head
-    ctx.fillStyle = '#fcd34d';
-    ctx.beginPath();
-    ctx.arc(x, y - 10 + walk, 12, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Eyes
-    ctx.fillStyle = '#1a1a2e';
-    ctx.fillRect(x - 5, y - 13 + walk, 3, 4);
-    ctx.fillRect(x + 2, y - 13 + walk, 3, 4);
-    
-    // Cape
-    ctx.fillStyle = '#fbbf24';
-    ctx.fillRect(x - 8, y - 3 + walk, 16, 8);
-    
-    // Hat
-    ctx.fillStyle = '#d97706';
-    ctx.fillRect(x - 8, y - 20 + walk, 16, 6);
-  }
-  
-  function drawPet() {
-    const x = pet.x - cameraX;
-    const y = pet.y - cameraY;
-    const bob = Math.sin(Date.now() / 200) * 1.5;
-    
-    // Shadow
-    ctx.fillStyle = 'rgba(0,0,0,0.2)';
-    ctx.beginPath();
-    ctx.ellipse(x + 2, y + 22, 10, 4, 0, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Body
-    ctx.fillStyle = '#22c55e';
-    ctx.fillRect(x - 8, y - 2 + bob, 16, 20);
-    
-    // Head
-    ctx.fillStyle = '#22c55e';
-    ctx.beginPath();
-    ctx.arc(x, y - 8 + bob, 10, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Ears
-    ctx.fillStyle = '#16a34a';
-    ctx.fillRect(x - 10, y - 16 + bob, 6, 8);
-    ctx.fillRect(x + 4, y - 16 + bob, 6, 8);
-    
-    // Eyes
-    ctx.fillStyle = '#1a1a2e';
-    ctx.fillRect(x - 5, y - 11 + bob, 3, 4);
-    ctx.fillRect(x + 2, y - 11 + bob, 3, 4);
-    
-    // Tail
-    ctx.fillStyle = '#22c55e';
-    ctx.fillRect(x + 10, y + 2 + bob, 8, 5);
-  }
-  
-  function drawMapEnemy(enemy) {
-    const x = enemy.x - cameraX;
-    const y = enemy.y - cameraY;
-    if (x < 0 || x > VIEW_WIDTH || y < 0 || y > VIEW_HEIGHT) return;
-    
-    const bob = Math.sin(Date.now() / 200) * 2;
-    
-    // Shadow
-    ctx.fillStyle = 'rgba(0,0,0,0.2)';
-    ctx.beginPath();
-    ctx.ellipse(x + 2, y + 18, 12, 5, 0, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Body
-    ctx.fillStyle = enemy.color;
-    ctx.beginPath();
-    ctx.arc(x, y + 5 + bob, 14, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Eyes
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(x - 6, y + 2 + bob, 4, 4);
-    ctx.fillRect(x + 2, y + 2 + bob, 4, 4);
-    ctx.fillStyle = '#1a1a2e';
-    ctx.fillRect(x - 5, y + 3 + bob, 2, 3);
-    ctx.fillRect(x + 3, y + 3 + bob, 2, 3);
-    
-    // ! mark
-    ctx.fillStyle = '#ef4444';
-    ctx.font = 'bold 14px monospace';
-    ctx.fillText('!', x - 12, y - 8 + bob);
-  }
-  
-  // ============================================================
-  // BATTLE SPRITES
-  // ============================================================
-  
-  function drawBattleEnemy(enemy) {
-    battleEnemyCtx.clearRect(0, 0, 160, 160);
-    const bob = Math.sin(Date.now() / 200) * 2;
-    
-    // Shadow
-    battleEnemyCtx.fillStyle = 'rgba(0,0,0,0.2)';
-    battleEnemyCtx.beginPath();
-    battleEnemyCtx.ellipse(80, 130, 35, 12, 0, 0, Math.PI * 2);
-    battleEnemyCtx.fill();
-    
-    // Body
-    battleEnemyCtx.fillStyle = enemy.color;
-    battleEnemyCtx.beginPath();
-    battleEnemyCtx.ellipse(80, 80 + bob, 45, 50, 0, 0, Math.PI * 2);
-    battleEnemyCtx.fill();
-    
-    // Eyes
-    battleEnemyCtx.fillStyle = '#fff';
-    battleEnemyCtx.fillRect(60, 70 + bob, 10, 10);
-    battleEnemyCtx.fillRect(90, 70 + bob, 10, 10);
-    battleEnemyCtx.fillStyle = '#1a1a2e';
-    battleEnemyCtx.fillRect(63, 73 + bob, 5, 5);
-    battleEnemyCtx.fillRect(93, 73 + bob, 5, 5);
-    
-    // Mouth
-    battleEnemyCtx.fillStyle = '#b45309';
-    battleEnemyCtx.fillRect(73, 95 + bob, 14, 8);
-    
-    // Name
-    battleEnemyCtx.fillStyle = 'white';
-    battleEnemyCtx.font = 'bold 12px monospace';
-    battleEnemyCtx.fillText(enemy.name, 55, 150);
-  }
-  
-  function drawBattlePet() {
-    battlePetCtx.clearRect(0, 0, 160, 160);
-    const bob = Math.sin(Date.now() / 200) * 2;
-    
-    // Shadow
-    battlePetCtx.fillStyle = 'rgba(0,0,0,0.2)';
-    battlePetCtx.beginPath();
-    battlePetCtx.ellipse(80, 130, 35, 12, 0, 0, Math.PI * 2);
-    battlePetCtx.fill();
-    
-    // Tail
-    battlePetCtx.fillStyle = '#22c55e';
-    battlePetCtx.fillRect(115, 70 + bob, 15, 8);
-    
-    // Body
-    battlePetCtx.fillStyle = '#22c55e';
-    battlePetCtx.fillRect(50, 60 + bob, 60, 55);
-    
-    // Head
-    battlePetCtx.fillStyle = '#22c55e';
-    battlePetCtx.beginPath();
-    battlePetCtx.arc(80, 55 + bob, 25, 0, Math.PI * 2);
-    battlePetCtx.fill();
-    
-    // Ears
-    battlePetCtx.fillStyle = '#16a34a';
-    battlePetCtx.fillRect(58, 35 + bob, 8, 15);
-    battlePetCtx.fillRect(94, 35 + bob, 8, 15);
-    
-    // Eyes
-    battlePetCtx.fillStyle = '#fff';
-    battlePetCtx.fillRect(68, 48 + bob, 7, 8);
-    battlePetCtx.fillRect(85, 48 + bob, 7, 8);
-    battlePetCtx.fillStyle = '#1a1a2e';
-    battlePetCtx.fillRect(70, 50 + bob, 4, 5);
-    battlePetCtx.fillRect(87, 50 + bob, 4, 5);
-    
-    // Nose
-    battlePetCtx.fillStyle = '#ef4444';
-    battlePetCtx.fillRect(78, 65 + bob, 4, 3);
-    
-    // Whiskers
-    battlePetCtx.strokeStyle = '#fff';
-    battlePetCtx.beginPath();
-    battlePetCtx.moveTo(55, 65 + bob);
-    battlePetCtx.lineTo(40, 62 + bob);
-    battlePetCtx.stroke();
-    battlePetCtx.beginPath();
-    battlePetCtx.moveTo(55, 70 + bob);
-    battlePetCtx.lineTo(40, 72 + bob);
-    battlePetCtx.stroke();
-    battlePetCtx.beginPath();
-    battlePetCtx.moveTo(105, 65 + bob);
-    battlePetCtx.lineTo(120, 62 + bob);
-    battlePetCtx.stroke();
-    battlePetCtx.beginPath();
-    battlePetCtx.moveTo(105, 70 + bob);
-    battlePetCtx.lineTo(120, 72 + bob);
-    battlePetCtx.stroke();
-  }
-  
-  // ============================================================
-  // COLLISION & MOVEMENT
-  // ============================================================
-  
-  function isColliding(x, y, radius) {
-    for (const tree of trees) {
-      const dx = x - tree.x;
-      const dy = y - tree.y;
-      if (Math.sqrt(dx * dx + dy * dy) < radius + 15) return true;
-    }
-    for (const enemy of enemies) {
-      const dx = x - enemy.x;
-      const dy = y - enemy.y;
-      if (Math.sqrt(dx * dx + dy * dy) < radius + 20 && !inBattle) {
-        startBattle(enemy);
+    for (const e of enemyList) {
+      if (Math.hypot(x - e.x, y - e.y) < r + 22 && !inBattle) {
+        startBattle(e);
         return true;
       }
     }
-    if (x < radius || x > WORLD_WIDTH - radius) return true;
-    if (y < radius || y > WORLD_HEIGHT - radius) return true;
+    if (x < r || x > WORLD_W - r) return true;
+    if (y < r || y > WORLD_H - r) return true;
     return false;
   }
   
-  function updateMovement() {
+  // ============================================================
+  // MOVEMENT & ANIMATION
+  // ============================================================
+  function handleMovement() {
     if (inBattle) return;
     
     let mx = 0, my = 0;
-    if (keys.w) my -= 1;
-    if (keys.s) my += 1;
-    if (keys.a) mx -= 1;
-    if (keys.d) mx += 1;
+    if (moveKeys.w) my -= 1;
+    if (moveKeys.s) my += 1;
+    if (moveKeys.a) mx -= 1;
+    if (moveKeys.d) mx += 1;
     
     if (mx !== 0 || my !== 0) {
       const len = Math.hypot(mx, my);
@@ -809,222 +577,499 @@
       let nx = player.x + mx * player.speed;
       let ny = player.y + my * player.speed;
       
-      if (!isColliding(nx, player.y, 15)) player.x = nx;
-      if (!isColliding(player.x, ny, 15)) player.y = ny;
+      if (!checkCollision(nx, player.y, 16)) player.x = nx;
+      if (!checkCollision(player.x, ny, 16)) player.y = ny;
       
-      player.walkFrame += 0.15;
+      player.walkCycle += 0.18;
+      player.legSwing = Math.sin(player.walkCycle * Math.PI) * 4;
     } else {
-      player.walkFrame = 0;
+      player.walkCycle = 0;
+      player.legSwing = 0;
     }
     
     // Pet follow
     const angle = Math.atan2(player.y - pet.y, player.x - pet.x);
-    pet.x += Math.cos(angle) * 2.5;
-    pet.y += Math.sin(angle) * 2.5;
+    pet.x += Math.cos(angle) * 2.6;
+    pet.y += Math.sin(angle) * 2.6;
+    pet.tailSwing = Math.sin(Date.now() / 150) * 3;
     
     // Camera
-    cameraX = player.x - VIEW_WIDTH / 2;
-    cameraY = player.y - VIEW_HEIGHT / 2;
-    cameraX = Math.max(0, Math.min(cameraX, WORLD_WIDTH - VIEW_WIDTH));
-    cameraY = Math.max(0, Math.min(cameraY, WORLD_HEIGHT - VIEW_HEIGHT));
+    camX = player.x - VIEW_W/2;
+    camY = player.y - VIEW_H/2;
+    camX = Math.max(0, Math.min(camX, WORLD_W - VIEW_W));
+    camY = Math.max(0, Math.min(camY, WORLD_H - VIEW_H));
   }
   
-  function updateClickMove() {
+  function handleClickMove() {
     if (inBattle) return;
     const dx = player.targetX - player.x;
     const dy = player.targetY - player.y;
     const dist = Math.hypot(dx, dy);
     
-    if (dist > 3) {
+    if (dist > 4) {
       const mx = (dx / dist) * player.speed;
       const my = (dy / dist) * player.speed;
-      
       let nx = player.x + mx;
       let ny = player.y + my;
-      
-      if (!isColliding(nx, player.y, 15)) player.x = nx;
-      if (!isColliding(player.x, ny, 15)) player.y = ny;
-      
-      player.walkFrame += 0.15;
+      if (!checkCollision(nx, player.y, 16)) player.x = nx;
+      if (!checkCollision(player.x, ny, 16)) player.y = ny;
+      player.walkCycle += 0.18;
     } else {
-      player.walkFrame = 0;
+      player.walkCycle = 0;
     }
+  }
+  
+  // ============================================================
+  // DRAW FUNCTIONS
+  // ============================================================
+  function drawTerrain() {
+    const startX = Math.max(0, Math.floor(camX / TILE));
+    const endX = Math.min(99, Math.ceil((camX + VIEW_W) / TILE) + 1);
+    const startY = Math.max(0, Math.floor(camY / TILE));
+    const endY = Math.min(99, Math.ceil((camY + VIEW_H) / TILE) + 1);
+    
+    for (let i = startX; i < endX; i++) {
+      for (let j = startY; j < endY; j++) {
+        const x = i * TILE - camX;
+        const y = j * TILE - camY;
+        ctx.fillStyle = tileColors[tileMap[i]?.[j] || 0];
+        ctx.fillRect(x, y, TILE, TILE);
+        ctx.strokeStyle = 'rgba(0,0,0,0.04)';
+        ctx.strokeRect(x, y, TILE, TILE);
+      }
+    }
+  }
+  
+  function drawDecor() {
+    for (const f of flowerList) {
+      const x = f.x - camX;
+      const y = f.y - camY;
+      if (x > -10 && x < VIEW_W + 10 && y > -10 && y < VIEW_H + 10) {
+        ctx.fillStyle = f.color;
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, Math.PI*2);
+        ctx.fill();
+        ctx.fillStyle = '#fbbf24';
+        ctx.beginPath();
+        ctx.arc(x, y, 1.5, 0, Math.PI*2);
+        ctx.fill();
+      }
+    }
+    
+    for (const t of treeList) {
+      const x = t.x - camX;
+      const y = t.y - camY;
+      if (x > -40 && x < VIEW_W + 40 && y > -50 && y < VIEW_H + 50) {
+        ctx.fillStyle = '#8B5A2B';
+        ctx.fillRect(x-5, y+5, 10, 22);
+        ctx.fillStyle = '#2d6e2d';
+        ctx.beginPath();
+        ctx.arc(x, y-5, 16, 0, Math.PI*2);
+        ctx.fill();
+        ctx.fillStyle = '#3a8c3a';
+        ctx.beginPath();
+        ctx.arc(x-6, y-10, 11, 0, Math.PI*2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x+6, y-10, 11, 0, Math.PI*2);
+        ctx.fill();
+        ctx.fillStyle = '#4ade80';
+        ctx.beginPath();
+        ctx.arc(x, y-16, 8, 0, Math.PI*2);
+        ctx.fill();
+      }
+    }
+  }
+  
+  function drawMapEnemies() {
+    for (const e of enemyList) {
+      const x = e.x - camX;
+      const y = e.y - camY;
+      if (x > -50 && x < VIEW_W + 50 && y > -60 && y < VIEW_H + 60) {
+        const bounce = Math.sin(Date.now() / 200) * 2;
+        ctx.fillStyle = 'rgba(0,0,0,0.2)';
+        ctx.beginPath();
+        ctx.ellipse(x+2, y+22, 14, 5, 0, 0, Math.PI*2);
+        ctx.fill();
+        ctx.fillStyle = e.color;
+        ctx.beginPath();
+        ctx.arc(x, y+8+bounce, 16, 0, Math.PI*2);
+        ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(x-7, y+4+bounce, 5, 5);
+        ctx.fillRect(x+2, y+4+bounce, 5, 5);
+        ctx.fillStyle = '#1a1a2e';
+        ctx.fillRect(x-6, y+5+bounce, 3, 3);
+        ctx.fillRect(x+3, y+5+bounce, 3, 3);
+        ctx.fillStyle = '#ef4444';
+        ctx.font = 'bold 14px monospace';
+        ctx.fillText('!', x-14, y-6+bounce);
+      }
+    }
+  }
+  
+  function drawPlayerChar() {
+    const x = player.x - camX;
+    const y = player.y - camY;
+    const bob = Math.sin(Date.now() / 180) * 1.5;
+    
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.beginPath();
+    ctx.ellipse(x+3, y+28, 14, 5, 0, 0, Math.PI*2);
+    ctx.fill();
+    
+    // Cape
+    ctx.fillStyle = '#fbbf24';
+    ctx.fillRect(x-10, y-2+bob, 20, 12);
+    
+    // Body
+    ctx.fillStyle = '#3b82f6';
+    ctx.fillRect(x-11, y-8+bob, 22, 28);
+    
+    // Legs with swing
+    ctx.fillStyle = '#2563eb';
+    ctx.fillRect(x-9 + (player.legSwing*0.3), y+16+bob, 7, 14);
+    ctx.fillRect(x+2 - (player.legSwing*0.3), y+16+bob, 7, 14);
+    
+    // Boots
+    ctx.fillStyle = '#8B4513';
+    ctx.fillRect(x-10 + (player.legSwing*0.3), y+26+bob, 9, 6);
+    ctx.fillRect(x+1 - (player.legSwing*0.3), y+26+bob, 9, 6);
+    
+    // Head
+    ctx.fillStyle = '#fcd34d';
+    ctx.beginPath();
+    ctx.arc(x, y-14+bob, 14, 0, Math.PI*2);
+    ctx.fill();
+    
+    // Hair
+    ctx.fillStyle = '#d97706';
+    ctx.fillRect(x-10, y-26+bob, 20, 8);
+    
+    // Eyes
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(x-6, y-18+bob, 4, 5);
+    ctx.fillRect(x+2, y-18+bob, 4, 5);
+    
+    // Mouth
+    ctx.fillStyle = '#b45309';
+    ctx.fillRect(x-3, y-9+bob, 6, 3);
+  }
+  
+  function drawPetChar() {
+    const x = pet.x - camX;
+    const y = pet.y - camY;
+    const bob = Math.sin(Date.now() / 180) * 1.5;
+    
+    ctx.fillStyle = 'rgba(0,0,0,0.15)';
+    ctx.beginPath();
+    ctx.ellipse(x+2, y+22, 11, 4, 0, 0, Math.PI*2);
+    ctx.fill();
+    
+    // Tail
+    ctx.fillStyle = '#22c55e';
+    ctx.fillRect(x+12, y+5+bob, 12, 5);
+    
+    // Body
+    ctx.fillStyle = '#22c55e';
+    ctx.fillRect(x-9, y-2+bob, 18, 22);
+    
+    // Head
+    ctx.fillStyle = '#22c55e';
+    ctx.beginPath();
+    ctx.arc(x, y-10+bob, 11, 0, Math.PI*2);
+    ctx.fill();
+    
+    // Ears
+    ctx.fillStyle = '#16a34a';
+    ctx.fillRect(x-8, y-19+bob, 5, 8);
+    ctx.fillRect(x+3, y-19+bob, 5, 8);
+    
+    // Eyes
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(x-5, y-13+bob, 3, 4);
+    ctx.fillRect(x+2, y-13+bob, 3, 4);
+    
+    // Nose
+    ctx.fillStyle = '#ef4444';
+    ctx.fillRect(x-1, y-7+bob, 2, 2);
+    
+    // Whiskers
+    ctx.strokeStyle = '#fff';
+    ctx.beginPath();
+    ctx.moveTo(x-9, y-8+bob);
+    ctx.lineTo(x-16, y-10+bob);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x+9, y-8+bob);
+    ctx.lineTo(x+16, y-10+bob);
+    ctx.stroke();
+  }
+  
+  // ============================================================
+  // BATTLE SPRITES (Pokemon style - side/back view)
+  // ============================================================
+  function drawEnemyBattleSprite(enemy) {
+    enemyBattleCtx.clearRect(0, 0, 220, 220);
+    const bob = Math.sin(Date.now() / 200) * 3;
+    
+    enemyBattleCtx.fillStyle = 'rgba(0,0,0,0.25)';
+    enemyBattleCtx.beginPath();
+    enemyBattleCtx.ellipse(110, 185, 50, 18, 0, 0, Math.PI*2);
+    enemyBattleCtx.fill();
+    
+    enemyBattleCtx.fillStyle = enemy.color;
+    enemyBattleCtx.beginPath();
+    enemyBattleCtx.ellipse(110, 110 + bob, 65, 70, 0, 0, Math.PI*2);
+    enemyBattleCtx.fill();
+    
+    // Eyes
+    enemyBattleCtx.fillStyle = '#fff';
+    enemyBattleCtx.fillRect(82, 95 + bob, 14, 16);
+    enemyBattleCtx.fillRect(124, 95 + bob, 14, 16);
+    enemyBattleCtx.fillStyle = '#1a1a2e';
+    enemyBattleCtx.fillRect(86, 99 + bob, 7, 9);
+    enemyBattleCtx.fillRect(128, 99 + bob, 7, 9);
+    
+    // Mouth
+    enemyBattleCtx.fillStyle = '#b45309';
+    enemyBattleCtx.fillRect(100, 125 + bob, 20, 10);
+    
+    // Name
+    enemyBattleCtx.fillStyle = 'white';
+    enemyBattleCtx.font = 'bold 14px monospace';
+    enemyBattleCtx.fillText(enemy.name, 75, 200);
+  }
+  
+  function drawPetBattleSprite() {
+    petBattleCtx.clearRect(0, 0, 220, 220);
+    const bob = Math.sin(Date.now() / 200) * 3;
+    
+    petBattleCtx.fillStyle = 'rgba(0,0,0,0.25)';
+    petBattleCtx.beginPath();
+    petBattleCtx.ellipse(110, 185, 50, 18, 0, 0, Math.PI*2);
+    petBattleCtx.fill();
+    
+    // Tail
+    petBattleCtx.fillStyle = '#22c55e';
+    petBattleCtx.fillRect(160, 90 + bob, 30, 12);
+    
+    // Body
+    petBattleCtx.fillStyle = '#22c55e';
+    petBattleCtx.fillRect(60, 85 + bob, 80, 70);
+    
+    // Head
+    petBattleCtx.fillStyle = '#22c55e';
+    petBattleCtx.beginPath();
+    petBattleCtx.arc(110, 75 + bob, 35, 0, Math.PI*2);
+    petBattleCtx.fill();
+    
+    // Ears
+    petBattleCtx.fillStyle = '#16a34a';
+    petBattleCtx.fillRect(80, 45 + bob, 12, 22);
+    petBattleCtx.fillRect(128, 45 + bob, 12, 22);
+    
+    // Eyes
+    petBattleCtx.fillStyle = '#fff';
+    petBattleCtx.fillRect(90, 68 + bob, 12, 14);
+    petBattleCtx.fillRect(118, 68 + bob, 12, 14);
+    petBattleCtx.fillStyle = '#1a1a2e';
+    petBattleCtx.fillRect(93, 71 + bob, 6, 8);
+    petBattleCtx.fillRect(121, 71 + bob, 6, 8);
+    
+    // Nose
+    petBattleCtx.fillStyle = '#ef4444';
+    petBattleCtx.fillRect(107, 88 + bob, 6, 4);
+    
+    // Whiskers
+    petBattleCtx.strokeStyle = '#fff';
+    petBattleCtx.beginPath();
+    petBattleCtx.moveTo(75, 85 + bob);
+    petBattleCtx.lineTo(50, 82 + bob);
+    petBattleCtx.stroke();
+    petBattleCtx.beginPath();
+    petBattleCtx.moveTo(75, 92 + bob);
+    petBattleCtx.lineTo(50, 95 + bob);
+    petBattleCtx.stroke();
+    petBattleCtx.beginPath();
+    petBattleCtx.moveTo(145, 85 + bob);
+    petBattleCtx.lineTo(170, 82 + bob);
+    petBattleCtx.stroke();
+    petBattleCtx.beginPath();
+    petBattleCtx.moveTo(145, 92 + bob);
+    petBattleCtx.lineTo(170, 95 + bob);
+    petBattleCtx.stroke();
   }
   
   // ============================================================
   // BATTLE SYSTEM
   // ============================================================
-  
   function startBattle(enemy) {
     if (inBattle) return;
     inBattle = true;
     currentEnemy = { ...enemy };
-    battleEnemyHp = currentEnemy.hp;
-    battlePetHp = pet.hp;
-    currentQuestion = getRandomQuestion();
+    battleEnemyHP = currentEnemy.hp;
+    battlePetHP = pet.hp;
+    currentMathQ = getRandomMath();
     
     document.getElementById('battleEnemyName').textContent = currentEnemy.name;
-    document.getElementById('battleEnemyHp').textContent = battleEnemyHp;
+    document.getElementById('battleEnemyHpText').textContent = battleEnemyHP;
     document.getElementById('battleEnemyMaxHp').textContent = currentEnemy.maxHp;
-    document.getElementById('battlePetHp').textContent = battlePetHp;
+    document.getElementById('battlePetHpText').textContent = battlePetHP;
     document.getElementById('battlePetMaxHp').textContent = pet.maxHp;
-    document.getElementById('battlePetLevel').textContent = pet.level;
-    document.getElementById('battleEnemySpriteName').textContent = currentEnemy.name;
-    document.getElementById('questionText').textContent = currentQuestion.q;
-    document.getElementById('battleMessage').innerHTML = `Wild ${currentEnemy.name} appeared! Answer correctly to attack!`;
+    document.getElementById('battlePetLv').textContent = pet.lv;
+    document.getElementById('enemyNameTag').textContent = currentEnemy.name;
+    document.getElementById('battleQ').textContent = currentMathQ.q;
+    document.getElementById('battleMsg').innerHTML = `Wild ${currentEnemy.name} appeared!`;
     
     updateBattleBars();
-    drawBattleEnemy(currentEnemy);
-    drawBattlePet();
-    renderAnswerButtons();
+    drawEnemyBattleSprite(currentEnemy);
+    drawPetBattleSprite();
+    renderBattleOptions();
     
     document.getElementById('battleScreen').classList.add('active');
   }
   
-  function renderAnswerButtons() {
-    const container = document.getElementById('answerButtons');
+  function renderBattleOptions() {
+    const container = document.getElementById('battleOpts');
     container.innerHTML = '';
-    currentQuestion.opts.forEach(opt => {
+    currentMathQ.opts.forEach(opt => {
       const btn = document.createElement('button');
-      btn.className = 'answer-btn';
+      btn.className = 'battle-opt-btn';
       btn.textContent = opt;
-      btn.onclick = () => handleAnswer(opt);
+      btn.onclick = () => handleBattleAnswer(opt);
       container.appendChild(btn);
     });
   }
   
   function updateBattleBars() {
-    const enemyPercent = (battleEnemyHp / currentEnemy.maxHp) * 100;
-    const petPercent = (battlePetHp / pet.maxHp) * 100;
-    document.getElementById('battleEnemyHpFill').style.width = `${Math.max(0, enemyPercent)}%`;
-    document.getElementById('battlePetHpFill').style.width = `${Math.max(0, petPercent)}%`;
-    document.getElementById('battleEnemyHp').textContent = Math.max(0, battleEnemyHp);
-    document.getElementById('battlePetHp').textContent = Math.max(0, battlePetHp);
+    const ep = (battleEnemyHP / currentEnemy.maxHp) * 100;
+    const pp = (battlePetHP / pet.maxHp) * 100;
+    document.getElementById('battleEnemyFill').style.width = `${Math.max(0, ep)}%`;
+    document.getElementById('battlePetFill').style.width = `${Math.max(0, pp)}%`;
+    document.getElementById('battleEnemyHpText').textContent = Math.max(0, battleEnemyHP);
+    document.getElementById('battlePetHpText').textContent = Math.max(0, battlePetHP);
   }
   
-  async function handleAnswer(answer) {
-    if (isAnimating || !inBattle) return;
-    isAnimating = true;
+  async function handleBattleAnswer(answer) {
+    if (isBattleAnim || !inBattle) return;
+    isBattleAnim = true;
     
-    // Attack animation
-    const enemySprite = document.getElementById('battleEnemyCanvas');
-    enemySprite.classList.add('shake-animation', 'flash-animation');
+    const enemySpriteDiv = document.getElementById('enemyBattleCanvas');
+    enemySpriteDiv.classList.add('shake-effect', 'hit-effect');
     setTimeout(() => {
-      enemySprite.classList.remove('shake-animation', 'flash-animation');
+      enemySpriteDiv.classList.remove('shake-effect', 'hit-effect');
     }, 300);
     
-    if (answer === currentQuestion.a) {
-      const damage = Math.floor(Math.random() * 12) + 10;
-      battleEnemyHp -= damage;
-      document.getElementById('battleMessage').innerHTML = `Correct! Mewt dealt ${damage} damage!`;
+    if (answer === currentMathQ.a) {
+      const dmg = Math.floor(Math.random() * 14) + 10;
+      battleEnemyHP -= dmg;
+      document.getElementById('battleMsg').innerHTML = `Correct! Mewt dealt ${dmg} damage!`;
       updateBattleBars();
       
-      if (battleEnemyHp <= 0) {
+      if (battleEnemyHP <= 0) {
         setTimeout(() => winBattle(), 800);
-        isAnimating = false;
+        isBattleAnim = false;
         return;
       }
-      
-      setTimeout(() => enemyAttack(), 1000);
+      setTimeout(() => enemyBattleTurn(), 1000);
     } else {
-      document.getElementById('battleMessage').innerHTML = `Wrong! The answer was ${currentQuestion.a}. ${currentEnemy.name} attacks!`;
+      document.getElementById('battleMsg').innerHTML = `Wrong! Answer was ${currentMathQ.a}. ${currentEnemy.name} attacks!`;
       
-      const damage = Math.floor(Math.random() * currentEnemy.attack) + 5;
-      const reduced = Math.max(1, damage - Math.floor(pet.defense / 3));
-      battlePetHp -= reduced;
+      const dmg = Math.floor(Math.random() * currentEnemy.atk) + 5;
+      const reduced = Math.max(1, dmg - Math.floor(pet.def / 3));
+      battlePetHP -= reduced;
       updateBattleBars();
       
-      const petSprite = document.getElementById('battlePetCanvas');
-      petSprite.classList.add('shake-animation', 'flash-animation');
+      const petSpriteDiv = document.getElementById('petBattleCanvas');
+      petSpriteDiv.classList.add('shake-effect', 'hit-effect');
       setTimeout(() => {
-        petSprite.classList.remove('shake-animation', 'flash-animation');
+        petSpriteDiv.classList.remove('shake-effect', 'hit-effect');
       }, 300);
       
-      if (battlePetHp <= 0) {
+      if (battlePetHP <= 0) {
         setTimeout(() => loseBattle(), 800);
-        isAnimating = false;
+        isBattleAnim = false;
         return;
       }
       
-      currentQuestion = getRandomQuestion();
-      document.getElementById('questionText').textContent = currentQuestion.q;
-      renderAnswerButtons();
-      document.getElementById('battleMessage').innerHTML = `What will Mewt do?`;
+      currentMathQ = getRandomMath();
+      document.getElementById('battleQ').textContent = currentMathQ.q;
+      renderBattleOptions();
+      document.getElementById('battleMsg').innerHTML = `What will Mewt do?`;
     }
-    
-    isAnimating = false;
+    isBattleAnim = false;
   }
   
-  function enemyAttack() {
-    if (!inBattle || battleEnemyHp <= 0) return;
+  function enemyBattleTurn() {
+    if (!inBattle || battleEnemyHP <= 0) return;
     
-    const damage = Math.floor(Math.random() * currentEnemy.attack) + 5;
-    const reduced = Math.max(1, damage - Math.floor(pet.defense / 3));
-    battlePetHp -= reduced;
-    document.getElementById('battleMessage').innerHTML = `${currentEnemy.name} attacked! Dealt ${reduced} damage!`;
+    const dmg = Math.floor(Math.random() * currentEnemy.atk) + 5;
+    const reduced = Math.max(1, dmg - Math.floor(pet.def / 3));
+    battlePetHP -= reduced;
+    document.getElementById('battleMsg').innerHTML = `${currentEnemy.name} attacked! Dealt ${reduced} damage!`;
     updateBattleBars();
     
-    const petSprite = document.getElementById('battlePetCanvas');
-    petSprite.classList.add('shake-animation', 'flash-animation');
+    const petSpriteDiv = document.getElementById('petBattleCanvas');
+    petSpriteDiv.classList.add('shake-effect', 'hit-effect');
     setTimeout(() => {
-      petSprite.classList.remove('shake-animation', 'flash-animation');
+      petSpriteDiv.classList.remove('shake-effect', 'hit-effect');
     }, 300);
     
-    if (battlePetHp <= 0) {
+    if (battlePetHP <= 0) {
       setTimeout(() => loseBattle(), 800);
       return;
     }
     
-    currentQuestion = getRandomQuestion();
-    document.getElementById('questionText').textContent = currentQuestion.q;
-    renderAnswerButtons();
-    document.getElementById('battleMessage').innerHTML = `What will Mewt do?`;
+    currentMathQ = getRandomMath();
+    document.getElementById('battleQ').textContent = currentMathQ.q;
+    renderBattleOptions();
+    document.getElementById('battleMsg').innerHTML = `What will Mewt do?`;
   }
   
   function winBattle() {
     const expGain = currentEnemy.exp;
-    const coinGain = 20 + Math.floor(Math.random() * 20);
+    const coinGain = 25 + Math.floor(Math.random() * 30);
     
     player.xp += expGain;
     player.coins += coinGain;
     pet.hp = Math.min(pet.hp + Math.floor(pet.maxHp * 0.3), pet.maxHp);
-    battlePetHp = pet.hp;
+    battlePetHP = pet.hp;
     
-    document.getElementById('battleMessage').innerHTML = `Victory! +${expGain} XP, +${coinGain} coins!`;
-    updateUI();
+    document.getElementById('battleMsg').innerHTML = `Victory! +${expGain} XP, +${coinGain} coins!`;
     
     if (player.xp >= player.xpNeeded) {
-      player.level++;
+      player.lv++;
       player.xp -= player.xpNeeded;
       player.xpNeeded = Math.floor(player.xpNeeded * 1.4);
-      pet.level++;
-      pet.maxHp += 8;
+      pet.lv++;
+      pet.maxHp += 10;
       pet.hp = pet.maxHp;
-      pet.attack += 3;
-      pet.defense += 2;
-      document.getElementById('battleMessage').innerHTML += ` 🌟 Mewt grew to Lv${pet.level}! 🌟`;
-      updateUI();
+      pet.atk += 4;
+      pet.def += 2;
+      document.getElementById('battleMsg').innerHTML += ` 🌟 Mewt grew to Lv${pet.lv}! 🌟`;
     }
     
     // Remove defeated enemy
-    const index = enemies.findIndex(e => e.x === currentEnemy.x && e.y === currentEnemy.y);
-    if (index !== -1) enemies.splice(index, 1);
+    const idx = enemyList.findIndex(e => e.x === currentEnemy.x && e.y === currentEnemy.y);
+    if (idx !== -1) enemyList.splice(idx, 1);
     
-    updateBattleBars();
     updateUI();
+    updateBattleBars();
+    saveGame();
     
     setTimeout(() => {
       document.getElementById('battleScreen').classList.remove('active');
       inBattle = false;
       currentEnemy = null;
-      isAnimating = false;
+      isBattleAnim = false;
     }, 2500);
   }
   
   function loseBattle() {
-    document.getElementById('battleMessage').innerHTML = `Mewt fainted... Running away to heal!`;
+    document.getElementById('battleMsg').innerHTML = `Mewt fainted... Running to heal!`;
     pet.hp = pet.maxHp;
-    battlePetHp = pet.hp;
+    battlePetHP = pet.hp;
     updateUI();
     updateBattleBars();
     
@@ -1032,100 +1077,92 @@
       document.getElementById('battleScreen').classList.remove('active');
       inBattle = false;
       currentEnemy = null;
-      isAnimating = false;
+      isBattleAnim = false;
     }, 2000);
   }
   
   function runBattle() {
-    document.getElementById('battleMessage').innerHTML = `Got away safely!`;
+    document.getElementById('battleMsg').innerHTML = `Got away safely!`;
     setTimeout(() => {
       document.getElementById('battleScreen').classList.remove('active');
       inBattle = false;
       currentEnemy = null;
-      isAnimating = false;
+      isBattleAnim = false;
     }, 800);
   }
   
   // ============================================================
-  // UI UPDATES
+  // UI UPDATE & SAVE
   // ============================================================
-  
   function updateUI() {
     const xpPercent = (player.xp / player.xpNeeded) * 100;
-    document.getElementById('xpFill').style.width = `${Math.min(100, xpPercent)}%`;
-    document.getElementById('xpCurrent').textContent = player.xp;
-    document.getElementById('xpNeeded').textContent = player.xpNeeded;
-    document.getElementById('playerLevelBadge').textContent = `Lv${player.level}`;
-    document.getElementById('coinAmount').textContent = player.coins;
-    document.getElementById('battlePetLevel').textContent = pet.level;
+    document.getElementById('xpFillBar').style.width = `${Math.min(100, xpPercent)}%`;
+    document.getElementById('xpCurrentVal').textContent = player.xp;
+    document.getElementById('xpNeededVal').textContent = player.xpNeeded;
+    document.getElementById('playerLv').textContent = `Lv${player.lv}`;
+    document.getElementById('coinAmt').textContent = player.coins;
+    document.getElementById('battlePetLv').textContent = pet.lv;
   }
   
   // ============================================================
   // EVENT HANDLERS
   // ============================================================
-  
   canvas.addEventListener('click', (e) => {
     if (inBattle) return;
     const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    const mx = (e.clientX - rect.left) * scaleX;
-    const my = (e.clientY - rect.top) * scaleY;
-    player.targetX = cameraX + mx;
-    player.targetY = cameraY + my;
+    const sx = canvas.width / rect.width;
+    const sy = canvas.height / rect.height;
+    const mx = (e.clientX - rect.left) * sx;
+    const my = (e.clientY - rect.top) * sy;
+    player.targetX = camX + mx;
+    player.targetY = camY + my;
   });
   
   document.addEventListener('keydown', (e) => {
     if (inBattle) return;
-    const key = e.key.toLowerCase();
-    if (key === 'w') keys.w = true;
-    if (key === 's') keys.s = true;
-    if (key === 'a') keys.a = true;
-    if (key === 'd') keys.d = true;
-    if (['w','s','a','d'].includes(key)) {
+    const k = e.key.toLowerCase();
+    if (k === 'w') moveKeys.w = true;
+    if (k === 's') moveKeys.s = true;
+    if (k === 'a') moveKeys.a = true;
+    if (k === 'd') moveKeys.d = true;
+    if (['w','s','a','d'].includes(k)) {
       player.targetX = player.x;
       player.targetY = player.y;
     }
   });
   
   document.addEventListener('keyup', (e) => {
-    const key = e.key.toLowerCase();
-    if (key === 'w') keys.w = false;
-    if (key === 's') keys.s = false;
-    if (key === 'a') keys.a = false;
-    if (key === 'd') keys.d = false;
+    const k = e.key.toLowerCase();
+    if (k === 'w') moveKeys.w = false;
+    if (k === 's') moveKeys.s = false;
+    if (k === 'a') moveKeys.a = false;
+    if (k === 'd') moveKeys.d = false;
   });
   
-  document.getElementById('runBattleBtn').onclick = () => runBattle();
-  document.getElementById('teamBtn').onclick = () => alert(`🐱 MEWT - Lv${pet.level}\n❤️ HP: ${pet.hp}/${pet.maxHp}\n⚔️ ATK: ${pet.attack}\n🛡️ DEF: ${pet.defense}`);
+  document.getElementById('battleRunBtn').onclick = () => runBattle();
+  document.getElementById('teamBtn').onclick = () => alert(`🐱 MEWT - Lv${pet.lv}\n❤️ HP: ${pet.hp}/${pet.maxHp}\n⚔️ ATK: ${pet.atk}\n🛡️ DEF: ${pet.def}`);
   document.getElementById('bagBtn').onclick = () => alert(`🎒 YOUR BAG\n🪙 ${player.coins} coins\n⭐ ${player.xp} XP`);
-  document.getElementById('mewtBtn').onclick = () => alert(`⭐ MEWT - Your companion!\nLevel: ${pet.level}\nHP: ${pet.hp}/${pet.maxHp}\nAttack: ${pet.attack}\nDefense: ${pet.defense}`);
-  document.getElementById('settingsBtn').onclick = () => alert(`⚙️ CONTROLS\nWASD or Click to move\nTouch enemies to battle!\nAnswer math to attack!`);
+  document.getElementById('mewtInfoBtn').onclick = () => alert(`⭐ MEWT - Your companion!\nLevel: ${pet.lv}\nHP: ${pet.hp}/${pet.maxHp}\nAttack: ${pet.atk}\nDefense: ${pet.def}`);
+  document.getElementById('settingsInfoBtn').onclick = () => alert(`⚙️ CONTROLS\nWASD or Click to move\nTouch enemies to battle!\nAnswer math to attack!\n\nGame saves automatically!`);
   
   // ============================================================
   // ANIMATION LOOP
   // ============================================================
-  
   function animate() {
     if (!inBattle) {
-      updateMovement();
-      updateClickMove();
+      handleMovement();
+      handleClickMove();
     }
     
     // Sky
     ctx.fillStyle = '#7dd3fc';
-    ctx.fillRect(0, 0, VIEW_WIDTH, VIEW_HEIGHT);
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
     
-    drawGround();
-    drawFlowers();
-    drawTrees();
-    
-    for (const enemy of enemies) {
-      drawMapEnemy(enemy);
-    }
-    
-    drawPet();
-    drawPlayer();
+    drawTerrain();
+    drawDecor();
+    drawMapEnemies();
+    drawPetChar();
+    drawPlayerChar();
     
     requestAnimationFrame(animate);
   }
