@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Fanter World - Prodigy Style RPG</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0a0a2a, #1a1a3a);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Courier New', 'Press Start 2P', monospace;
+      overflow: hidden;
+    }
+
+    .game-wrapper {
+      position: relative;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      border: 3px solid #ffcc00;
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto;
+      cursor: crosshair;
+      border-radius: 10px;
+    }
+
+    /* UI Panels */
+    .ui-panel {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 12px 20px;
+      color: white;
+      border-left: 4px solid #ffcc00;
+      z-index: 10;
+      font-size: 14px;
+      font-weight: bold;
+      pointer-events: none;
+    }
+
+    .ui-panel span {
+      color: #ffcc00;
+    }
+
+    .pet-panel {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 12px 20px;
+      color: white;
+      border-left: 4px solid #9f5ae3;
+      z-index: 10;
+      min-width: 180px;
+      pointer-events: none;
+    }
+
+    .pet-panel .pet-name {
+      color: #9f5ae3;
+      font-weight: bold;
+    }
+
+    .pet-panel .pet-hp {
+      background: #ff4466;
+      border-radius: 10px;
+      padding: 2px 8px;
+      display: inline-block;
+      font-size: 11px;
+    }
+
+    .controls-hint {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 8px 15px;
+      color: rgba(255,255,255,0.6);
+      font-size: 10px;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* Battle Panel */
+    .battle-panel {
+      position: absolute;
+      bottom: 50%;
+      right: 50%;
+      transform: translate(50%, 50%);
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 25px;
+      color: white;
+      border: 3px solid #ff4466;
+      z-index: 20;
+      display: none;
+      min-width: 350px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      animation: battleAppear 0.3s ease;
+    }
+
+    .battle-panel.active {
+      display: block;
+    }
+
+    @keyframes battleAppear {
+      from {
+        opacity: 0;
+        transform: translate(50%, 50%) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translate(50%, 50%) scale(1);
+      }
+    }
+
+    .battle-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .enemy-info, .player-info {
+      text-align: center;
+    }
+
+    .enemy-name {
+      color: #ff4466;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .enemy-hp-bar, .pet-hp-bar {
+      width: 150px;
+      height: 10px;
+      background: #333;
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 5px 0;
+    }
+
+    .enemy-hp-fill, .pet-hp-fill {
+      height: 100%;
+      background: #00e87a;
+      width: 100%;
+      transition: width 0.3s;
+    }
+
+    .battle-question {
+      background: rgba(0,0,0,0.5);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .battle-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .battle-btn {
+      background: linear-gradient(135deg, #2d5ae3, #1a3bc0);
+      border: none;
+      border-radius: 30px;
+      padding: 12px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: monospace;
+      font-size: 16px;
+    }
+
+    .battle-btn:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #3d6af3, #2a4bd0);
+      box-shadow: 0 0 15px rgba(45,90,227,0.5);
+    }
+
+    .battle-message {
+      margin-top: 15px;
+      font-size: 12px;
+      color: #ffcc00;
+    }
+
+    .close-battle {
+      background: rgba(255,68,102,0.3);
+      border: 1px solid #ff4466;
+    }
+
+    .close-battle:hover {
+      background: rgba(255,68,102,0.5);
+    }
+  </style>
+</head>
+<body>
+<div class="game-wrapper">
+  <canvas id="gameCanvas" width="1200" height="800"></canvas>
+  
+  <div class="ui-panel">
+    🗺️ FANTER WORLD | <span>✨ Level 1</span> | ⭐ XP: <span id="xpCount">0</span>
+  </div>
+  
+  <div class="pet-panel">
+    🐱 <span class="pet-name">MEWT</span> (Lv 1)<br>
+    ❤️ HP: <span id="petHp" class="pet-hp">30</span>/30<br>
+    ⚔️ Attack: 8-12
+  </div>
+  
+  <div class="controls-hint">
+    🎮 WASD or Click to Move | 🐱 Pet Follows | ⚔️ Touch Enemy = Battle
+  </div>
+  
+  <div class="battle-panel" id="battlePanel">
+    <div class="battle-header">
+      <div class="enemy-info">
+        <div class="enemy-name" id="enemyName">Slime</div>
+        <div class="enemy-hp-bar"><div class="enemy-hp-fill" id="enemyHpFill" style="width: 100%"></div></div>
+        <div>❤️ <span id="enemyHp">25</span>/25</div>
+      </div>
+      <div class="player-info">
+        <div>🐱 Mewt</div>
+        <div class="pet-hp-bar"><div class="pet-hp-fill" id="battlePetHpFill" style="width: 100%"></div></div>
+        <div>❤️ <span id="battlePetHp">30</span>/30</div>
+      </div>
+    </div>
+    
+    <div class="battle-question" id="battleQuestion">
+      2 + 2 = ?
+    </div>
+    
+    <div class="battle-options" id="battleOptions">
+      <button class="battle-btn" data-answer="0">0</button>
+      <button class="battle-btn" data-answer="1">1</button>
+      <button class="battle-btn" data-answer="2">2</button>
+      <button class="battle-btn" data-answer="3">3</button>
+      <button class="battle-btn" data-answer="4">4</button>
+    </div>
+    
+    <div class="battle-message" id="battleMessage">
+      Answer correctly to attack!
+    </div>
+    
+    <button class="battle-btn close-battle" id="closeBattleBtn">🏃 Run Away</button>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  // FANTER WORLD - PRODIGY STYLE RPG
+  // ============================================================
+  
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  // ============================================================
+  // MAP DATA (32x32 grid, isometric style)
+  // ============================================================
+  const MAP_WIDTH = 32;
+  const MAP_HEIGHT = 32;
+  const TILE_SIZE = 64;
+  
+  // Tile types
+  const TILE_GRASS = 0;
+  const TILE_DIRT = 1;
+  const TILE_WATER = 2;
+  const TILE_FLOWER = 3;
+  
+  // Generate random map
+  const gameMap = [];
+  for (let y = 0; y < MAP_HEIGHT; y++) {
+    gameMap[y] = [];
+    for (let x = 0; x < MAP_WIDTH; x++) {
+      if (y === 0 || y === MAP_HEIGHT-1 || x === 0 || x === MAP_WIDTH-1) {
+        gameMap[y][x] = TILE_WATER;
+      } else if (Math.random() < 0.05) {
+        gameMap[y][x] = TILE_FLOWER;
+      } else if (Math.random() < 0.1) {
+        gameMap[y][x] = TILE_DIRT;
+      } else {
+        gameMap[y][x] = TILE_GRASS;
+      }
+    }
+  }
+  
+  // Enemy positions
+  const enemies = [
+    { x: 10, y: 8, name: 'Slime', hp: 25, maxHp: 25, attack: 5, color: '#44ff88', type: 'slime' },
+    { x: 20, y: 12, name: 'Goblin', hp: 35, maxHp: 35, attack: 7, color: '#ff8844', type: 'goblin' },
+    { x: 5, y: 20, name: 'Bat', hp: 20, maxHp: 20, attack: 6, color: '#8844ff', type: 'bat' },
+    { x: 25, y: 25, name: 'Truffle', hp: 40, maxHp: 40, attack: 8, color: '#ff66cc', type: 'truffle' },
+  ];
+  
+  // ============================================================
+  // PLAYER & PET
+  // ============================================================
+  const player = {
+    x: 16,
+    y: 16,
+    targetX: 16,
+    targetY: 16,
+    moving: false,
+    direction: 'down',
+    walkFrame: 0,
+    level: 1,
+    xp: 0,
+    xpNeeded: 100,
+    invincibleTimer: 0
+  };
+  
+  const pet = {
+    x: 15,
+    y: 15,
+    targetX: 15,
+    targetY: 15,
+    hp: 30,
+    maxHp: 30,
+    attack: 10,
+    level: 1
+  };
+  
+  let petFollowOffset = -1;
+  
+  // Battle state
+  let inBattle = false;
+  let currentEnemy = null;
+  let currentQuestion = null;
+  let battleMessage = '';
+  let battlePetHp = pet.hp;
+  let battleEnemyHp = 0;
+  
+  // Movement
+  const keys = { w: false, s: false, a: false, d: false };
+  let moveInterval = null;
+  
+  // ============================================================
+  // MATH QUESTIONS (Kindergarten Level)
+  // ============================================================
+  const mathQuestions = [
+    { question: "1 + 1 = ?", answer: 2, options: [0, 1, 2, 3] },
+    { question: "2 + 2 = ?", answer: 4, options: [2, 3, 4, 5] },
+    { question: "3 + 1 = ?", answer: 4, options: [2, 3, 4, 5] },
+    { question: "5 - 2 = ?", answer: 3, options: [1, 2, 3, 4] },
+    { question: "2 + 3 = ?", answer: 5, options: [3, 4, 5, 6] },
+    { question: "4 - 1 = ?", answer: 3, options: [1, 2, 3, 4] },
+    { question: "1 + 0 = ?", answer: 1, options: [0, 1, 2, 3] },
+    { question: "3 - 1 = ?", answer: 2, options: [1, 2, 3, 4] },
+    { question: "2 + 4 = ?", answer: 6, options: [4, 5, 6, 7] },
+    { question: "5 - 3 = ?", answer: 2, options: [1, 2, 3, 4] },
+  ];
+  
+  function getRandomQuestion() {
+    return { ...mathQuestions[Math.floor(Math.random() * mathQuestions.length)] };
+  }
+  
+  // ============================================================
+  // DRAW TILE (64x64 with isometric feel)
+  // ============================================================
+  function drawTile(x, y, type) {
+    const screenX = x * TILE_SIZE;
+    const screenY = y * TILE_SIZE;
+    
+    // Base tile colors with gradient
+    let color, darkColor;
+    switch(type) {
+      case TILE_GRASS:
+        color = '#3a8c3a';
+        darkColor = '#2d6e2d';
+        break;
+      case TILE_DIRT:
+        color = '#b87c4a';
+        darkColor = '#8b5e2e';
+        break;
+      case TILE_WATER:
+        color = '#2a6b8c';
+        darkColor = '#1a4a6e';
+        break;
+      case TILE_FLOWER:
+        color = '#3a8c3a';
+        darkColor = '#2d6e2d';
+        break;
+      default:
+        color = '#3a8c3a';
+        darkColor = '#2d6e2d';
+    }
+    
+    // Draw base tile
+    ctx.fillStyle = color;
+    ctx.fillRect(screenX, screenY, TILE_SIZE, TILE_SIZE);
+    
+    // Add grid lines
+    ctx.strokeStyle = 'rgba(0,0,0,0.1)';
+    ctx.strokeRect(screenX, screenY, TILE_SIZE, TILE_SIZE);
+    
+    // Add detail for flowers
+    if (type === TILE_FLOWER) {
+      ctx.fillStyle = '#ff69b4';
+      ctx.beginPath();
+      ctx.arc(screenX + 32, screenY + 32, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffcc00';
+      ctx.beginPath();
+      ctx.arc(screenX + 32, screenY + 32, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    
+    // Grass tufts
+    if (type === TILE_GRASS && (x + y) % 3 === 0) {
+      ctx.fillStyle = '#2d6e2d';
+      ctx.beginPath();
+      ctx.moveTo(screenX + 20, screenY + 50);
+      ctx.lineTo(screenX + 25, screenY + 40);
+      ctx.lineTo(screenX + 30, screenY + 50);
+      ctx.fill();
+    }
+  }
+  
+  // ============================================================
+  // DRAW CHARACTER (64x64 pixel art style)
+  // ============================================================
+  function drawPlayer(x, y, direction, walkFrame, isPet = false) {
+    const screenX = x * TILE_SIZE;
+    const screenY = y * TILE_SIZE;
+    const offset = walkFrame ? Math.sin(Date.now() / 100) * 2 : 0;
+    
+    // Body
+    ctx.fillStyle = isPet ? '#44cc66' : '#2d5ae3';
+    ctx.fillRect(screenX + 16, screenY + 16 + offset, 32, 32);
+    
+    // Head
+    ctx.fillStyle = isPet ? '#33aa55' : '#ffcc66';
+    ctx.fillRect(screenX + 20, screenY + 8 + offset, 24, 20);
+    
+    // Eyes
+    ctx.fillStyle = 'white';
+    ctx.fillRect(screenX + 24, screenY + 16 + offset, 6, 6);
+    ctx.fillRect(screenX + 34, screenY + 16 + offset, 6, 6);
+    ctx.fillStyle = '#1a1a2a';
+    ctx.fillRect(screenX + 26, screenY + 18 + offset, 3, 3);
+    ctx.fillRect(screenX + 36, screenY + 18 + offset, 3, 3);
+    
+    if (isPet) {
+      // Cat ears
+      ctx.fillStyle = '#33aa55';
+      ctx.beginPath();
+      ctx.moveTo(screenX + 18, screenY + 8 + offset);
+      ctx.lineTo(screenX + 26, screenY + 2 + offset);
+      ctx.lineTo(screenX + 30, screenY + 8 + offset);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(screenX + 38, screenY + 8 + offset);
+      ctx.lineTo(screenX + 46, screenY + 2 + offset);
+      ctx.lineTo(screenX + 42, screenY + 8 + offset);
+      ctx.fill();
+      
+      // Cat tail
+      ctx.fillStyle = '#44cc66';
+      ctx.fillRect(screenX + 52, screenY + 28 + offset, 12, 6);
+      
+      // Whiskers
+      ctx.strokeStyle = 'white';
+      ctx.beginPath();
+      ctx.moveTo(screenX + 16, screenY + 24 + offset);
+      ctx.lineTo(screenX + 8, screenY + 22 + offset);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(screenX + 16, screenY + 28 + offset);
+      ctx.lineTo(screenX + 8, screenY + 30 + offset);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(screenX + 48, screenY + 24 + offset);
+      ctx.lineTo(screenX + 56, screenY + 22 + offset);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(screenX + 48, screenY + 28 + offset);
+      ctx.lineTo(screenX + 56, screenY + 30 + offset);
+      ctx.stroke();
+    } else {
+      // Mouth
+      ctx.fillStyle = '#cc6644';
+      ctx.fillRect(screenX + 30, screenY + 28 + offset, 4, 4);
+    }
+  }
+  
+  // ============================================================
+  // DRAW ENEMY
+  // ============================================================
+  function drawEnemy(x, y, enemy) {
+    const screenX = x * TILE_SIZE;
+    const screenY = y * TILE_SIZE;
+    
+    ctx.fillStyle = enemy.color;
+    ctx.fillRect(screenX + 16, screenY + 16, 32, 32);
+    
+    // Eyes
+    ctx.fillStyle = 'white';
+    ctx.fillRect(screenX + 24, screenY + 28, 6, 6);
+    ctx.fillRect(screenX + 34, screenY + 28, 6, 6);
+    ctx.fillStyle = '#1a1a2a';
+    ctx.fillRect(screenX + 26, screenY + 30, 3, 3);
+    ctx.fillRect(screenX + 36, screenY + 30, 3, 3);
+    
+    // Mouth
+    ctx.fillStyle = '#cc6644';
+    ctx.fillRect(screenX + 30, screenY + 38, 4, 4);
+    
+    // Name tag
+    ctx.fillStyle = 'rgba(0,0,0,0.7)';
+    ctx.fillRect(screenX + 8, screenY - 15, 48, 15);
+    ctx.fillStyle = 'white';
+    ctx.font = '10px monospace';
+    ctx.fillText(enemy.name, screenX + 16, screenY - 5);
+  }
+  
+  // ============================================================
+  // MOVEMENT & COLLISION
+  // ============================================================
+  function isWalkable(tileX, tileY) {
+    if (tileX < 0 || tileX >= MAP_WIDTH || tileY < 0 || tileY >= MAP_HEIGHT) return false;
+    if (gameMap[tileY][tileX] === TILE_WATER) return false;
+    for (const enemy of enemies) {
+      if (Math.abs(enemy.x - tileX) < 1 && Math.abs(enemy.y - tileY) < 1) return false;
+    }
+    return true;
+  }
+  
+  function movePlayer(dx, dy) {
+    if (inBattle) return;
+    const newX = player.targetX + dx;
+    const newY = player.targetY + dy;
+    if (isWalkable(newX, newY)) {
+      player.targetX = newX;
+      player.targetY = newY;
+      player.moving = true;
+      
+      if (dx > 0) player.direction = 'right';
+      else if (dx < 0) player.direction = 'left';
+      else if (dy > 0) player.direction = 'down';
+      else if (dy < 0) player.direction = 'up';
+      
+      // Check for enemy encounter
+      for (const enemy of enemies) {
+        if (Math.abs(enemy.x - player.targetX) < 1 && Math.abs(enemy.y - player.targetY) < 1) {
+          startBattle(enemy);
+          break;
+        }
+      }
+    }
+  }
+  
+  function updateMovement() {
+    if (inBattle) return;
+    
+    // Smooth movement interpolation
+    player.x += (player.targetX - player.x) * 0.3;
+    player.y += (player.targetY - player.y) * 0.3;
+    
+    // Pet follow (stays behind player)
+    pet.targetX = player.targetX - (player.direction === 'left' ? 1 : player.direction === 'right' ? -1 : 0);
+    pet.targetY = player.targetY - (player.direction === 'up' ? 1 : player.direction === 'down' ? -1 : 0);
+    pet.x += (pet.targetX - pet.x) * 0.25;
+    pet.y += (pet.targetY - pet.y) * 0.25;
+  }
+  
+  // ============================================================
+  // BATTLE SYSTEM
+  // ============================================================
+  function startBattle(enemy) {
+    if (inBattle) return;
+    inBattle = true;
+    currentEnemy = { ...enemy, hp: enemy.hp, maxHp: enemy.maxHp };
+    battleEnemyHp = currentEnemy.hp;
+    battlePetHp = pet.hp;
+    currentQuestion = getRandomQuestion();
+    battleMessage = 'Answer the question to attack!';
+    
+    document.getElementById('enemyName').textContent = currentEnemy.name;
+    document.getElementById('enemyHp').textContent = battleEnemyHp;
+    document.getElementById('battlePetHp').textContent = battlePetHp;
+    document.getElementById('battleQuestion').textContent = currentQuestion.question;
+    document.getElementById('battleMessage').textContent = battleMessage;
+    
+    updateBattleHpBars();
+    renderBattleOptions();
+    document.getElementById('battlePanel').classList.add('active');
+  }
+  
+  function updateBattleHpBars() {
+    const enemyPercent = (battleEnemyHp / currentEnemy.maxHp) * 100;
+    const petPercent = (battlePetHp / pet.maxHp) * 100;
+    document.getElementById('enemyHpFill').style.width = `${enemyPercent}%`;
+    document.getElementById('battlePetHpFill').style.width = `${petPercent}%`;
+    document.getElementById('enemyHp').textContent = battleEnemyHp;
+    document.getElementById('battlePetHp').textContent = battlePetHp;
+  }
+  
+  function renderBattleOptions() {
+    const container = document.getElementById('battleOptions');
+    container.innerHTML = '';
+    currentQuestion.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'battle-btn';
+      btn.textContent = opt;
+      btn.onclick = () => handleBattleAnswer(opt);
+      container.appendChild(btn);
+    });
+  }
+  
+  function handleBattleAnswer(answer) {
+    if (!inBattle) return;
+    
+    if (answer === currentQuestion.answer) {
+      // Correct answer - player attacks
+      const damage = Math.floor(Math.random() * 8) + 8;
+      battleEnemyHp -= damage;
+      battleMessage = `✨ Correct! Mewt deals ${damage} damage!`;
+      
+      if (battleEnemyHp <= 0) {
+        winBattle();
+        return;
+      }
+      
+      // Enemy attacks
+      const enemyDamage = Math.floor(Math.random() * currentEnemy.attack) + 3;
+      battlePetHp -= enemyDamage;
+      battleMessage += `\n💔 ${currentEnemy.name} deals ${enemyDamage} damage!`;
+      
+      if (battlePetHp <= 0) {
+        loseBattle();
+        return;
+      }
+    } else {
+      // Wrong answer - enemy attacks immediately
+      battleMessage = `❌ Wrong! The correct answer was ${currentQuestion.answer}.`;
+      const enemyDamage = Math.floor(Math.random() * currentEnemy.attack) + 3;
+      battlePetHp -= enemyDamage;
+      battleMessage += `\n💔 ${currentEnemy.name} deals ${enemyDamage} damage!`;
+      
+      if (battlePetHp <= 0) {
+        loseBattle();
+        return;
+      }
+    }
+    
+    // Update UI and get new question
+    currentQuestion = getRandomQuestion();
+    document.getElementById('battleQuestion').textContent = currentQuestion.question;
+    document.getElementById('battleMessage').textContent = battleMessage;
+    updateBattleHpBars();
+    renderBattleOptions();
+  }
+  
+  function winBattle() {
+    battleMessage = `🎉 Victory! You defeated ${currentEnemy.name}! +25 XP`;
+    document.getElementById('battleMessage').textContent = battleMessage;
+    
+    // Grant XP
+    const xpGain = 25;
+    player.xp += xpGain;
+    document.getElementById('xpCount').textContent = player.xp;
+    
+    // Level up check
+    if (player.xp >= player.xpNeeded) {
+      player.xp -= player.xpNeeded;
+      player.level++;
+      pet.hp = pet.maxHp + 10;
+      pet.maxHp += 10;
+      pet.attack += 3;
+      battlePetHp = pet.hp;
+      player.xpNeeded = Math.floor(player.xpNeeded * 1.5);
+      battleMessage += `\n🌟 Level up! You're now level ${player.level}!`;
+    }
+    
+    // Remove defeated enemy
+    const index = enemies.findIndex(e => e.x === currentEnemy.x && e.y === currentEnemy.y);
+    if (index !== -1) enemies.splice(index, 1);
+    
+    // Heal pet after battle
+    pet.hp = Math.min(pet.hp + 15, pet.maxHp);
+    battlePetHp = pet.hp;
+    
+    setTimeout(() => {
+      document.getElementById('battlePanel').classList.remove('active');
+      inBattle = false;
+      currentEnemy = null;
+    }, 2000);
+  }
+  
+  function loseBattle() {
+    battleMessage = `💀 You were defeated! Running away to heal...`;
+    document.getElementById('battleMessage').textContent = battleMessage;
+    
+    // Heal but no XP
+    pet.hp = pet.maxHp;
+    battlePetHp = pet.hp;
+    
+    setTimeout(() => {
+      document.getElementById('battlePanel').classList.remove('active');
+      inBattle = false;
+      currentEnemy = null;
+    }, 2000);
+  }
+  
+  function runFromBattle() {
+    battleMessage = `🏃 You ran away!`;
+    document.getElementById('battleMessage').textContent = battleMessage;
+    setTimeout(() => {
+      document.getElementById('battlePanel').classList.remove('active');
+      inBattle = false;
+      currentEnemy = null;
+    }, 1000);
+  }
+  
+  // ============================================================
+  // CLICK TO MOVE
+  // ============================================================
+  canvas.addEventListener('click', (e) => {
+    if (inBattle) return;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const mouseX = (e.clientX - rect.left) * scaleX;
+    const mouseY = (e.clientY - rect.top) * scaleY;
+    const tileX = Math.floor(mouseX / TILE_SIZE);
+    const tileY = Math.floor(mouseY / TILE_SIZE);
+    
+    if (isWalkable(tileX, tileY)) {
+      player.targetX = tileX;
+      player.targetY = tileY;
+      player.moving = true;
+    }
+  });
+  
+  // ============================================================
+  // KEYBOARD CONTROLS
+  // ============================================================
+  document.addEventListener('keydown', (e) => {
+    if (inBattle) return;
+    const key = e.key.toLowerCase();
+    if (key === 'w') movePlayer(0, -1);
+    if (key === 's') movePlayer(0, 1);
+    if (key === 'a') movePlayer(-1, 0);
+    if (key === 'd') movePlayer(1, 0);
+  });
+  
+  document.getElementById('closeBattleBtn').onclick = () => runFromBattle();
+  
+  // ============================================================
+  // ANIMATION LOOP
+  // ============================================================
+  function drawMap() {
+    for (let y = 0; y < MAP_HEIGHT; y++) {
+      for (let x = 0; x < MAP_WIDTH; x++) {
+        drawTile(x, y, gameMap[y][x]);
+      }
+    }
+  }
+  
+  function animate() {
+    updateMovement();
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw map
+    drawMap();
+    
+    // Draw enemies
+    for (const enemy of enemies) {
+      drawEnemy(enemy.x, enemy.y, enemy);
+    }
+    
+    // Draw pet
+    drawPlayer(pet.x, pet.y, 'down', true, true);
+    
+    // Draw player
+    drawPlayer(player.x, player.y, player.direction, player.moving);
+    
+    // Update UI
+    document.getElementById('petHp').textContent = `${Math.floor(pet.hp)}/${pet.maxHp}`;
+    
+    requestAnimationFrame(animate);
+  }
+  
+  // Initialize
+  pet.hp = pet.maxHp;
+  battlePetHp = pet.hp;
+  animate();
+</script>
+</body>
+</html>
