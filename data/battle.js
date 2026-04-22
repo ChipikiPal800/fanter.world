@@ -164,4 +164,73 @@ function winBattle() {
     // Check evolution
     if (activePet.id === 'mewt' && activePet.level >= PETS.mewt.evolutionLevel && !gameState.storyFlags.mewtEvolved) {
       message += `\n✨ WHAT? MEWT is evolving! ✨`;
-      setTimeout(() =>
+      setTimeout(() => {
+        evolvePet('mewt', 'meowt');
+      }, 2000);
+    }
+  }
+  
+  document.getElementById('battleMessage').textContent = message;
+  updateUI();
+  saveGame();
+  
+  // Remove enemy from world if not a boss respawn
+  if (!currentEnemy.isBoss) {
+    const enemyIndex = currentAreaEnemies.findIndex(e => e.id === currentEnemy.id);
+    if (enemyIndex !== -1) currentAreaEnemies.splice(enemyIndex, 1);
+  }
+  
+  setTimeout(() => {
+    document.getElementById('battleUI').style.display = 'none';
+    inBattle = false;
+    currentEnemy = null;
+    isBattleAnimating = false;
+    
+    // Check for story triggers after battle
+    if (currentEnemy.storyFlag) {
+      gameState.storyFlags[currentEnemy.storyFlag] = true;
+      advanceStory();
+    }
+  }, 3000);
+}
+
+function loseBattle() {
+  document.getElementById('battleMessage').textContent = `You fainted... Running to heal!`;
+  const activePet = gameState.pets[gameState.activePet];
+  activePet.hp = activePet.maxHp;
+  battlePetHp = activePet.hp;
+  updateUI();
+  
+  setTimeout(() => {
+    document.getElementById('battleUI').style.display = 'none';
+    inBattle = false;
+    currentEnemy = null;
+    isBattleAnimating = false;
+    // Return to town
+    gameState.currentArea = 'town';
+    gameState.playerX = 500;
+    gameState.playerY = 500;
+    saveGame();
+  }, 2000);
+}
+
+function runFromBattle() {
+  document.getElementById('battleMessage').textContent = `Got away safely!`;
+  setTimeout(() => {
+    document.getElementById('battleUI').style.display = 'none';
+    inBattle = false;
+    currentEnemy = null;
+    isBattleAnimating = false;
+  }, 800);
+}
+
+function evolvePet(from, to) {
+  gameState.pets[to] = { ...PETS[to] };
+  gameState.pets[to].level = gameState.pets[from].level;
+  gameState.pets[to].exp = gameState.pets[from].exp;
+  gameState.activePet = to;
+  delete gameState.pets[from];
+  gameState.storyFlags.mewtEvolved = true;
+  saveGame();
+  showToast(`✨ MEWT evolved into MEOWT! ✨`);
+}
