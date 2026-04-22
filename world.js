@@ -1,17 +1,6 @@
 // WORLD RENDERING
 let currentAreaEnemies = [];
 
-// Make sure ctx is available
-if (typeof ctx === 'undefined') {
-  var ctx = null;
-}
-
-
-
-
-// WORLD RENDERING
-let currentAreaEnemies = [];
-
 function loadArea(areaId) {
   gameState.currentArea = areaId;
   const area = AREAS[areaId];
@@ -19,33 +8,30 @@ function loadArea(areaId) {
   // Load enemies for this area
   if (areaId === 'forest') {
     currentAreaEnemies = [
-      { ...ENEMIES.slime, x: 600, y: 400 },
-      { ...ENEMIES.goblin, x: 800, y: 600 },
-      { ...ENEMIES.shadowpaw, x: 1000, y: 300 }
+      { ...ENEMIES.forestSlime, x: 800, y: 600 },
+      { ...ENEMIES.forestSlime, x: 1100, y: 800 },
+      { ...ENEMIES.forestSlime, x: 1400, y: 700 },
+      { ...ENEMIES.forestGoblin, x: 1700, y: 900 }
     ];
     if (!gameState.storyFlags.defeatedForestFanter) {
-      currentAreaEnemies.push({ ...ENEMIES.fanterForest, x: 1200, y: 500 });
+      currentAreaEnemies.push({ ...ENEMIES.fanterForest, x: 2000, y: 1100 });
     }
   } else if (areaId === 'stormPeak') {
     currentAreaEnemies = [
       { ...ENEMIES.frostbite, x: 500, y: 300 },
       { ...ENEMIES.frostbite, x: 700, y: 500 }
     ];
-    if (!gameState.storyFlags.defeatedStormFanter) {
-      currentAreaEnemies.push({ ...ENEMIES.fanterStorm, x: 900, y: 400 });
-    }
   } else if (areaId === 'lavaCaverns') {
     currentAreaEnemies = [
       { ...ENEMIES.emberfang, x: 600, y: 400 },
       { ...ENEMIES.emberfang, x: 800, y: 600 }
     ];
-    if (!gameState.storyFlags.defeatedLavaFanter) {
-      currentAreaEnemies.push({ ...ENEMIES.fanterLava, x: 1000, y: 500 });
-    }
-  } else if (areaId === 'fanterWorld') {
-    currentAreaEnemies = [{ ...ENEMIES.fanterFinal, x: 700, y: 400 }];
   } else {
-    currentAreaEnemies = [];
+    currentAreaEnemies = [
+      { ...ENEMIES.slime, x: 600, y: 400 },
+      { ...ENEMIES.slime, x: 900, y: 600 },
+      { ...ENEMIES.goblin, x: 1200, y: 800 }
+    ];
   }
 }
 
@@ -65,11 +51,10 @@ function drawWorld() {
     drawMapEnemy(enemy);
   }
   
-  // Draw player
-  drawPlayer();
-  
-  // Draw pet
-  drawPet();
+  // Draw NPCs if in forest
+  if (gameState.currentArea === 'forest') {
+    drawNPCs();
+  }
 }
 
 function drawMapEnemy(enemy) {
@@ -103,80 +88,39 @@ function drawMapEnemy(enemy) {
   }
 }
 
-// ============================================================
-// FOREST RENDERING - Add to bottom of world.js
-// ============================================================
-
-function renderForest() {
-    const area = AREAS.forest;
-    const map = area.map;
-    const TILE_SIZE = 40;
-    
-    for (let row = 0; row < map.length; row++) {
-        for (let col = 0; col < map[row].length; col++) {
-            const x = col * TILE_SIZE - camX;
-            const y = row * TILE_SIZE - camY;
-            const tile = map[row][col];
-            
-            if (tile === 'G') {
-                // Grass tile
-                ctx.fillStyle = '#3a7a33';
-                ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
-                ctx.fillStyle = '#4a8a43';
-                ctx.fillRect(x + 5, y + 5, TILE_SIZE - 10, TILE_SIZE - 10);
-            } else if (tile === 'T') {
-                // Tree tile - draw tree
-                ctx.fillStyle = '#2d6e2d';
-                ctx.beginPath();
-                ctx.arc(x + TILE_SIZE/2, y + TILE_SIZE/2 - 10, 15, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.fillStyle = '#8B5A2B';
-                ctx.fillRect(x + TILE_SIZE/2 - 4, y + TILE_SIZE/2, 8, 15);
-            }
-        }
-    }
-    
-    // Draw NPCs
-    if (area.npcs) {
-        for (const npc of area.npcs) {
-            const x = npc.x - camX;
-            const y = npc.y - camY;
-            if (x > -50 && x < VIEW_W + 50 && y > -60 && y < VIEW_H + 60) {
-                drawNPC(npc);
-            }
-        }
-    }
-}
-
-function drawNPC(npc) {
+function drawNPCs() {
+  const npcs = [
+    { id: 'elderOak', name: 'Elder Oak', x: 900, y: 700 }
+  ];
+  
+  for (const npc of npcs) {
     const x = npc.x - camX;
     const y = npc.y - camY;
-    
-    ctx.fillStyle = '#fcd34d';
-    ctx.fillRect(x - 8, y - 15, 16, 20);
-    ctx.fillStyle = '#d97706';
-    ctx.fillRect(x - 6, y - 22, 12, 8);
-    ctx.fillStyle = '#1a1a2e';
-    ctx.fillRect(x - 3, y - 12, 2, 3);
-    ctx.fillRect(x + 1, y - 12, 2, 3);
-    
-    // Name tag
-    ctx.fillStyle = 'rgba(0,0,0,0.7)';
-    ctx.fillRect(x - 25, y - 32, 50, 15);
-    ctx.fillStyle = '#fbbf24';
-    ctx.font = '8px monospace';
-    ctx.fillText(npc.name, x - 20, y - 22);
-    
-    // Interact indicator
-    ctx.fillStyle = '#fbbf24';
-    ctx.font = 'bold 12px monospace';
-    ctx.fillText('?', x - 3, y - 28);
-}
-
-// NPC interaction
-function interactWithNPC(npcId) {
-    const dialog = DIALOGS[npcId];
-    if (dialog) {
-        startDialogSequence(dialog);
+    if (x > -50 && x < VIEW_W + 50 && y > -60 && y < VIEW_H + 60) {
+      ctx.fillStyle = '#fcd34d';
+      ctx.fillRect(x - 8, y - 15, 16, 20);
+      ctx.fillStyle = '#d97706';
+      ctx.fillRect(x - 6, y - 22, 12, 8);
+      ctx.fillStyle = '#1a1a2e';
+      ctx.fillRect(x - 3, y - 12, 2, 3);
+      ctx.fillRect(x + 1, y - 12, 2, 3);
+      
+      ctx.fillStyle = 'rgba(0,0,0,0.7)';
+      ctx.fillRect(x - 25, y - 32, 50, 15);
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = '8px monospace';
+      ctx.fillText(npc.name, x - 20, y - 22);
+      
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = 'bold 12px monospace';
+      ctx.fillText('?', x - 3, y - 28);
+      
+      // Check collision with NPC
+      const playerX = player.x - camX;
+      const playerY = player.y - camY;
+      if (Math.hypot(playerX - x, playerY - y) < 30 && !inBattle && !inCutscene) {
+        startDialogSequence('elderOakIntro');
+      }
     }
+  }
 }
