@@ -71,26 +71,20 @@
 </div>
 
 <script>
-  
-  
-  // Wait for game to initialize then add forest button
+  // Forest button handler
   document.addEventListener('DOMContentLoaded', function() {
-    // Add forest button handler
     const forestBtn = document.getElementById('forestBtn');
     if (forestBtn) {
       forestBtn.addEventListener('click', function() {
         if (confirm('Teleport to the Whispering Woods?')) {
-          if (typeof gameState !== 'undefined') {
-            gameState.currentArea = 'forest';
-            if (typeof player !== 'undefined') {
-              player.x = 1200;
-              player.y = 800;
-              player.targetX = 1200;
-              player.targetY = 800;
-            }
-            if (typeof saveGame === 'function') saveGame();
-            if (typeof showToast === 'function') showToast('🌲 Entered the Whispering Woods');
-          }
+          gameState.currentArea = 'forest';
+          player.x = 600;
+          player.y = 600;
+          player.targetX = 600;
+          player.targetY = 600;
+          loadArea('forest');
+          saveGame();
+          showToast('🌲 Entered the Whispering Woods');
         }
       });
     }
