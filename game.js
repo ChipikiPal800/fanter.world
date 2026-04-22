@@ -1,6 +1,15 @@
 // MAIN GAME ENGINE
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+let canvas;
+let ctx;
+
+// Wait for DOM to load before accessing canvas
+document.addEventListener('DOMContentLoaded', function() {
+  canvas = document.getElementById('gameCanvas');
+  ctx = canvas.getContext('2d');
+  
+  // Now initialize the game
+  initGame();
+});
 
 const VIEW_W = 1200;
 const VIEW_H = 700;
@@ -56,6 +65,8 @@ function initGame() {
   
   animate();
 }
+
+
 
 function handleCanvasClick(e) {
   if (isInCutscene || inBattle) return;
