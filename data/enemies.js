@@ -1,0 +1,123 @@
+// ENEMY DATA
+const ENEMIES = {
+  slime: {
+    id: 'slime',
+    name: 'SLIME',
+    hp: 30,
+    maxHp: 30,
+    attack: 7,
+    defense: 3,
+    exp: 35,
+    coins: 25,
+    color: '#86efac',
+    level: 2
+  },
+  goblin: {
+    id: 'goblin',
+    name: 'GOBLIN',
+    hp: 40,
+    maxHp: 40,
+    attack: 9,
+    defense: 4,
+    exp: 50,
+    coins: 35,
+    color: '#fbbf24',
+    level: 3
+  },
+  shadowpaw: {
+    id: 'shadowpaw',
+    name: 'SHADOWPAW',
+    hp: 50,
+    maxHp: 50,
+    attack: 12,
+    defense: 5,
+    exp: 70,
+    coins: 50,
+    color: '#a855f7',
+    level: 4
+  },
+  frostbite: {
+    id: 'frostbite',
+    name: 'FROSTBITE',
+    hp: 45,
+    maxHp: 45,
+    attack: 10,
+    defense: 6,
+    exp: 60,
+    coins: 45,
+    color: '#06b6d4',
+    level: 3
+  },
+  emberfang: {
+    id: 'emberfang',
+    name: 'EMBERFANG',
+    hp: 60,
+    maxHp: 60,
+    attack: 15,
+    defense: 4,
+    exp: 90,
+    coins: 65,
+    color: '#f97316',
+    level: 5
+  },
+  // BOSSES
+  fanterForest: {
+    id: 'fanterForest',
+    name: 'FANTER (Forest)',
+    hp: 120,
+    maxHp: 120,
+    attack: 20,
+    defense: 10,
+    exp: 200,
+    coins: 150,
+    color: '#2d6e2d',
+    isBoss: true,
+    level: 8,
+    storyFlag: 'defeatedForestFanter'
+  },
+  fanterStorm: {
+    id: 'fanterStorm',
+    name: 'STORM FANTER',
+    hp: 180,
+    maxHp: 180,
+    attack: 25,
+    defense: 12,
+    exp: 300,
+    coins: 250,
+    color: '#60a5fa',
+    isBoss: true,
+    level: 12,
+    storyFlag: 'defeatedStormFanter',
+    phases: 2
+  },
+  fanterLava: {
+    id: 'fanterLava',
+    name: 'LAVA FANTER',
+    hp: 250,
+    maxHp: 250,
+    attack: 30,
+    defense: 15,
+    exp: 500,
+    coins: 400,
+    color: '#f97316',
+    isBoss: true,
+    level: 16,
+    storyFlag: 'defeatedLavaFanter'
+  },
+  fanterFinal: {
+    id: 'fanterFinal',
+    name: 'FANTER (Final Form)',
+    hp: 500,
+    maxHp: 500,
+    attack: 45,
+    defense: 25,
+    exp: 1000,
+    coins: 800,
+    color: '#1a1a2e',
+    isBoss: true,
+    isFinal: true,
+    level: 25,
+    storyFlag: 'defeatedFinalFanter',
+    phases: 3
+  }
+};
