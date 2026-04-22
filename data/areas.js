@@ -19,10 +19,36 @@ const AREAS = {
   forest: {
     id: 'forest',
     name: 'Whispering Woods',
-    description: 'A dense forest filled with wild creatures.',
+    description: 'A dense forest filled with ancient trees and wild creatures. Something dark lurks deeper in...',
     background: '#2d5a2a',
     music: 'forest',
-    isTown: false
+    isTown: false,
+    map: [
+      ['T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T'],
+      ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
+      ['T','G','G','T','T','G','G','G','G','G','G','G','G','T','T','G','G','G','G','T'],
+      ['T','G','G','T','T','G','G','G','G','G','G','G','G','T','T','G','G','G','G','T'],
+      ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
+      ['T','G','G','G','G','T','T','T','T','G','G','T','T','T','T','G','G','G','G','T'],
+      ['T','G','G','G','G','T','T','T','T','G','G','T','T','T','T','G','G','G','G','T'],
+      ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
+      ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
+      ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
+      ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
+      ['T','G','G','T','T','T','T','G','G','G','G','G','G','T','T','T','T','G','G','T'],
+      ['T','G','G','T','T','T','T','G','G','G','G','G','G','T','T','T','T','G','G','T'],
+      ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
+      ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
+      ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
+      ['T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T']
+    ],
+    npcs: [
+      { id: 'elderOak', name: 'Elder Oak', x: 900, y: 700, dialogId: 'elderOakIntro' }
+    ],
+    spawnPoints: {
+      entrance: { x: 600, y: 600 },
+      boss: { x: 1800, y: 1400 }
+    }
   },
   stormPeak: {
     id: 'stormPeak',
@@ -48,54 +74,4 @@ const AREAS = {
     music: 'boss',
     isTown: false
   }
-};
-// ============================================================
-// FOREST AREA - Add to bottom of areas.js
-// ============================================================
-
-AREAS.forest = {
-    id: 'forest',
-    name: 'Whispering Woods',
-    description: 'A dense forest filled with ancient trees and wild creatures. Something dark lurks deeper in...',
-    background: '#2d5a2a',
-    music: 'forest',
-    isTown: false,
-    // Forest map layout (20x20 grid)
-    map: [
-        ['T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T'],
-        ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
-        ['T','G','G','T','T','G','G','G','G','G','G','G','G','T','T','G','G','G','G','T'],
-        ['T','G','G','T','T','G','G','G','G','G','G','G','G','T','T','G','G','G','G','T'],
-        ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
-        ['T','G','G','G','G','T','T','T','T','G','G','T','T','T','T','G','G','G','G','T'],
-        ['T','G','G','G','G','T','T','T','T','G','G','T','T','T','T','G','G','G','G','T'],
-        ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
-        ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
-        ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
-        ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
-        ['T','G','G','T','T','T','T','G','G','G','G','G','G','T','T','T','T','G','G','T'],
-        ['T','G','G','T','T','T','T','G','G','G','G','G','G','T','T','T','T','G','G','T'],
-        ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
-        ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
-        ['T','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','G','T'],
-        ['T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T','T']
-    ],
-    npcs: [
-        { id: 'elder_oak', name: 'Elder Oak', x: 900, y: 700, dialogId: 'elderOakIntro' }
-    ],
-    spawnPoints: {
-        entrance: { x: 600, y: 600 },
-        boss: { x: 1800, y: 1400 }
-    }
-};
-
-// Forest Fanter boss area
-AREAS.forestBoss = {
-    id: 'forestBoss',
-    name: 'Forest Heart',
-    description: 'The ancient heart of the forest. A dark presence lingers here...',
-    background: '#1a3a1a',
-    music: 'boss',
-    isTown: false,
-    isBossArea: true
 };
