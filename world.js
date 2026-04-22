@@ -1,6 +1,17 @@
 // WORLD RENDERING
 let currentAreaEnemies = [];
 
+// Make sure ctx is available
+if (typeof ctx === 'undefined') {
+  var ctx = null;
+}
+
+
+
+
+// WORLD RENDERING
+let currentAreaEnemies = [];
+
 function loadArea(areaId) {
   gameState.currentArea = areaId;
   const area = AREAS[areaId];
