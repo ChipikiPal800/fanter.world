@@ -17,27 +17,32 @@ body {
 
 #gameContainer {
   position: relative;
-  border-radius: 20px;
-  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-  border: 3px solid #fbbf24;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
 }
 
 #gameCanvas {
   display: block;
+  width: 100%;
+  height: 100%;
   cursor: crosshair;
   background: #2d5a3a;
 }
 
-/* Paper-style Dialog Box - Prodigy Inspired */
+/* Paper-style Dialog Box */
 #dialogBox {
   position: absolute;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   width: 600px;
+  max-width: 90%;
   background: #fef3c7;
   border-radius: 16px;
-  padding: 20px 25px;
+  padding: 18px 22px;
   font-family: 'Courier New', monospace;
   box-shadow: 0 8px 0 #d97706, 0 12px 20px rgba(0,0,0,0.3);
   border: 1px solid #fbbf24;
@@ -55,20 +60,20 @@ body {
   font-weight: bold;
   font-size: 14px;
   color: #b45309;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   letter-spacing: 1px;
 }
 
 .dialog-text {
   font-size: 14px;
   color: #451a03;
-  line-height: 1.6;
-  min-height: 60px;
+  line-height: 1.5;
+  min-height: 50px;
 }
 
 .dialog-arrow {
   text-align: center;
-  margin-top: 10px;
+  margin-top: 8px;
   color: #b45309;
   animation: bounce 1s infinite;
   cursor: pointer;
@@ -82,13 +87,13 @@ body {
 /* Quest Tracker */
 #questTracker {
   position: absolute;
-  top: 80px;
+  top: 20px;
   right: 20px;
   background: rgba(0,0,0,0.85);
   backdrop-filter: blur(10px);
   border-radius: 16px;
   padding: 12px 18px;
-  min-width: 220px;
+  min-width: 250px;
   border-left: 4px solid #fbbf24;
   font-family: monospace;
   z-index: 90;
@@ -102,8 +107,15 @@ body {
 }
 
 .quest-text {
-  font-size: 11px;
+  font-size: 12px;
   color: white;
+  font-weight: bold;
+}
+
+.quest-subtext {
+  font-size: 10px;
+  color: #aaa;
+  margin-top: 5px;
 }
 
 /* Bottom Menu Bar */
@@ -114,8 +126,8 @@ body {
   transform: translateX(-50%);
   background: rgba(0,0,0,0.85);
   backdrop-filter: blur(10px);
-  border-radius: 50px;
-  padding: 8px 20px;
+  border-radius: 60px;
+  padding: 10px 25px;
   display: flex;
   gap: 15px;
   z-index: 90;
@@ -126,12 +138,12 @@ body {
   background: rgba(255,255,255,0.1);
   border: none;
   border-radius: 40px;
-  padding: 8px 20px;
+  padding: 10px 20px;
   color: white;
   font-weight: bold;
   cursor: pointer;
   font-family: monospace;
-  font-size: 12px;
+  font-size: 13px;
   transition: all 0.2s;
 }
 
@@ -160,15 +172,15 @@ body {
 .battle-hud {
   display: flex;
   justify-content: space-between;
-  padding: 25px 50px;
+  padding: 30px 50px;
 }
 
 .battle-card {
   background: rgba(0,0,0,0.8);
   backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 12px 25px;
-  min-width: 220px;
+  border-radius: 20px;
+  padding: 15px 25px;
+  min-width: 250px;
   border: 2px solid;
 }
 
@@ -176,20 +188,20 @@ body {
 .battle-card.player { border-color: #22c55e; }
 
 .battle-name {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 .enemy .battle-name { color: #f87171; }
 .player .battle-name { color: #4ade80; }
 
 .battle-hp-bar {
-  width: 160px;
-  height: 10px;
+  width: 180px;
+  height: 12px;
   background: #333;
-  border-radius: 5px;
+  border-radius: 6px;
   overflow: hidden;
-  margin: 5px 0;
+  margin: 8px 0;
 }
 
 .battle-hp-fill {
@@ -206,7 +218,7 @@ body {
   right: 0;
   background: linear-gradient(135deg, #1a1a2e, #0f0f1a);
   border-top: 3px solid #fbbf24;
-  padding: 20px 40px;
+  padding: 25px 50px;
 }
 
 .battle-math {
@@ -218,7 +230,7 @@ body {
 }
 
 .math-question {
-  font-size: 28px;
+  font-size: 32px;
   color: #fbbf24;
   font-weight: bold;
   margin-bottom: 15px;
@@ -235,9 +247,9 @@ body {
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   border: none;
   border-radius: 50px;
-  padding: 10px 25px;
+  padding: 12px 28px;
   color: white;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   cursor: pointer;
   font-family: monospace;
@@ -246,23 +258,24 @@ body {
 .battle-message {
   background: rgba(0,0,0,0.7);
   border-radius: 15px;
-  padding: 10px;
+  padding: 12px;
   text-align: center;
   margin-top: 12px;
   color: #fbbf24;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .battle-run {
   background: linear-gradient(135deg, #ef4444, #dc2626);
   border: none;
   border-radius: 50px;
-  padding: 10px 25px;
+  padding: 12px 28px;
   color: white;
   font-weight: bold;
   cursor: pointer;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 12px;
+  font-size: 16px;
 }
 
 @keyframes shake {
@@ -276,3 +289,26 @@ body {
 }
 .shake-effect { animation: shake 0.3s ease-in-out; }
 .flash-effect { animation: flash 0.3s ease-in-out; }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.85);
+  color: #fbbf24;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 13px;
+  z-index: 1000;
+  border: 1px solid #fbbf24;
+  animation: fadeOut 2s forwards;
+  white-space: nowrap;
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
