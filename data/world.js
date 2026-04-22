@@ -91,3 +91,81 @@ function drawMapEnemy(enemy) {
     ctx.fillText('BOSS', x - 15, y - 10);
   }
 }
+
+// ============================================================
+// FOREST RENDERING - Add to bottom of world.js
+// ============================================================
+
+function renderForest() {
+    const area = AREAS.forest;
+    const map = area.map;
+    const TILE_SIZE = 40;
+    
+    for (let row = 0; row < map.length; row++) {
+        for (let col = 0; col < map[row].length; col++) {
+            const x = col * TILE_SIZE - camX;
+            const y = row * TILE_SIZE - camY;
+            const tile = map[row][col];
+            
+            if (tile === 'G') {
+                // Grass tile
+                ctx.fillStyle = '#3a7a33';
+                ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+                ctx.fillStyle = '#4a8a43';
+                ctx.fillRect(x + 5, y + 5, TILE_SIZE - 10, TILE_SIZE - 10);
+            } else if (tile === 'T') {
+                // Tree tile - draw tree
+                ctx.fillStyle = '#2d6e2d';
+                ctx.beginPath();
+                ctx.arc(x + TILE_SIZE/2, y + TILE_SIZE/2 - 10, 15, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#8B5A2B';
+                ctx.fillRect(x + TILE_SIZE/2 - 4, y + TILE_SIZE/2, 8, 15);
+            }
+        }
+    }
+    
+    // Draw NPCs
+    if (area.npcs) {
+        for (const npc of area.npcs) {
+            const x = npc.x - camX;
+            const y = npc.y - camY;
+            if (x > -50 && x < VIEW_W + 50 && y > -60 && y < VIEW_H + 60) {
+                drawNPC(npc);
+            }
+        }
+    }
+}
+
+function drawNPC(npc) {
+    const x = npc.x - camX;
+    const y = npc.y - camY;
+    
+    ctx.fillStyle = '#fcd34d';
+    ctx.fillRect(x - 8, y - 15, 16, 20);
+    ctx.fillStyle = '#d97706';
+    ctx.fillRect(x - 6, y - 22, 12, 8);
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(x - 3, y - 12, 2, 3);
+    ctx.fillRect(x + 1, y - 12, 2, 3);
+    
+    // Name tag
+    ctx.fillStyle = 'rgba(0,0,0,0.7)';
+    ctx.fillRect(x - 25, y - 32, 50, 15);
+    ctx.fillStyle = '#fbbf24';
+    ctx.font = '8px monospace';
+    ctx.fillText(npc.name, x - 20, y - 22);
+    
+    // Interact indicator
+    ctx.fillStyle = '#fbbf24';
+    ctx.font = 'bold 12px monospace';
+    ctx.fillText('?', x - 3, y - 28);
+}
+
+// NPC interaction
+function interactWithNPC(npcId) {
+    const dialog = DIALOGS[npcId];
+    if (dialog) {
+        startDialogSequence(dialog);
+    }
+}
