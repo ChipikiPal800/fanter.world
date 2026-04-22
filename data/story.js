@@ -105,3 +105,49 @@ function updateQuestTracker() {
     document.getElementById('questText').textContent = quest.description;
   }
 }
+// ============================================================
+// FOREST CUTSCENES - Add to bottom of story.js
+// ============================================================
+
+CUTSCENES.enterForest = {
+    dialogs: [
+        { speaker: 'You', text: 'The Whispering Woods... feels different than I remember.' },
+        { speaker: 'MEWT', text: 'Meow... (ears twitching nervously)' },
+        { speaker: 'You', text: 'Something\'s wrong here. Let\'s find Elder Oak.' }
+    ],
+    onComplete: () => {
+        gameState.inForest = true;
+        showToast('🌲 Entered the Whispering Woods');
+    }
+};
+
+CUTSCENES.forestBossIntro = {
+    dialogs: [
+        { speaker: '???', text: 'So... you\'ve come.' },
+        { speaker: 'You', text: 'Who\'s there?! Show yourself!' },
+        { speaker: 'FANTER', text: 'I am the heart of this forest. The darkness you feel... is me.' },
+        { speaker: 'FANTER', text: 'You cannot defeat me, child.' },
+        { speaker: 'MEWT', text: 'Meow! (stands protectively in front of you)' },
+        { speaker: 'You', text: 'We\'ll see about that!' }
+    ],
+    onComplete: () => {
+        // Start boss battle
+        startBattle('fanterForest');
+    }
+};
+
+CUTSCENES.forestBossVictory = {
+    dialogs: [
+        { speaker: 'FANTER', text: 'NO! This cannot be!' },
+        { speaker: 'FANTER', text: 'You... you are stronger than I anticipated.' },
+        { speaker: 'FANTER', text: 'But this is not over. I will return.' },
+        { speaker: 'FANTER', text: 'Take the Forest Gem... for now.' },
+        { speaker: 'FANTER', text: 'But know this - we will meet again.' }
+    ],
+    onComplete: () => {
+        gameState.hasForestGem = true;
+        gameState.storyFlags.defeatedForestFanter = true;
+        saveGame();
+        showToast('💎 Forest Gem obtained! +300 XP, +250 coins');
+    }
+};
