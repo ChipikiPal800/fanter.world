@@ -5,59 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Fanter World | Prodigy-Style RPG</title>
   <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div id="gameContainer">
-    <canvas id="gameCanvas"></canvas>
-    
-    <!-- Paper-style Dialog Box -->
-    <div id="dialogBox" class="dialog-hidden">
-      <div class="dialog-paper"></div>
-      <div class="dialog-name" id="dialogName"></div>
-      <div class="dialog-text" id="dialogText"></div>
-      <div class="dialog-arrow">▼</div>
-    </div>
-    
-    <!-- Quest Tracker -->
-    <div id="questTracker">
-      <div class="quest-title">📜 CURRENT QUEST</div>
-      <div class="quest-text" id="questText"></div>
-    </div>
-    
-    <!-- Bottom Menu Bar -->
-    <div id="menuBar">
-      <button class="menu-btn" id="menuBtn">⚔️ MENU</button>
-      <button class="menu-btn" id="forestBtn">🌲 FOREST</button>
-      <button class="menu-btn" id="bagBtn">🎒 BAG</button>
-      <button class="menu-btn" id="petsBtn">🐱 PETS</button>
-      <button class="menu-btn" id="saveBtn">💾 SAVE</button>
-    </div>
-    
-    <!-- Battle UI (hidden by default) -->
-    <div id="battleUI" class="battle-hidden">
-      <div class="battle-hud">
-        <div class="battle-card enemy">
-          <div class="battle-name" id="battleEnemyName"></div>
-          <div class="battle-hp-bar"><div class="battle-hp-fill" id="battleEnemyHp"></div></div>
-          <div>❤️ <span id="battleEnemyHpText">0</span>/<span id="battleEnemyMaxHp">0</span></div>
-        </div>
-        <div class="battle-card player">
-          <div class="battle-name">🐱 MEWT</div>
-          <div class="battle-hp-bar"><div class="battle-hp-fill" id="battlePetHp"></div></div>
-          <div>❤️ <span id="battlePetHpText">0</span>/<span id="battlePetMaxHp">0</span></div>
-        </div>
-      </div>
-      <div class="battle-actions">
-        <div class="battle-math" id="battleMath">
-          <div class="math-question" id="mathQuestion"></div>
-          <div class="math-options" id="mathOptions"></div>
-        </div>
-        <div class="battle-message" id="battleMessage"></div>
-        <button class="battle-run" id="runBtn">🏃 RUN</button>
-      </div>
-    </div>
-  </div>
-
   <script src="data/pets.js"></script>
   <script src="data/enemies.js"></script>
   <script src="data/quests.js"></script>
@@ -69,7 +16,85 @@
   <script src="world.js"></script>
   <script src="ui.js"></script>
   <script src="game.js"></script>
-
+</head>
+<body>
+<div id="gameContainer">
+  <canvas id="gameCanvas"></canvas>
   
+  <!-- Paper-style Dialog Box -->
+  <div id="dialogBox" class="dialog-hidden">
+    <div class="dialog-paper"></div>
+    <div class="dialog-name" id="dialogName"></div>
+    <div class="dialog-text" id="dialogText"></div>
+    <div class="dialog-arrow">▼</div>
+  </div>
+  
+  <!-- Quest Tracker - ADDED quest-subtext -->
+  <div id="questTracker">
+    <div class="quest-title">📜 CURRENT QUEST</div>
+    <div class="quest-text" id="questText"></div>
+    <div class="quest-subtext" id="questSubtext"></div>
+  </div>
+  
+  <!-- Bottom Menu Bar - ADDED forest button -->
+  <div id="menuBar">
+    <button class="menu-btn" id="menuBtn">⚔️ MENU</button>
+    <button class="menu-btn" id="forestBtn">🌲 FOREST</button>
+    <button class="menu-btn" id="bagBtn">🎒 BAG</button>
+    <button class="menu-btn" id="petsBtn">🐱 PETS</button>
+    <button class="menu-btn" id="saveBtn">💾 SAVE</button>
+  </div>
+  
+  <!-- Battle UI -->
+  <div id="battleUI" class="battle-hidden">
+    <div class="battle-hud">
+      <div class="battle-card enemy">
+        <div class="battle-name" id="battleEnemyName"></div>
+        <div class="battle-hp-bar"><div class="battle-hp-fill" id="battleEnemyHp"></div></div>
+        <div>❤️ <span id="battleEnemyHpText">0</span>/<span id="battleEnemyMaxHp">0</span></div>
+      </div>
+      <div class="battle-card player">
+        <div class="battle-name">🐱 MEWT</div>
+        <div class="battle-hp-bar"><div class="battle-hp-fill" id="battlePetHp"></div></div>
+        <div>❤️ <span id="battlePetHpText">0</span>/<span id="battlePetMaxHp">0</span></div>
+      </div>
+    </div>
+    <div class="battle-actions">
+      <div class="battle-math">
+        <div class="math-question" id="mathQuestion"></div>
+        <div class="math-options" id="mathOptions"></div>
+      </div>
+      <div class="battle-message" id="battleMessage"></div>
+      <button class="battle-run" id="runBtn">🏃 RUN</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  
+  
+  // Wait for game to initialize then add forest button
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add forest button handler
+    const forestBtn = document.getElementById('forestBtn');
+    if (forestBtn) {
+      forestBtn.addEventListener('click', function() {
+        if (confirm('Teleport to the Whispering Woods?')) {
+          if (typeof gameState !== 'undefined') {
+            gameState.currentArea = 'forest';
+            if (typeof player !== 'undefined') {
+              player.x = 1200;
+              player.y = 800;
+              player.targetX = 1200;
+              player.targetY = 800;
+            }
+            if (typeof saveGame === 'function') saveGame();
+            if (typeof showToast === 'function') showToast('🌲 Entered the Whispering Woods');
+          }
+        }
+      });
+    }
+  });
+</script>
 </body>
 </html>
