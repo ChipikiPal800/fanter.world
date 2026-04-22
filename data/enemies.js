@@ -121,3 +121,64 @@ const ENEMIES = {
     phases: 3
   }
 };
+// ============================================================
+// FOREST ENEMIES - Add to bottom of enemies.js
+// ============================================================
+
+ENEMIES.forestSlime = {
+    id: 'forestSlime',
+    name: 'FOREST SLIME',
+    hp: 35,
+    maxHp: 35,
+    attack: 8,
+    defense: 4,
+    exp: 45,
+    coins: 30,
+    color: '#4ade80',
+    level: 3,
+    description: 'A slime that absorbed forest energy. Bouncy and persistent.'
+};
+
+ENEMIES.forestGoblin = {
+    id: 'forestGoblin',
+    name: 'FOREST GOBLIN',
+    hp: 45,
+    maxHp: 45,
+    attack: 10,
+    defense: 5,
+    exp: 60,
+    coins: 45,
+    color: '#fbbf24',
+    level: 4,
+    description: 'A sneaky goblin that ambushes travelers.'
+};
+
+ENEMIES.forestWolf = {
+    id: 'forestWolf',
+    name: 'FOREST WOLF',
+    hp: 50,
+    maxHp: 50,
+    attack: 12,
+    defense: 5,
+    exp: 75,
+    coins: 55,
+    color: '#a8a29e',
+    level: 5,
+    description: 'A swift predator that hunts in packs.'
+};
+
+ENEMIES.fanterForest = {
+    id: 'fanterForest',
+    name: 'FANTER (Forest Form)',
+    hp: 120,
+    maxHp: 120,
+    attack: 18,
+    defense: 10,
+    exp: 250,
+    coins: 200,
+    color: '#2d6e2d',
+    isBoss: true,
+    level: 8,
+    storyFlag: 'defeatedForestFanter',
+    description: 'The Fanter in its forest manifestation. Dark green, root-like tendrils.'
+};
