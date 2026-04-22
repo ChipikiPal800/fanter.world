@@ -5,17 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Fanter World | Prodigy-Style RPG</title>
   <link rel="stylesheet" href="style.css">
-  <script src="data/pets.js"></script>
-  <script src="data/enemies.js"></script>
-  <script src="data/quests.js"></script>
-  <script src="data/areas.js"></script>
-  <script src="data/dialogs.js"></script>
-  <script src="save.js"></script>
-  <script src="battle.js"></script>
-  <script src="story.js"></script>
-  <script src="world.js"></script>
-  <script src="ui.js"></script>
-  <script src="game.js"></script>
 </head>
 <body>
 <div id="gameContainer">
@@ -23,20 +12,19 @@
   
   <!-- Paper-style Dialog Box -->
   <div id="dialogBox" class="dialog-hidden">
-    <div class="dialog-paper"></div>
     <div class="dialog-name" id="dialogName"></div>
     <div class="dialog-text" id="dialogText"></div>
     <div class="dialog-arrow">▼</div>
   </div>
   
-  <!-- Quest Tracker - ADDED quest-subtext -->
+  <!-- Quest Tracker -->
   <div id="questTracker">
     <div class="quest-title">📜 CURRENT QUEST</div>
     <div class="quest-text" id="questText"></div>
     <div class="quest-subtext" id="questSubtext"></div>
   </div>
   
-  <!-- Bottom Menu Bar - ADDED forest button -->
+  <!-- Bottom Menu Bar -->
   <div id="menuBar">
     <button class="menu-btn" id="menuBtn">⚔️ MENU</button>
     <button class="menu-btn" id="forestBtn">🌲 FOREST</button>
@@ -70,21 +58,44 @@
   </div>
 </div>
 
+<!-- ALL SCRIPTS AT THE BOTTOM - THIS FIXES THE ISSUE -->
+<script src="data/pets.js"></script>
+<script src="data/enemies.js"></script>
+<script src="data/quests.js"></script>
+<script src="data/areas.js"></script>
+<script src="data/dialogs.js"></script>
+<script src="save.js"></script>
+<script src="battle.js"></script>
+<script src="story.js"></script>
+<script src="world.js"></script>
+<script src="ui.js"></script>
+<script src="game.js"></script>
+
 <script>
-  // Forest button handler
+  // Forest button handler - runs after all scripts load
   document.addEventListener('DOMContentLoaded', function() {
     const forestBtn = document.getElementById('forestBtn');
     if (forestBtn) {
       forestBtn.addEventListener('click', function() {
         if (confirm('Teleport to the Whispering Woods?')) {
-          gameState.currentArea = 'forest';
-          player.x = 600;
-          player.y = 600;
-          player.targetX = 600;
-          player.targetY = 600;
-          loadArea('forest');
-          saveGame();
-          showToast('🌲 Entered the Whispering Woods');
+          if (typeof gameState !== 'undefined') {
+            gameState.currentArea = 'forest';
+          }
+          if (typeof player !== 'undefined') {
+            player.x = 800;
+            player.y = 600;
+            player.targetX = 800;
+            player.targetY = 600;
+          }
+          if (typeof loadArea === 'function') {
+            loadArea('forest');
+          }
+          if (typeof saveGame === 'function') {
+            saveGame();
+          }
+          if (typeof showToast === 'function') {
+            showToast('🌲 Entered the Whispering Woods');
+          }
         }
       });
     }
